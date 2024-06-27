@@ -1,0 +1,9 @@
+HOST_IP @models.project.Project
+DB_TYPE @models
+ERROR_MODE @models.handleError
+DB_NAME @models.engine.mongo_storage.MongoStorage
+DB_PORT @models.engine.mongo_storage.MongoStorage
+DB_HOST @models.engine.mongo_storage.MongoStorage
+JENKINS_URL @deploywer.main.Deployer
+JENKINS_USER @deploywer.main.Deployer
+JENKINS_PASSWD @deploywer.main.Deployer
