@@ -107,7 +107,7 @@ def updateBuildStatus(_id, num):
     """
     print(_id, num)
     try:
-        Build.updateBuildStat({"id": _id, "build_num": num})
+        Build.updateBuildStat({"id": _id, "build_num": num}, "jenkins")
     except Exception as e:
         raise e
     return jsonify({})
