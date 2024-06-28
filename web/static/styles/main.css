@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.myBigMenu {
+  @apply w-[25%] transition-all duration-500 ease-in-out;
+}
+
+.mySmallMenu {
+  @apply w-[80px] border-none;
+}
+
+/* back grounds  */
+
+.nextBackGround {
+  @apply bg-[url('/static/images/next1.png')]
+}
+
+.reactBackGround {
+  @apply bg-[url('/static/images/react1.png')]
+}
+
+.flaskBackGround {
+  @apply bg-[url('/static/images/flask1.png')]
+}

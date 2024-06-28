@@ -1,0 +1,24 @@
+<div class="relative">
+	<div class="h-[70px] bg-gradient-to-l from-teal-300/95 iiitransparent via-90% to-teal-900/95 bg-size-100 shadow-md p-[10px] m-0 top-0 left-0 right-0 flex justify-between">
+		<a class="text-[20px]  md:text-[35px]" href="{{ url_for('app_views.index') }}">LOGO</a>
+		<div class="">
+			{% if g.user %}
+				<div class="flex  gap-5">
+					<a class="border rounded p-1 border-red-900" href="{{ url_for('user_views.home') }}">
+						<h4 class="text-[30px]">{{ g.user }}</h4>
+					</a>
+					<a class="bg-blue-900 p-2 rounded" href="{{ url_for('auth_views.logout') }}">
+						<button class="bold text-[15px]">Log Out...</button>
+					</a>
+				</div>
+			{% else %}
+				<a class="bg-blue-900 rounded" href="{{ url_for('auth_views.register') }}">
+						<button class="bold text-[30px]">Sign In...</button>
+				</a>
+				<a class="bg-blue-900 rounded" href="{{ url_for('auth_views.login') }}">
+						<button class="bold text-[30px]">Log In...</button>
+				</a>
+			{% endif %}
+		</div>
+	</div>
+</div>

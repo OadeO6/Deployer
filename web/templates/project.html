@@ -1,0 +1,27 @@
+{% extends 'userbase.html' %}
+{% block workspace %}
+<div>
+	<div class="bg-green-900 ">
+		<p> Project :{{ project}}</p>
+		<p> Project Name:{{ project.name }}</p>
+		<p> Project Url: <a target="_blank" href="http://{{project.url}}">{{ project.url }}</a></p>
+	</div>
+	<div>
+		<form action="{{url_for("user_views.newProject")}}/{{id}}" method="POST">
+			<button type="submit" class="">ReDeploy</button>
+		</form>
+	</div>
+	<div>
+		<h1>Log:</h1l>
+		<div class="log">
+		</div>
+		<p>{{builds }} === builds</p>
+		<p>{{ build}} ==== build</p>
+		<p> output </p>
+		<div id="projectOutPut">
+		</div>
+		<p>loading..........</p>
+	</div>
+	<script src="{{url_for('static', filename='script/projectOutPut.js')}}" defer></script>
+</div>
+{% endblock workspace %}

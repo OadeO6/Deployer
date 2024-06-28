@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main_content">
+	<form method="POST">
+		{{ form.csrf_token }}
+		{{ form.email.label}} {{ form.email(size=20) }}
+		{% if form.email.errors %}
+			<p> error in email </p>
+		{% endif %}
+		{{ form.password.label }} {{ form.password }}
+		{% if form.password.errors %}
+			<p> error in password </p>
+		{% endif %}
+		{{ form.submit }}
+	</form>
+</div>
+{% endblock %}

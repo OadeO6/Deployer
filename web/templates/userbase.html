@@ -1,0 +1,60 @@
+{#
+{% extends 'base.html' %}
+{% block content %}
+	<div class="mt-[25px] main_content pt-0 rielative flex">
+		<div class=" h-screen w-[25%] bg-red-900 flex flex-col fixed  overflow-y-scroll">
+			<p> mennu </p>
+		</div>
+		<div class="ml-[340px] iml-[500px] bg-blue-500 w-full p-5 iiiimax-h-screen iiiiml-36 overflow-y-sciiroll ">
+			{% block workspace %}
+			{% endblock workspace %}
+		</div>
+	</div>
+{% endblock %}
+#}
+
+{% extends 'base.html' %}
+{% block content %}
+	<div class="flex h-[calc(100vh-70px)]">
+		<div class=" h-full   bg-red-900 overflow-y-scroll myBigMenu ">
+			<div id="userMenu" class="hover:curso0px] border-blue-900 flex BackGroundbetween justify-center p-[5px]">
+				<!-- <div class="my-auto">
+					<svg class="w-[40px] h-[40px]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+					</svg>
+				</div>-->
+				<div class="myMenuHide  py-2 my-[5px] my-auto">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[20px] w-[20px] hover:h-[35px] hover:w-[35px]">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+					</svg>
+				</div>
+			</div>
+			<div class="p-2">
+			{{ mymenubar(menubar) }}
+			</div>
+		</div>
+		<div class="bg-blue-500 w-full p-5 h-full iiiiml-36 overflow-y-scroll ">
+			{% block workspace %}
+			{% endblock workspace %}
+		</div>
+	</div>
+{% endblock %}
+
+{% macro mymenubar(menubar) -%}
+{% for menu in menubar %}
+	<a class="" href="{{ menu[1] }}">
+		<div class="flex gap-5 {% if curentUrl == menu[1] %} bg-blue-900 {% endif %}">
+			<div class="p-1 h-[40px] w-[40px]">
+				{{ menu[2]| safe }}
+			</div>
+			<div class="myMenuHide my-auto">
+				{{ menu[0] }}
+			</div>
+		</div>
+	</a>
+	{% if menu[0] == "Projects" %}
+		<div class="bg-green-900 ml-5 border-l-2 border-indigo-900 p-2 min-h-5 w-full">
+		</div>
+	{% endif %}
+{% endfor %}
+{%- endmacro %}
