@@ -10,7 +10,7 @@ from deployer.myxml import generate_xml
 
 class Deployer:
     def __init__(self, **kwargs):
-        self.id = kwargs.get("id", str(uuid.uuid4())) # remove cration od id #temp
+        self.id = kwargs.get("id") # remove cration od id #temp
         self.server = jenkins.Jenkins(
             url=  getenv("JENKINS_URL","http://localhost:8080"),
             username= getenv("JENKINS_USER", "OadeO6"), # use an env file
@@ -26,6 +26,9 @@ class Deployer:
             self.buildNum = self.server.get_job_info(f'{self.id}-job')['nextBuildNumber']
         else:
             self.buildNum = 1
+        api_addr = getenv("API_ADDR")
+        api_port = getenv("API_PORT")
+        self.api2Endpoint = f'http://{api_addr}:{api_port}/user/project/{self.id}/{self.buildNum}/api1'
 
     def getStatus(self, job_name=None, build_num=None):
         """
@@ -170,7 +173,7 @@ class Deployer:
         code.append(checkPort)
         code.append(Run)
         print(code)
-        xml = generate_xml(self.id, code, port)
+        xml = generate_xml(self.id, code, port, self.api2Endpoint)
         return xml
 
     def old_data_to_new_repo(self):

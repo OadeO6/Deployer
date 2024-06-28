@@ -7,3 +7,5 @@ DB_HOST @models.engine.mongo_storage.MongoStorage
 JENKINS_URL @deploywer.main.Deployer
 JENKINS_USER @deploywer.main.Deployer
 JENKINS_PASSWD @deploywer.main.Deployer
+API_ADDR @deloyer.main.Deployer
+API_PORT @deloyer.main.Deployer

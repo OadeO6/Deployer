@@ -77,10 +77,13 @@ class Build(Base):
         return status
 
     @classmethod
-    def updateBuildStat(cls, obj):
+    def updateBuildStat(cls, obj, caller=None):
         """
         update database
         """
         stats= cls.status(obj["id"], obj["build_num"])
-        if stats[0]:
-            models.storage.update(obj, {"building": stas[0], "status": stats[1]})
+        models.storage.update(cls, obj,
+                              {
+                              "building": False if caller == "jenkins" else stats[0],
+                              "status": stats[1]
+                              })

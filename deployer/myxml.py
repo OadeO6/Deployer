@@ -9,7 +9,7 @@ sample_pipeline_code = """pipeline {
     }
 }"""
 
-def generate_pipe(Id, code, port):
+def generate_pipe(Id, code, port, apiEndpoint):
     """
     create a pieline code using the two di,entional list of commands
     """
@@ -64,15 +64,23 @@ def generate_pipe(Id, code, port):
             }}
             always {{
                 echo 'done with {}'
+                script {{
+                    def original = currentBuild.currentResult
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){{
+                         def response = httpRequest(httpMode: 'PUT', url: '{}', contentType: 'APPLICATION_JSON')
+                         echo "Status: ${{response.status}}"
+                    }}
+                    currentBuild.result = original
+                }}
             }}
         }}
-    }}""".format(stages, Id, port, port, Id, Id, Id, Id, Id)
+    }}""".format(stages, Id, port, port, Id, Id, Id, Id, Id, apiEndpoint)
     return pipeline_code
 
-def generate_xml(Id, code=None, port=None, description="no description"):
+def generate_xml(Id, code=None, port=None, apiEndpoint=None, description="no description"):
     if not code:
         code = [[]]
-    pipeline_code = generate_pipe(Id, code, port)
+    pipeline_code = generate_pipe(Id, code, port, apiEndpoint)
     xml_config = f"""<?xml version="1.1" encoding="UTF-8" standalone="no"?>
     <flow-definition plugin="workflow-job@1400.v7fd111b_ec82f">
       <actions>

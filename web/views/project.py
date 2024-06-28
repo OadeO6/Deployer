@@ -82,7 +82,7 @@ def project(id):
         builds=builds, build=curentBuild, id=id
     )
 
-# to be moved to the main api 
+# to be moved to the main api
 # because of how frequently request is sent here
 @user_views.route('/project/<string:id>/api1', methods=['GET'])
 def projectApi(id):
@@ -99,3 +99,15 @@ def projectApi(id):
     return jsonify({
         "output": render_template("projectOutPut.html", data=output),
         "building": building})
+
+@user_views.route('/project/<string:_id>/<int:num>/api1', methods=['PUT'])
+def updateBuildStatus(_id, num):
+    """
+    endpoint to update build status after jenkins is done with build
+    """
+    print(_id, num)
+    try:
+        Build.updateBuildStat({"id": _id, "build_num": num})
+    except Exception as e:
+        raise e
+    return jsonify({})
