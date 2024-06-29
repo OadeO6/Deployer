@@ -6,3 +6,4 @@ WTForms==3.1.1
 pymongo==3.11.2
 python-dotenv==1.0.1
 python-jenkins==1.0.2
+flask-cors==4.0.1
