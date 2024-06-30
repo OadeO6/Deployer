@@ -113,7 +113,7 @@ def project(id):
     curentBuild = Project.getCurentBuild(id, project["current_build_num"])
     return render_template(
         "project.html",
-        curentUrl=url_for("user_views.projects", id=id),
+        curentUrl=url_for("user_views.project", id=id),
         menubar=get_menus(), project=project,
         builds=builds, build=curentBuild, id=id
     )
@@ -190,7 +190,7 @@ def createProjectApi(pType):
         data = None
     return jsonify({ "data": data })
 
-@user_views.route('/project/<string:_id>/<int:num>/api1', methods=['PUT'])
+@user_views.route('/project/<string:_id>/<int:num>/api2', methods=['PUT'])
 def updateBuildStatus(_id, num):
     """
     endpoint to update build status after jenkins is done with build

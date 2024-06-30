@@ -1,9 +1,10 @@
 """
 doc
 """
-from flask import Blueprint, g, redirect, url_for, current_app
+from flask import Blueprint, g, redirect, session, url_for, current_app
 import functools
 from web.views.images import UpdateSvg, SetingSvg, NewProjectSvg, ProfileSvg, ProjectsSvg
+from models.project import Project
 
 app_views = Blueprint("app_views", __name__, url_prefix="/")
 auth_views = Blueprint("auth_views", __name__, url_prefix="/auth")
@@ -27,7 +28,8 @@ def get_menus():
         [
             "Projects",
             url_for("user_views.projects"),
-            ProjectsSvg
+            ProjectsSvg,
+            [ project for project in Project.find({"user_id": session["user_id"]}) ]
         ],
         [
             "New Project",

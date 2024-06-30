@@ -53,8 +53,17 @@
 		</div>
 	</a>
 	{% if menu[0] == "Projects" %}
-		<div class="bg-green-900 ml-5 border-l-2 border-indigo-900 p-2 min-h-5 w-full">
-		</div>
+    <div class="px-3 border-l-2  bg-green-900 ml-5 p-2 max-h-10 border-indigo-900 w-full">
+    {% for project  in menu[3] %}
+    {% set theLink = url_for('user_views.project', id=project.id) %}
+    <a
+            class="flex justify-between border border-indigo-900 p-2 {% if curentUrl == theLink %} bg-blue-900 {% endif %}"
+    href="{{ theLink }}">
+            <b>{{ project.name }} </b>
+            <b>{{ project.project_type }} </b>
+    </a>
+    {% endfor %}
+    </div>
 	{% endif %}
 {% endfor %}
 {%- endmacro %}

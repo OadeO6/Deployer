@@ -28,7 +28,7 @@ class Deployer:
             self.buildNum = 1
         api_addr = getenv("API_ADDR")
         api_port = getenv("API_PORT")
-        self.api2Endpoint = f'http://{api_addr}:{api_port}/user/project/{self.id}/{self.buildNum}/api1'
+        self.api2Endpoint = f'http://{api_addr}:{api_port}/user/project/{self.id}/{self.buildNum}/api2'
 
     def getStatus(self, job_name=None, build_num=None):
         """
