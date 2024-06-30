@@ -113,7 +113,8 @@ async function updateForm(timeOut){
     }
   }, timeOut);
 }
-projectName.addEventListener('change', async (event) => {
+
+async function projectNameEventHandler(event){
   const value = event.target.value;
   let available = await verifyName(value);
   if (available) {
@@ -121,9 +122,14 @@ projectName.addEventListener('change', async (event) => {
   } else {
     project2.classList.add('hidden');
   }
-});
+}
 
-projectUrl.addEventListener('change', async (event) => {
+// projectName.addEventListener('change', async (event) => {
+projectName.addEventListener('change', projectNameEventHandler);
+projectName.addEventListener('input', projectNameEventHandler);
+
+
+async function projectUrlEventHandler(event){
   const value = event.target.value;
   const available = await verifyUrl(value);
   let timeOut = 0;
@@ -137,7 +143,10 @@ projectUrl.addEventListener('change', async (event) => {
     timeOut = 10;
   }
   updateForm(timeOut);
-});
+}
+
+// projectUrl.addEventListener('load', projectUrlEventHandler);
+projectUrl.addEventListener('change', projectUrlEventHandler);
 
 projectType.addEventListener('change', () => {
   updateForm(2000);
