@@ -78,13 +78,13 @@ class Deployer:
         code = []
         port = self.envDict.get("FLASK_RUN_PORT", "5000")
         Setup = ["set up ",
-                f"sudo docker network  create {self.id}-network",
+                f"sudo docker network  create {self.id}-network-${{currentBuild.number}}",
                 "scriptNext", # the script shoud be removed because this file is not meant to understand hoe to interact with jenkins
                  f"""
                  script {{
                     def theRepo = sh(script: "ls -d theRepo-* | head -n 1", returnStdout: true).trim()
                     if (theRepo){{
-                            sh "cp -r theRepo theRepo-${{currentBuild.number}}"
+                            sh "cp -r ${{theRepo}} theRepo-${{currentBuild.number}}"
                             sh "cd theRepo-${{currentBuild.number}}; git pull"
                         }} else {{
                         sh "git clone {self.repo} theRepo-${{currentBuild.number}}"
@@ -104,7 +104,7 @@ class Deployer:
                     " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
                     " -w /app " +
                     f" -p {host_port}:5000 " +
-                    f" --network {self.id}-network" +
+                    f" --network {self.id}-network-${{currentBuild.number}}" +
                     " python:3.9-alpine " +
                     " sh"
                 )
@@ -132,7 +132,7 @@ class Deployer:
                     " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
                     " -w /app " +
                     f" -p {host_port}:3000 " +
-                    f" --network {self.id}-network " +
+                    f" --network {self.id}-network-${{currentBuild.number}} " +
                     " node:16-alpine " +
                     " sh"
                 )
@@ -155,7 +155,7 @@ class Deployer:
                     " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
                     " -w /app " +
                     f" -p {host_port}:3000 " +
-                    f" --network {self.id}-network " +
+                    f" --network {self.id}-network-${{currentBuild.number}} " +
                     " node:18-alpine " +
                     " sh"
                 )
