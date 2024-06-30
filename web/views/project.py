@@ -2,8 +2,10 @@
 authentications
 """
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, abort, jsonify
+    Blueprint, flash, g, request, redirect, render_template, request, session, url_for, abort, jsonify
 )
+from jenkins import requests
+from six.moves import urllib
 from werkzeug.security import check_password_hash, generate_password_hash
 from web.forms import projectForm
 from models.project import Project
@@ -32,6 +34,36 @@ def projects():
         projects=projects
     )
 
+# @user_views.route('/project/new', methods=['GET', 'POST'])
+# @user_views.route('/project/new/<string:id>', methods=['POST'])
+# @need_login
+# def newProject(id=None): # old newProject
+#     form = projectForm()
+#     if request.method == "POST":
+#     #if form.validate_on_submit():
+#         #return redirect(url_for("user_views.newproject"))
+#         """
+#         projectName = form.projectName.data
+#         repoUrl = request.form["repoUrl"]
+#         envKey = request.form["envKey"]
+#         envValue = request.form["envValue"]
+#         projectType = request.form["projectType"]
+#         projectdirectory = request.form["projectdirectory"]
+#         hostIp = request.form["hostIp"]
+#         buildCommand = request.form["buildCommand"]
+#         installCommand = request.form["installCommand"]
+#         deployCommans = request.form["deployCommans"]
+#         """
+#         if id:
+#             project = Project(session.get("user_id"), _id=id)
+#             project.rebuild()
+#         else:
+#             project = Project(session.get("user_id"), form)
+#             project.build()
+#         project.save()
+#         return redirect(url_for("user_views.project", id=project.id))
+#     #form = {"submit":2}
+#     return render_template("newproject.html", form=form, curentUrl=url_for("user_views.newProject"), menubar=get_menus())
 
 
 
@@ -64,7 +96,11 @@ def newProject(id=None):
         project.save()
         return redirect(url_for("user_views.project", id=project.id))
     #form = {"submit":2}
-    return render_template("newproject.html", form=form, curentUrl=url_for("user_views.newProject"), menubar=get_menus())
+    return render_template("newProject.html",
+                           form=form,
+                           apiUrl= 'http://localhost:5000/user/project',
+                           curentUrl=url_for("user_views.newProject"),
+                           menubar=get_menus())
 
 @user_views.route('/project/<string:id>', methods=['GET'])
 def project(id):
@@ -99,6 +135,60 @@ def projectApi(id):
     return jsonify({
         "output": render_template("projectOutPut.html", data=output),
         "building": building})
+
+@user_views.route('/project/<string:name>/api4', methods=['GET'])
+def checkApi(name):
+    res = Project.find({"name": name})
+    if len(res) != 0:
+        data = False
+    else:
+        data = True
+    return jsonify({ "data": data })
+
+@user_views.route('/project/api5/api5', methods=['POST'])
+def checkRepo():
+    resdata = request.get_json()
+    repo = urllib.parse.unquote(resdata.get('repo_url'))
+    main_repo = repo.replace("http://github.com/", "")
+    main_repo = repo.replace("https://github.com/", "")
+    try:
+        token_start = repo.find('://') + 3
+        token_end = repo.find('@')
+        token = repo.find('@')
+        token = repo[token_start:token_end]
+        api_url = repo.replace(token + '@', '').replace('.git', '')
+
+        headers = {'Authorization': f'token {token}'}
+
+        main_repo = api_url.replace("http:/github.com/", "")
+        main_repo = api_url.replace("https://github.com/", "")
+        print("main_repo", main_repo)
+        response = requests.get(f'https://api.github.com/repos/{main_repo}', headers=headers)
+        print("code", response.status_code)
+        assert  response.status_code == 200, "No such repo"
+        data = True
+    except Exception as e:
+        print(e)
+        try:
+            response = requests.get(f'https://api.github.com/repos/{main_repo}')
+            assert  response.status_code == 200, "No such repo"
+            data = True
+        except Exception as e:
+            print("2sss",e)
+            data = False
+    return jsonify({ "data": data })
+
+@user_views.route('/project/<string:pType>/api3', methods=['GET'])
+def createProjectApi(pType):
+    pType = pType.lower()
+    form = projectForm()
+    if pType == "flask":
+        data = render_template("projectFlask.html", form=form)
+    elif pType == "next":
+        data = render_template("projectNext.html", form=form)
+    else:
+        data = None
+    return jsonify({ "data": data })
 
 @user_views.route('/project/<string:_id>/<int:num>/api1', methods=['PUT'])
 def updateBuildStatus(_id, num):

@@ -11,7 +11,7 @@ class projectForm(FlaskForm):
     hostIp = StringField("Custom Host Ip")
     buildCommand = StringField("Build Command")
     installCommand = StringField("Install Command")
-    deployCommans = StringField("Deploy Command")
+    deployCommand = StringField("Deploy Command")
     webServer = SelectField("Web Server")
     dataBaseServer = SelectMultipleField("Select servers", default=["a","b"], choices=["a", "b", "c"])
     """
