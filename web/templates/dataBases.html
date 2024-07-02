@@ -1,0 +1,26 @@
+{% extends 'userbase.html' %}
+{% block workspace %}
+<div class="p-6 w-full h-full flex -----justify-center flex-wrap">
+	{% if projects %}
+		{% for i in projects %}
+			<div class="
+				border-2 block border-green-900 p-0 m-[20px] h-[350px] rounded-md w-[250px]
+				">
+
+				<a href="{{ url_for('user_views.project',id=i.id) }}">
+					<div class=" h-[150px] m-0 {{i.project_type | lower}}BackGround bg-image bg-cover bg-center">
+					</div>
+				</a>
+				<ul class="p-5 bg-red-900 w-full rounded-b-md h-[200px]">
+					<li>: {{ i.building }}</li>
+					<li>: {{ i.status }}</li>
+					<li>Name: {{ i.name }}</li>
+					<li>Type: {{ i.project_type | lower}}</li>
+					<li>Url: <a target="_blank" href="http://{{ i.url }}">{{ i.url }}</a></li>
+					<li>Tag: {{ i.tag }}</li>
+				</ul>
+			</div>
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock workspace %}

@@ -65,6 +65,57 @@ def projects():
 #     #form = {"submit":2}
 #     return render_template("newproject.html", form=form, curentUrl=url_for("user_views.newProject"), menubar=get_menus())
 
+# @user_views.route('/database/new', methods=['GET', 'POST'])
+# @need_login
+# def newDataBase():
+#     """
+#     creata a data base
+#     """
+#     form = dataBaseForm()
+#     if request.method == "POST":
+#         dataBase = DataBase(session.get("user_id"), form)
+#         dataBase.build()
+#         dataBase.save()
+#     return render_template("newDataBase.html", form=form, curentUrl=url_for("user_views.newDataBase"), menubar=get_menus())
+#
+# @user_views.route('/database/<string:id>', methods=['GET'])
+# @need_login
+# def dataBase(id):
+#     dataBase = DataBase.find({"id":id})
+#     if dataBase:
+#         dataBase = dataBase[0]
+#     else:
+#         return abort(404)
+#     builds = Project.getbuilds(id=id)
+#     curentBuild = Project.getCurentBuild(id, project["current_build_num"])
+#     return render_template(
+#         "dataBase.html",
+#         curentUrl=url_for("user_views.dataBase", id=id),
+#         menubar=get_menus(), id=id
+#     )
+#
+# @user_views.route('/databases', methods=['GET'])
+# @need_login
+# def dataBases():
+#     dataBases = DataBase.find({"user_id": session.get("user_id")})
+#     # print(projects)
+#     # for project in projects:
+#     #     print(project)
+#     #     Data = Build.find({"project_id": project["id"]})
+#     #     print(Data)
+#     #     if len(Data) == 1:
+#     #         Data = Data[0]
+#     #     else:
+#     #         Data = {}
+#     #     project["building"] = Data.get("building", False)
+#     #     project["status"] = Data.get("status", None)
+#     return render_template(
+#         "dataBases.html",
+#         curentUrl=url_for("user_views.dataBases"),
+#         menubar=get_menus(),
+#         projects=dataBases
+#     )
+
 
 
 @user_views.route('/project/new', methods=['GET', 'POST'])

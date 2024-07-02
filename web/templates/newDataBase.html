@@ -1,0 +1,37 @@
+{% extends 'userbase.html' %}
+{% block workspace %}
+<div>
+	{% set style5 = "w-auto bg-orange-900 rounded-md inline-block" %}
+	<form method="POST" class="bg-pink-900 m-[20px] p-[20px] rounded min-h-[calc(100vh-40px-60px)] flex flex-col justify-between">
+		<div>
+			<div class="border-b border-b-green-900 py-[20px] my-5">
+				<div  class="{{ style5 }}">
+					{{ form.projectName.label(class="p-2 m-5 text-[20px] m-2 m-auto") }}
+					{{ form.projectName(class="rounded-md p-2", placeholder="Project", id="projectName") }}
+				</div>
+			</div>
+            <div id="project2" class="hidden">
+                <div>
+                    {{ form.mode.label(class="") }}
+                    {{ form.mode(class="", id="projectMode") }}
+                </div>
+                <div>
+                    {{ form.projectType.label(class="") }}
+                    {{ form.projectType(class="", id="projectType") }}
+                </div>
+                <div>
+                    {{ form.repoUrl.label(class="") }}
+                    {{ form.repoUrl(class="", id="projectUrl") }}
+                </div>
+                <div id="project3" class="border-l-gray-50 border-l-[30px] p-2 m-3">
+                </div>
+            </div>
+		</div>
+		<div id="formSubmit" class="mx-auto">
+			{{ form.submit(class="hover:cursor-pointer bg-green-900 text-[20px] py-3 px-5  m-5 rounded-md bottom-0") }}
+		</div>
+        <input type="hidden" id="apiurlnew" value="{{apiUrl}}">
+	</form>
+    <script src="{{url_for('static', filename='script/newProject.js')}}"></script>
+</div>
+{% endblock workspace %}

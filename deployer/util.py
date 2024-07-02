@@ -59,3 +59,13 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
     code.append(checkPort)
     code.append(Run)
     return code
+
+def mysqlSetup(code, Id, dockerEnv, mainEnv, host_port):
+    """
+    create a mysql database
+    """
+    CreateServer = ["create data-base server"]
+    CreateDatabase = ["create data-base"]
+    code.append(CreateServer)
+    code.append(CreateDatabase)
+    return code
