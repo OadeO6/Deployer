@@ -1,15 +1,4 @@
-sample_pipeline_code = """pipeline {
-    agent any
-    stages {
-        stage("discription"){
-            steps {
-                sh "echo run"
-            }
-        }
-    }
-}"""
-
-def generate_pipe(Id, code, port, apiEndpoint):
+def generate_pipe(Id, code, port, apiEndpoint, check, abort, fail):
     """
     create a pieline code using the two di,entional list of commands
     """
@@ -34,53 +23,66 @@ def generate_pipe(Id, code, port, apiEndpoint):
         stage += "\n\t\t\t\t}\n\t\t\t}\n"
         stages += stage
         # agent {{ label 'alx' }}
-    pipeline_code = """pipeline {{
+    # had to do it this way because in python f string regects any backlash
+    # something like a = f" { 'ade\n' }" wount work
+    # commenting is also not allowed
+    stagesContent = (
+                '\tstage("healt check"){\n' +
+                    "\t\toptions {\n" +
+                        "\t\t\tretry(40)\n" +
+                   "\t\t}\n" +
+                    "\t\tsteps {\n" +
+                        '\t\t\techo "cheacking if server is ready"\n' +
+                        f"\t\t\tsh \"sudo docker exec { Id }-name sh -c 'netstat -tnlp | grep { port }'\"\n" +
+                        f"\t\t\techo 'Server listenig on { port } '\n" +
+                    "\t\t}\n" +
+                "\t}\n" if check else "")
+    abort = [a+'\n' for a in abort]
+    fail = [a+'\n' for a in fail]
+    pipeline_code = f"""pipeline {{
         agent any
 
         triggers {{
             pollSCM('*/1 * * * *')
         }}
         stages {{
-        {}
-            stage("healt check"){{
-                options {{
-                    retry(40)
-                }}
-                steps {{
-                    echo "cheacking if server is ready"
-                    sh "sudo docker exec {}-name sh -c 'netstat -tnlp | grep {}'"
-                    echo 'Server listenig on {} '
-                }}
-            }}
+        { stages }
+            {
+                stagesContent
+            }
         }}
         post {{
             aborted {{
-                sh "sudo docker rm -f {}-name"
-                sh "sudo docker network rm {}-network"
+                {
+                "".join(abort)
+                }
             }}
             failure {{
-                sh "sudo docker rm {}-name -f"
-                sh "sudo docker network rm {}-network"
+                {
+                    "".join(fail)
+                }
             }}
             always {{
-                echo 'done with {}'
+                echo 'done with { Id }'
                 script {{
                     def original = currentBuild.currentResult
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){{
-                         def response = httpRequest(httpMode: 'PUT', url: '{}', contentType: 'APPLICATION_JSON')
+                         def response = httpRequest(httpMode: 'PUT', url: '{ apiEndpoint }', contentType: 'APPLICATION_JSON')
                          echo "Status: ${{response.status}}"
                     }}
                     currentBuild.result = original
                 }}
             }}
         }}
-    }}""".format(stages, Id, port, port, Id, Id, Id, Id, Id, apiEndpoint)
+    }}"""
     return pipeline_code
 
-def generate_xml(Id, code=None, port=None, apiEndpoint=None, description="no description"):
-    if not code:
-        code = [[]]
-    pipeline_code = generate_pipe(Id, code, port, apiEndpoint)
+def generate_xml(Id, code=[[]], port=None,
+                 apiEndpoint=None, check=False,
+                 abort=["echo 'no command to run after abort'"],
+                 fail=["echo 'no command to run after fail'"],
+                 description="no description"):
+    pipeline_code = generate_pipe(Id, code, port, apiEndpoint, check, abort, fail)
     xml_config = f"""<?xml version="1.1" encoding="UTF-8" standalone="no"?>
     <flow-definition plugin="workflow-job@1400.v7fd111b_ec82f">
       <actions>

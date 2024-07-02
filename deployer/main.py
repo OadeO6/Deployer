@@ -6,6 +6,7 @@ import uuid
 from os import getenv
 import jenkins
 from deployer.myxml import generate_xml
+from deployer.util import flaskSetup, reactSetup
 
 
 class Deployer:
@@ -76,7 +77,7 @@ class Deployer:
 
     def generate_xml_config(self, host_port):
         code = []
-        port = self.envDict.get("FLASK_RUN_PORT", "5000")
+        projectPort = self.envDict.get("FLASK_RUN_PORT", "5000")
         Setup = ["set up ",
                 f"sudo docker network  create {self.id}-network-${{currentBuild.number}}",
                 "scriptNext", # the script shoud be removed because this file is not meant to understand hoe to interact with jenkins
@@ -93,87 +94,109 @@ class Deployer:
                  """]
 
         pType = self.pType
+        code.append(Setup)
         if pType:
             if pType.casefold() == "flask":
-                Build = ["build flask project"]
-                # run container
-                Build.append(
-                    " sudo docker run -d -it" +
-                    f" --name {self.id}-name " +
-                    self.getDEnv(self.envDict) +
-                    " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
-                    " -w /app " +
-                    f" -p {host_port}:5000 " +
-                    f" --network {self.id}-network-${{currentBuild.number}}" +
-                    " python:3.9-alpine " +
-                    " sh"
-                )
-                #do instalations
-                Build.append(
-                    f"sudo docker exec {self.id}-name sh -c 'pip install -r requirements.txt'"
-                )
-                Run = ["Run project"]
-                # add -d wil make it run in background
-                Run.append(
-                    f'sudo docker exec -d {self.id}-name sh -c ' +
-                    " 'python -m flask --app {} run --host 0.0.0.0' ".format(
-                        self.envDict.get("FLASK_APP", "app")
-                    )
-                )
+                # projectPort = 5000
+                # Build = ["build flask project"]
+                # # run container
+                # Build.append(
+                #     " sudo docker run -d -it" +
+                #     f" --name {self.id}-name " +
+                #     self.getDEnv(self.envDict) +
+                #     " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
+                #     " -w /app " +
+                #     f" -p {host_port}:{projectPort} " +
+                #     f" --network {self.id}-network-${{currentBuild.number}}" +
+                #     " python:3.9-alpine " +
+                #     " sh"
+                # )
+                # #do instalations
+                # Build.append(
+                #     f"sudo docker exec {self.id}-name sh -c 'pip install -r requirements.txt'"
+                # )
+                # Run = ["Run project"]
+                # # add -d wil make it run in background
+                # Run.append(
+                #     f'sudo docker exec -d {self.id}-name sh -c ' +
+                #     " 'python -m flask --app {} run --host 0.0.0.0' ".format(
+                #         self.envDict.get("FLASK_APP", "app")
+                #     )
+                # )
+                code, projectPort = flaskSetup(code,
+                                               self.getDEnv(self.envDict),
+                                               self.envDict, host_port)
 
 
             if pType.casefold() == "react":
-                Build = ["run next project"]
-                # run container
-                Build.append(
-                    "sudo docker run -d -it" +
-                    f" --name {self.id}-name " +
-                    self.getDEnv(self.envDict) +
-                    " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
-                    " -w /app " +
-                    f" -p {host_port}:3000 " +
-                    f" --network {self.id}-network-${{currentBuild.number}} " +
-                    " node:16-alpine " +
-                    " sh"
-                )
-                #do instalations
-                Build.append(
-                    f" sudo docker exec {self.id}-name sh -c 'npm install'"
-                )
-                Run = ["Run project"]
-                Run.append(
-                    f"sudo docker exec -d {self.id}-name sh -c 'HOST=0.0.0.0 npm run dev '"
-                )
+                # projectPort = 3000
+                # Build = ["run next project"]
+                # # run container
+                # Build.append(
+                #     "sudo docker run -d -it" +
+                #     f" --name {self.id}-name " +
+                #     self.getDEnv(self.envDict) +
+                #     " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
+                #     " -w /app " +
+                #     f" -p {host_port}:{projectPort} " +
+                #     f" --network {self.id}-network-${{currentBuild.number}} " +
+                #     " node:16-alpine " +
+                #     " sh"
+                # )
+                # #do instalations
+                # Build.append(
+                #     f" sudo docker exec {self.id}-name sh -c 'npm install'"
+                # )
+                # Run = ["Run project"]
+                # Run.append(
+                #     f"sudo docker exec -d {self.id}-name sh -c 'HOST=0.0.0.0 npm run dev '"
+                # )
+                code, projectPort = reactSetup(code,
+                                               self.getDEnv(self.envDict),
+                                               self.envDict, host_port)
+
 
             if pType.casefold() == "next":
-                Build = ["run next project"]
-                # run container
-                Build.append(
-                    "sudo docker run -d -it" +
-                    f" --name {self.id}-name " +
-                    self.getDEnv(self.envDict) +
-                    " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
-                    " -w /app " +
-                    f" -p {host_port}:3000 " +
-                    f" --network {self.id}-network-${{currentBuild.number}} " +
-                    " node:18-alpine " +
-                    " sh"
-                )
-                #do instalations
-                Build.append(
-                    f" sudo docker exec {self.id}-name sh -c 'npm install'"
-                )
-                Run = ["Run project"]
-                Run.append(
-                    f"sudo docker exec  -d {self.id}-name sh -c 'HOST=0.0.0.0 npm run dev'"
-                )
-        checkPort = ["skip"]
-        code.append(Setup)
-        code.append(Build)
-        code.append(checkPort)
-        code.append(Run)
-        print(code)
-        xml = generate_xml(self.id, code, port, self.api2Endpoint)
+                # projectPort = 3000
+                # Build = ["run next project"]
+                # # run container
+                # Build.append(
+                #     "sudo docker run -d -it" +
+                #     f" --name {self.id}-name " +
+                #     self.getDEnv(self.envDict) +
+                #     " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
+                #     " -w /app " +
+                #     f" -p {host_port}:{projectPort} " +
+                #     f" --network {self.id}-network-${{currentBuild.number}} " +
+                #     " node:18-alpine " +
+                #     " sh"
+                # )
+                # #do instalations
+                # Build.append(
+                #     f" sudo docker exec {self.id}-name sh -c 'npm install'"
+                # )
+                # Run = ["Run project"]
+                # Run.append(
+                #     f"sudo docker exec  -d {self.id}-name sh -c 'HOST=0.0.0.0 npm run dev'"
+                # )
+                code, projectPort = reactSetup(code,
+                                               self.getDEnv(self.envDict),
+                                               self.envDict, host_port)
+        # checkPort = ["skip"]
+        # code.append(Setup)
+        # code.append(Build)
+        # code.append(checkPort)
+        # code.append(Run)
+        # print(code)
+        abort = [
+                f'sh "sudo docker rm -f { self.id }-name"',
+                f'sh "sudo docker network rm { self.id }-network"'
+        ]
+        fail = [
+                f'sh "sudo docker rm { self.id }-name -f"',
+                f'sh "sudo docker network rm { self.id }-network"'
+        ]
+        xml = generate_xml(self.id, code, projectPort, self.api2Endpoint, True, abort, fail)
         return xml
 
     def old_data_to_new_repo(self):
