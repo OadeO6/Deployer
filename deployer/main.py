@@ -94,8 +94,17 @@ class Deployer:
                  """]
 
         pType = self.pType
-        code.append(Setup)
         if pType:
+            if pType.casefold() == "mysql":
+                code, projectPort = mysqlSetup(code,
+                                               self.getDEnv(self.envDict),
+                                               self.envDict, host_port)
+
+            if pType.casefold() == "mongodb":
+                code, projectPort = mongodbSetup(code,
+                                               self.getDEnv(self.envDict),
+                                               self.envDict, host_port)
+
             if pType.casefold() == "flask":
                 # projectPort = 5000
                 # Build = ["build flask project"]
@@ -123,6 +132,7 @@ class Deployer:
                 #         self.envDict.get("FLASK_APP", "app")
                 #     )
                 # )
+                code.append(Setup)
                 code, projectPort = flaskSetup(code,
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port)
@@ -151,6 +161,7 @@ class Deployer:
                 # Run.append(
                 #     f"sudo docker exec -d {self.id}-name sh -c 'HOST=0.0.0.0 npm run dev '"
                 # )
+                code.append(Setup)
                 code, projectPort = reactSetup(code,
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port)
@@ -179,6 +190,7 @@ class Deployer:
                 # Run.append(
                 #     f"sudo docker exec  -d {self.id}-name sh -c 'HOST=0.0.0.0 npm run dev'"
                 # )
+                code.append(Setup)
                 code, projectPort = reactSetup(code,
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port)
