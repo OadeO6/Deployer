@@ -64,8 +64,57 @@ def mysqlSetup(code, Id, dockerEnv, mainEnv, host_port):
     """
     create a mysql database
     """
+    if True:
+        parentId = Id
     CreateServer = ["create data-base server"]
+    CreateServer.append(
+        f" sudo docker run --name {Id}-name " +
+        f" -p {host_port}:{projectPort} " +
+        f" --network {parentId}-network-${{currentBuild.number}}" +
+        f"  -e MYSQL_ROOT_PASSWORD={rootPass} " +
+        f" -e MYSQL_USER={userName} " +
+        f" -e MYSQL_TCP_PORT={projectPort} " +
+        f" -e MYSQL_PASSWORD={userPass} " +
+        " -d mysql:8.0 "
+    )
     CreateDatabase = ["create data-base"]
+    CreateDatabase.append(
+        f" sudo  docker run -it --rm  mysql:8.0  " +
+        # f" mysql -u{userName} -p{userPass} -P {projectPort}" +
+        f" mysql -uroot -p{rootPass} -P {projectPort}" +
+        f" -e CREATE DATABASE {dbName}; "
+    )
+    CreateDatabase.append(
+        f" sudo  docker run -it --rm  mysql:8.0  " +
+        # f" mysql -u{userName} -p{userPass} -P {projectPort}" +
+        f" mysql -uroot -p{rootPass} -P {projectPort}" +
+    f" GRANT ALL PRIVILEGES ON {dbName}.* TO '{userName}'@'%'; "
+    )
     code.append(CreateServer)
     code.append(CreateDatabase)
     return code
+
+def mongodbSetup(code, Id, dockerEnv, mainEnv, host_port):
+    """
+    create a mysql database
+    """
+    CreateServer = ["create data-base server"]
+    CreateServer.append(
+        f" sudo docker run --name {Id}-name " +
+        f" --network {parentId}-network-${{currentBuild.number}}" +
+            f" -e MONGO_INITDB_ROOT_USERNAME={userName} " +
+            # f" -e MYSQL_TCP_PORT={projectPort} " +
+            f" -e MONGO_INITDB_ROOT_PASSWORD={userPass} " +
+            " -d mongo:7.0-jammy "
+    )
+
+    # there should be no need to create a dfata base since it will
+    # be automatically created
+    # CreateDatabase = ["create data-base"]
+    # CreateDatabase.append(
+    #     f" sudo  docker exec -it {Id}-name mongosh " +
+    #     f" -u {userName} -p {userPass} -P {projectPort}" +
+    #     f" CREATE DATABASE {dbName} "
+    # )
+    # code.append(CreateServer)
+    # code.append(CreateDatabase)
