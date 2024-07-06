@@ -3,6 +3,7 @@
 seed a database with available ports
 """
 import socket
+from os import getenv
 # import psutil
 
 
@@ -11,7 +12,7 @@ def check_port(port):
     check if a perticulart port is in use
     """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex(('localhost', port)) == 0
+        return s.connect_ex((getenv("HOST_IP", "127.0.0.1"), port)) == 0
 
 def get_available_port(port_ignore):
     """
