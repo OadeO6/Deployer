@@ -8,30 +8,43 @@ from models.build import Build
 from models.user import User
 from os import getenv
 
-class DataBase(Base):
-    name = "database" # collection name
-    def __init__(self, user_id, form=None,  _id=None):
-        self.keys = ["id", "name", "created_at", "user_id", "data_base_type", "tag", "build_id", "current_build_num", "url"]
+class DBServer(Base):
+    name = "db_server" # collection name
+    def __init__(self, user_id, project_id, form=None,  _id=None):
+        self.keys = ["id", "name", "created_at", "user_id", "data_bases",
+                     "scope", "db_type", "build_id", "url", "project_id"]
         # build id is the combination of build id ans build num
         super().__init__()
         if _id:
             self.id = _id
         if form:
             self.name = form.dataBaseName.data
-            self.project_type = form.dataBaseType.data
+            self.db_type = form.dataBaseType.data
+            self.port = form.dataBasPort.data
+            self.user_name = form.dataBaseUser.data
+            self.user_pass = form.dataBasePass.data
         self.user_id = User.confirm(user_id)
+        if project_id:
+            self.project_id = project_id #Project.confirm(project_id)
+            self.scope = "local"
+        else:
+            self.scope = "global"
+            self.project_id = None
         self.server_ip = getenv("HOST_IP" , "54.208.115.123")
+        self.root_pass = "rootpass"
 
-    # def build(self):
-    def create(self):
+    # def create(self):
+    def build(self):
         """
-        administer a projrct build
+        administer a project build
         returns True if it was successfull
         """
         from models.ports import Ports
         build = Build(self.id,
-                      self.form.repoUrl.data,
-                      self.form.projectType.data)
+                      self.db_type, projectPort=self.port,
+                      userPass=self.user_pass, userName=self.user_name,
+                      rootPass=self.root_pass,
+                      relativeProjectId=self.project_id)
         host_port = Ports.get_a_port()
         if not host_port:
             print("No port was gotten, pls log this")
@@ -42,7 +55,6 @@ class DataBase(Base):
             return False
         self.build_id = build.id
         # self.curent build num
-        self.current_build_num = build.build_num
         build.save()
         return True
 
@@ -85,11 +97,11 @@ class DataBase(Base):
     #     return True
 
     @classmethod
-    def getbuilds(cls, id):
+    def getdatabases(cls, id):
         """
         get the latest build of a project
         """
-        results = Build.find({"project_id": id})
+        results = DBServer.find({"id": id})
         return results
 
     # @classmethod

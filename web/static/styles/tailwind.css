@@ -598,6 +598,10 @@ video {
   margin: 0.5rem;
 }
 
+.m-3 {
+  margin: 0.75rem;
+}
+
 .m-5 {
   margin: 1.25rem;
 }
@@ -608,10 +612,6 @@ video {
 
 .m-auto {
   margin: auto;
-}
-
-.m-3 {
-  margin: 0.75rem;
 }
 
 .mx-auto {
@@ -721,10 +721,6 @@ video {
 
 .max-h-10 {
   max-height: 2.5rem;
-}
-
-.min-h-5 {
-  min-height: 1.25rem;
 }
 
 .min-h-\[calc\(100vh-40px-60px\)\] {
@@ -963,6 +959,11 @@ video {
   padding: 5px;
 }
 
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
 .px-5 {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
@@ -981,11 +982,6 @@ video {
 .py-\[20px\] {
   padding-top: 20px;
   padding-bottom: 20px;
-}
-
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
 }
 
 .pt-0 {

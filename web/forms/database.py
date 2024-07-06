@@ -1,6 +1,6 @@
 from . import FlaskForm, StringField, SubmitField, RadioField, SelectField, SelectMultipleField
 
-class dataBaseForm(FlaskForm):
+class dbServerForm(FlaskForm):
     # mode = RadioField(default="dev", choices=["ade","dev"])
     # projectName = StringField("Project Name")
     # repoUrl = StringField("Repo Url", default="https://github.com/Ade06AA/mytest")
@@ -15,9 +15,12 @@ class dataBaseForm(FlaskForm):
     # webServer = SelectField("Web Server")
     # dataBaseServer = SelectMultipleField("Select servers", default=["a","b"], choices=["a", "b", "c"])
     dataBaseName = StringField("Name")
+    dataBasePort = StringField("Port")
+    dataBaseScope = StringField("Scope", default="global")
     dataBasetype = SelectField("Select an option", choices=[("Mongo Db", "MongoDb"), ("Mysql", "Mysql")])
-    dataBaseUserName = SelectField("User name")
-    dataBasePassword = SelectField("User password")
+    dataBaseUser = StringField("User name")
+    dataBasePass = StringField("User password")
+    dbProjectName = StringField("User password")
     """
     dataBaseServer = SelectMultipleField("Select servers", choices=[
         ("ADE", "ADE"), ("BOLA", "BOLA"),

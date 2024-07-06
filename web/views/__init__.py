@@ -29,12 +29,22 @@ def get_menus():
             "Projects",
             url_for("user_views.projects"),
             ProjectsSvg,
-            [ project for project in Project.find({"user_id": session["user_id"]}) ]
+            [ project for project in Project.find({
+                "user_id": session["user_id"]
+            }) ]
         ],
         [
             "New Project",
             url_for("user_views.newProject"),
             NewProjectSvg
+        ],
+        [
+            "Database Servers",
+            url_for("user_views.dbServers"),
+            ProjectsSvg,
+            [ servers for servers in DBServer.find({
+                "user_id": session["user_id"]
+            }) ]
         ],
         [
             "Configurations",
@@ -51,5 +61,6 @@ from web.views.auth import *
 from web.views.index import *
 from web.views.dashboard import *
 from web.views.project import *
+from web.views.database import *
 from web.views.api import *
 from web.views.dashboardextra import *

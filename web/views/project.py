@@ -1,5 +1,5 @@
 """
-authentications
+projects
 """
 from flask import (
     Blueprint, flash, g, request, redirect, render_template, request, session, url_for, abort, jsonify

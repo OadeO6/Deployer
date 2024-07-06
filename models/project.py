@@ -11,7 +11,8 @@ from os import getenv
 class Project(Base):
     name = "project" # collection name
     def __init__(self, user_id, form=None,  _id=None):
-        self.keys = ["id", "name", "created_at", "user_id", "project_type", "tag", "build_id", "current_build_num", "url"]
+        self.keys = ["id", "name", "created_at", "user_id", "project_type",
+                     "tag", "build_id", "current_build_num", "url"]
         # build id is the combination of build id ans build num
         super().__init__()
         if _id:
@@ -30,8 +31,8 @@ class Project(Base):
         """
         from models.ports import Ports
         build = Build(self.id,
-                      self.form.repoUrl.data,
-                      self.form.projectType.data)
+                      self.form.projectType.data,
+                      self.form.repoUrl.data)
         host_port = Ports.get_a_port()
         print("@@@ ", host_port)
         if not host_port:

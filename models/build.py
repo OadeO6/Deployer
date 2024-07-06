@@ -7,7 +7,9 @@ from deployer.main import Deployer
 
 class Build(Base):
     name = "build"
-    def __init__(self, project_id, _repo=None, _type=None, _id=None):
+    def __init__(self, project_id, _type: str , _repo=None, _id=None,
+                 userName=None, userPass=None, rootPass=None, dbName=None,
+                 projectPort=None, relativeProjectId=None):
         """
         to add build finis time
         """
@@ -20,8 +22,18 @@ class Build(Base):
             self.id = _id
         self.project_id = project_id
         self.repo = _repo
+        _type = _type.lower()
+        kwargs = {}
+        if _type in ["flask", "react", "next", "django"]:
+            kwargs = {"repoUrl": _repo}
+        elif _type == "mongodb":
+            kwargs = {"userName": userName,"project_id": relativeProjectId,
+                     "userPass": userPass}
+        elif _type == "mysql":
+            kwargs = {"userName": userName, "userPass": userPass,
+                     "project_id": relativeProjectId, "rootPass": rootPass}
         self.job = Deployer(id=self.id,
-                            projectType=_type, repoUrl=_repo)
+                            projectType=_type, projectPort=projectPort, **kwargs)
         self.build_num = self.job.buildNum
 
     def build(self, port):

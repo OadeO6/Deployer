@@ -2,11 +2,10 @@
 """
 Module that handels the main deployment
 """
-import uuid
 from os import getenv
 import jenkins
 from deployer.myxml import generate_xml
-from deployer.util import flaskSetup, reactSetup
+from deployer.util import flaskSetup, reactSetup, mysqlSetup, mongodbSetup
 
 
 class Deployer:
@@ -21,6 +20,7 @@ class Deployer:
         # FLASK_RUN_PORT FLASK_APP
         self.envDict = {}
         self.pType = kwargs.get("projectType", "flask")
+        self.projectPort = kwargs.get("projectPort")
         self.repo = kwargs.get("repoUrl") # remove cration od id #temp
         #"https://github.com/Ade06AA/mytest"
         if self.server.job_exists(f"{self.id}-job"):
@@ -96,44 +96,31 @@ class Deployer:
         pType = self.pType
         if pType:
             if pType.casefold() == "mysql":
-                code, projectPort = mysqlSetup(code,
+                dbDetails = {
+                    "userName": self.kwargs.get("userName"),
+                    "userPass": self.kwargs.get("userPass"),
+                    "rootPass": self.kwargs.get("rootPass"),
+                    "parent_id": self.kwargs.get("project_id"),
+                    "projectPort": self.projectPort
+                }
+                code, projectPort = mysqlSetup(code, self.id,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port)
+                                               self.envDict, host_port, dbDetails, dbDetails)
 
             if pType.casefold() == "mongodb":
-                code, projectPort = mongodbSetup(code,
+                dbDetails = {
+                    "userName": self.kwargs.get("userName"),
+                    "userPass": self.kwargs.get("userPass"),
+                    "parent_id": self.kwargs.get("project_id"),
+                    "projectPort": self.projectPort
+                }
+                code, projectPort = mongodbSetup(code, self.id,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port)
+                                               self.envDict, host_port, dbDetails)
 
             if pType.casefold() == "flask":
-                # projectPort = 5000
-                # Build = ["build flask project"]
-                # # run container
-                # Build.append(
-                #     " sudo docker run -d -it" +
-                #     f" --name {self.id}-name " +
-                #     self.getDEnv(self.envDict) +
-                #     " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
-                #     " -w /app " +
-                #     f" -p {host_port}:{projectPort} " +
-                #     f" --network {self.id}-network-${{currentBuild.number}}" +
-                #     " python:3.9-alpine " +
-                #     " sh"
-                # )
-                # #do instalations
-                # Build.append(
-                #     f"sudo docker exec {self.id}-name sh -c 'pip install -r requirements.txt'"
-                # )
-                # Run = ["Run project"]
-                # # add -d wil make it run in background
-                # Run.append(
-                #     f'sudo docker exec -d {self.id}-name sh -c ' +
-                #     " 'python -m flask --app {} run --host 0.0.0.0' ".format(
-                #         self.envDict.get("FLASK_APP", "app")
-                #     )
-                # )
                 code.append(Setup)
-                code, projectPort = flaskSetup(code,
+                code, projectPort = flaskSetup(code, self.id,
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port)
 
@@ -208,7 +195,8 @@ class Deployer:
                 f'sh "sudo docker rm { self.id }-name -f"',
                 f'sh "sudo docker network rm { self.id }-network"'
         ]
-        xml = generate_xml(self.id, code, projectPort, self.api2Endpoint, True, abort, fail)
+        xml = generate_xml(self.id, code, projectPort, self.api2Endpoint,
+                           True, abort, fail)
         return xml
 
     def old_data_to_new_repo(self):
