@@ -40,7 +40,7 @@ def generate_pipe(Id, code, port, apiEndpoint, check, abort, fail):
     abort = [a+'\n' for a in abort]
     fail = [a+'\n' for a in fail]
     pipeline_code = f"""pipeline {{
-        agent any
+        agent {{ label 'alx'}}
 
         triggers {{
             pollSCM('*/1 * * * *')
