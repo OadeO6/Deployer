@@ -5,3 +5,8 @@ document.getElementById("userMenu").addEventListener("click", function() {
   document.querySelectorAll(".myMenuHide").forEach((element)=>{ element.classList.toggle("hidden");
   });
 });
+
+function toggleHidden(Id) {
+  const div = document.getElementById(Id);
+  div.classList.toggle("hidden")
+}
