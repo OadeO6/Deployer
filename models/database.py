@@ -20,7 +20,8 @@ class DBServer(Base):
         if form:
             self.name = form.dataBaseName.data
             self.db_type = form.dataBaseType.data
-            self.port = form.dataBasPort.data
+            print(self.db_type, "@")
+            self.port = form.dataBasePort.data
             self.user_name = form.dataBaseUser.data
             self.user_pass = form.dataBasePass.data
         self.user_id = User.confirm(user_id)

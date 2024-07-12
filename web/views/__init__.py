@@ -3,7 +3,7 @@ doc
 """
 from flask import Blueprint, g, redirect, session, url_for, current_app
 import functools
-from web.views.images import UpdateSvg, SetingSvg, NewProjectSvg, ProfileSvg, ProjectsSvg
+from web.views.images import UpdateSvg, SetingSvg, NewProjectSvg, ProfileSvg, ProjectsSvg, DatabaseSvg
 from models.project import Project
 
 app_views = Blueprint("app_views", __name__, url_prefix="/")
@@ -21,7 +21,7 @@ def need_login(view):
 def get_menus():
     return ([
         [
-            "Profile",
+            "Dashboard",
             url_for("user_views.home"),
             ProfileSvg
         ],
@@ -41,19 +41,19 @@ def get_menus():
         [
             "Database Servers",
             url_for("user_views.dbServers"),
-            ProjectsSvg,
+            DatabaseSvg,
             [ servers for servers in DBServer.find({
                 "user_id": session["user_id"]
             }) ]
         ],
         [
-            "Configurations",
-            url_for("user_views.projects"),
+            "Settings",
+            "#",
             SetingSvg
         ],
         [
             "Update",
-            url_for("user_views.projects"),
+            "#",
             UpdateSvg
         ]
     ])

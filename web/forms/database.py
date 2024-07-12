@@ -1,3 +1,4 @@
+from wtforms.fields import choices
 from . import FlaskForm, StringField, SubmitField, RadioField, SelectField, SelectMultipleField
 
 class dbServerForm(FlaskForm):
@@ -16,11 +17,11 @@ class dbServerForm(FlaskForm):
     # dataBaseServer = SelectMultipleField("Select servers", default=["a","b"], choices=["a", "b", "c"])
     dataBaseName = StringField("Name")
     dataBasePort = StringField("Port")
-    dataBaseScope = StringField("Scope", default="global")
-    dataBasetype = SelectField("Select an option", choices=[("Mongo Db", "MongoDb"), ("Mysql", "Mysql")])
+    dataBaseScope = RadioField("Scope", default="global", choices=["global", "local"])
+    dataBaseType = SelectField("Select an option", choices=[("Mongo Db", "MongoDb"), ("Mysql", "Mysql")])
     dataBaseUser = StringField("User name")
     dataBasePass = StringField("User password")
-    dbProjectName = StringField("User password")
+    dbProjectName = StringField("Project Name")
     """
     dataBaseServer = SelectMultipleField("Select servers", choices=[
         ("ADE", "ADE"), ("BOLA", "BOLA"),
@@ -30,4 +31,4 @@ class dbServerForm(FlaskForm):
         ("AD", "AD"), ("BOL", "BOL")
     ])
     """
-    submit = SubmitField("Create Data-base")
+    submit = SubmitField("Create Database Server")

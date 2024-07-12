@@ -101,7 +101,7 @@ def mysqlSetup(code, Id, dockerEnv, mainEnv, host_port,
     f" GRANT ALL PRIVILEGES ON {dbName}.* TO '{userName}'@'%'; "
     )
     code.append(CreateServer)
-    code.append(CreateDatabase)
+    #code.append(CreateDatabase)
     return code, dbPort
 
 def mongodbSetup(code, Id, dockerEnv, mainEnv, host_port, dbDetails):
@@ -128,6 +128,7 @@ def mongodbSetup(code, Id, dockerEnv, mainEnv, host_port, dbDetails):
             f" -e MONGO_INITDB_ROOT_PASSWORD={userPass} " +
             " -d mongo:7.0-jammy "
     )
+    code.append(CreateServer)
     return code, dbPort
 
     # there should be no need to create a dfata base since it will

@@ -1,19 +1,19 @@
 from . import FlaskForm, StringField, SubmitField, RadioField, SelectField, SelectMultipleField
 
 class projectForm(FlaskForm):
-    mode = RadioField(default="dev", choices=["ade","dev"])
+    mode = RadioField("Deployment Mode", default="dev", choices=["Production","Development"])
     projectName = StringField("Project Name")
-    repoUrl = StringField("Repo Url", default="https://github.com/Ade06AA/mytest")
+    repoUrl = StringField("Repository URL") #, default="https://github.com/Ade06AA/mytest")
     envKey = StringField("Key")
     envValue = StringField("Value")
     projectType = SelectField("Select an option", choices=[("Next", "Next"), ("Flask", "Flask")])
-    projectdirectory = StringField("Project Directory")
+    projectDirectory = StringField("Project Directory")
     hostIp = StringField("Custom Host Ip")
     buildCommand = StringField("Build Command")
     installCommand = StringField("Install Command")
+
     deployCommand = StringField("Deploy Command")
-    webServer = SelectField("Web Server")
-    dataBaseServer = SelectMultipleField("Select servers", default=["a","b"], choices=["a", "b", "c"])
+    webServer = SelectField("HTTP Server", choices=[("Gunicorn", "Gunicorn"), ("uWSGI", "uWSGI")])
     """
     dataBaseServer = SelectMultipleField("Select servers", choices=[
         ("ADE", "ADE"), ("BOLA", "BOLA"),
@@ -22,5 +22,6 @@ class projectForm(FlaskForm):
         ("AE", "AE"), ("OLA", "OLA"),
         ("AD", "AD"), ("BOL", "BOL")
     ])
+
     """
-    submit = SubmitField("Next")
+    submit = SubmitField("Deploy Project")

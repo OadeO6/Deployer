@@ -96,6 +96,8 @@ class Deployer:
         pType = self.pType
         if pType:
             if pType.casefold() == "mysql":
+                if not self.kwargs.get("project_id"):
+                    code.append(Setup[:2])
                 dbDetails = {
                     "userName": self.kwargs.get("userName"),
                     "userPass": self.kwargs.get("userPass"),
@@ -108,6 +110,9 @@ class Deployer:
                                                self.envDict, host_port, dbDetails, dbDetails)
 
             if pType.casefold() == "mongodb":
+
+                if not self.kwargs.get("project_id"):
+                    code.append(Setup[:2])
                 dbDetails = {
                     "userName": self.kwargs.get("userName"),
                     "userPass": self.kwargs.get("userPass"),

@@ -10,6 +10,7 @@ from web.forms.database import dbServerForm
 from models.database import DBServer
 from models.project import Project
 from . import user_views, need_login, get_menus
+from web.views.images import PlusSvg
 
 
 @user_views.route('/dbserver/new', methods=['GET', 'POST'])
@@ -71,5 +72,6 @@ def dbServers():
         "dbServers.html",
         curentUrl=url_for("user_views.dbServers"),
         menubar=get_menus(),
-        projects=dbservers
+        projects=dbservers,
+        PlusSvg = PlusSvg
     )
