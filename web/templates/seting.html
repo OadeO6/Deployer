@@ -1,6 +1,107 @@
 {% extends 'base.html' %}
-{% block content %}
-<div class="main_content">
-	<p> hello</p>
-</div>
-{% endblock %}
+  {% block content %}
+  <div class="layout-container flex h-full grow flex-col">
+
+    <div class="px-40 flex flex-1 justify-center py-5">
+      <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+        <div class="flex flex-wrap gap-2 p-4"><span class="text-white text-base font-medium leading-normal">Settings</span></div>
+        <div class="flex flex-wrap justify-between gap-3 p-4"><p class="text-white tracking-light text-[32px] font-bold leading-tight min-w-72">Account</p></div>
+        <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Theme</h3>
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+          <div class="flex flex-1 gap-3 rounded-lg border border-[#314f68] bg-[#182834] p-4 items-center">
+            <div class="text-white" data-icon="Sun" data-size="24px" data-weight="regular">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                <path
+                  d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-white text-base font-bold leading-tight">Light</h2>
+          </div>
+          <div class="flex flex-1 gap-3 rounded-lg border border-[#314f68] bg-[#182834] p-4 items-center">
+            <div class="text-white" data-icon="Moon" data-size="24px" data-weight="regular">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                <path
+                  d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-white text-base font-bold leading-tight">Dark</h2>
+          </div>
+        </div>
+        <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Username</h3>
+        <div class="flex items-center gap-4 bg-[#101a23] px-4 min-h-14 justify-between">
+          <p class="text-white text-base font-normal leading-normal flex-1 truncate">@johndoe</p>
+          <div class="shrink-0">
+            <div class="text-white flex size-7 items-center justify-center" data-icon="PencilSimple" data-size="24px" data-weight="regular">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                <path
+                  d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Password</h3>
+        <div class="flex items-center gap-4 bg-[#101a23] px-4 min-h-14 justify-between">
+          <p class="text-white text-base font-normal leading-normal flex-1 truncate">••••••••••••••••••</p>
+          <div class="shrink-0">
+            <div class="text-white flex size-7 items-center justify-center" data-icon="PencilSimple" data-size="24px" data-weight="regular">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                <path
+                  d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Profile Picture</h3>
+        <div class="flex items-center gap-4 bg-[#101a23] px-4 min-h-14 justify-between">
+          <p class="text-white text-base font-normal leading-normal flex-1 truncate">Change picture</p>
+          <div class="shrink-0">
+            <div class="text-white flex size-7 items-center justify-center" data-icon="CaretRight" data-size="24px" data-weight="regular">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Email</h3>
+        <div class="flex items-center gap-4 bg-[#101a23] px-4 min-h-[72px] py-2 justify-between">
+          <div class="flex flex-col justify-center">
+            <p class="text-white text-base font-medium leading-normal line-clamp-1">Primary</p>
+            <p class="text-[#90b0cb] text-sm font-normal leading-normal line-clamp-2">john.doe@gmail.com</p>
+          </div>
+          <div class="shrink-0">
+            <div class="text-white flex size-7 items-center justify-center" data-icon="CaretRight" data-size="24px" data-weight="regular">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 bg-[#101a23] px-4 min-h-[72px] py-2 justify-between">
+          <div class="flex flex-col justify-center">
+            <p class="text-white text-base font-medium leading-normal line-clamp-1">Recovery Email</p>
+            <p class="text-[#90b0cb] text-sm font-normal leading-normal line-clamp-2">Add recovery email</p>
+          </div>
+          <div class="shrink-0">
+            <div class="text-white flex size-7 items-center justify-center" data-icon="CaretRight" data-size="24px" data-weight="regular">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="flex px-4 py-3 justify-start">
+          <button
+            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#2094f3] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+          >
+            <span class="truncate">Save Changes</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}

@@ -1,5 +1,90 @@
 {% extends 'userbase.html' %}
-{% block workspace %}
+  {% block workspace %}
+  <div class="px-40 flex flex-1 justify-center py-5">
+<form method="POST" class="bg-gray-950 p-3 md:p-7 rounded-xl layout-content-container flex flex-col  py-5 flex-1">
+      <div class="flex flex-wrap justify-between gap-3 p-4"><p class="text-white tracking-light text-[32px] font-bold leading-tight min-w-72">New Database Server</p></div>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.dataBaseName.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{form.dataBaseName(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal",
+          placeholder="e.g. production-db"
+          )}}
+
+        </label>
+      </div>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.dbProjectName.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{form.dbProjectName(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal",
+          placeholder="e.g. project name"
+          )}}
+        </label>
+      </div>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.dataBaseUser.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{form.dataBaseUser(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal",
+          placeholder="e.g. username"
+          )}}
+        </label>
+      </div>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.dataBasePass.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{form.dataBasePass(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal",
+          placeholder="e.g. password"
+          )}}
+        </label>
+      </div>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.dataBasePort.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{ form.dataBasePort(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal",
+          placeholder="e.g. 9980"
+          )  }}
+        </label>
+      </div>
+      <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Scope</h3>
+      <div class="flex flex-col gap-3 p-4">
+        {% for radio in form.dataBaseScope  %}
+        <label class="flex items-center gap-4 rounded-xl border border-solid border-[#314f68] p-[15px]">
+          {{ radio(
+          class="h-5 w-5 border-2 border-[#314f68] bg-transparent text-transparent checked:border-[#2094f3] checked:bg-[image:--radio-dot-svg] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-[#2094f3]"
+          ) }}
+          <div class="flex grow flex-col">
+            {{ radio.label(class="", class="text-white text-sm font-medium leading-normal") }}
+          </div>
+        </label>
+        {% endfor %}
+
+      </div>
+      <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Type</h3>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.dataBaseType.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{ form.dataBaseType(class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal") }}
+        </label>
+      </div>
+      <div class="flex px-4 py-3 justify-end">
+        {{ form.submit(class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#2094f3] text-white text-sm font-bold leading-normal tracking-[0.015em]") }}
+      </div>
+	</form>
+    <script src="{{url_for('static', filename='script/newProject.js')}}"></script>
+  </div>
+
+  {% endblock workspace %}
+
+
+
+
+
+
+{#
 <div>
 	{% set style5 = "w-auto bg-orange-900 rounded-md inline-block" %}
 	<form method="POST" class="bg-pink-900 m-[20px] p-[20px] rounded min-h-[calc(100vh-40px-60px)] flex flex-col justify-between">
@@ -34,4 +119,4 @@
 	</form>
     <script src="{{url_for('static', filename='script/newProject.js')}}"></script>
 </div>
-{% endblock workspace %}
+#}

@@ -5,20 +5,29 @@
     <meta charset="utf-8">
 		<meta name="description" content={{ description | default("Auto Server is a solution that help newbie web developers host their mini project") }}>
 		<meta name="author" content="ADE">
-		<meta name="image" content="images/icon.png">
+    <meta name="image" content="images/icon.png">
+    <link
+        rel="stylesheet"
+        as="style"
+        onload="this.rel='stylesheet'"
+        href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Work+Sans%3Awght%40400%3B500%3B700%3B900"
+        />
     <link rel="icon" href="images/icon.png" type="image/png">
 		<link rel="stylesheet" href="{{url_for('static',filename='styles/tailwind.css')}}">
 		<script src="{{url_for('static', filename='script/main.js')}}" defer></script>
     <title>Auto Server</title>
   </head>
-	<body class="bg-gray-300 relative">
+	<body class="bg-[#101923] relative dark group/design-root"
+    style='font-family: "Work Sans", "Noto Sans", sans-serif;'>
 		<header class="sticky top-0">
+      {% block header %}
 			{% include 'header.html' %}
+      {% endblock %}
 		</header>
 		<div class="">
 			{% with messages = get_flashed_messages() %}
 				{% if messages %}
-					<div class="ibg-red-900 text-center text-white p-2 iimin-w-1/3 mx-auto">
+					<div class="text-center text-white p-2 iimin-w-1/3 mx-auto">
 						<ul class="">
 							{% for message in messages %}
 								<li>{{ message }}</li>
@@ -31,8 +40,9 @@
 				<p> sorry, are you lost </p>
 			{% endblock %}
 		</div>
-		<!--footer class="bg-red-900 bottom-0 absolute w-full h-[50px]">
-			{% include 'footer.html' %}
-		</footer-->
+		<footer class="bg-red-900 bottom-0 absolute w-full">
+      {% block footer %}
+      {% endblock %}
+		</footer>
   </body>
 </html>

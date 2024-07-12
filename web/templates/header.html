@@ -1,24 +1,50 @@
 <div class="relative">
 	<div class="h-[70px] bg-gradient-to-l from-teal-300/95 iiitransparent via-90% to-teal-900/95 bg-size-100 shadow-md p-[10px] m-0 top-0 left-0 right-0 flex justify-between">
-		<a class="text-[20px]  md:text-[35px]" href="{{ url_for('app_views.index') }}">LOGO</a>
+		<a class="ml-3 text-[20px] md:text-[35px]" href="{{ url_for('app_views.index') }}">
+      <img class="h-[50px] m-auto  w-auto"src="{{url_for('static', filename='images/logo.png')}}" alt="DEPLOYER">
+    </a>
+
+      <div class="hidden lg:flex lg:gap-x-12 m-auto">
+        <a href="#" class="text-lg font-semibold leading-6 text-gray-900 hover:text-gray-600">Stats</a>
+      <a href="#" class="text-lg font-semibold leading-6 text-gray-900 hover:text-gray-600">Features</a>
+        <a href="#" class="text-lg font-semibold leading-6 text-gray-900  hover:text-gray-600">Surports</a>
+        <a href="#" class="text-lg font-semibold leading-6 text-gray-900  hover:text-gray-600">News</a>
+        <a href="#" class="text-lg font-semibold leading-6 text-gray-900  hover:text-gray-600">Api</a>
+        <a href="#" class="text-lg font-semibold leading-6 text-gray-900  hover:text-gray-600">FAQ</a>
+      </div>
+
 		<div class="">
 			{% if g.user %}
-				<div class="flex  gap-5">
-					<a class="border rounded p-1 border-red-900" href="{{ url_for('user_views.home') }}">
-						<h4 class="text-[30px]">{{ g.user }}</h4>
-					</a>
-					<a class="bg-blue-900 p-2 rounded" href="{{ url_for('auth_views.logout') }}">
-						<button class="bold text-[15px]">Log Out...</button>
-					</a>
-				</div>
-			{% else %}
-				<a class="bg-blue-900 rounded" href="{{ url_for('auth_views.register') }}">
-						<button class="bold text-[30px]">Sign In...</button>
-				</a>
-				<a class="bg-blue-900 rounded" href="{{ url_for('auth_views.login') }}">
-						<button class="bold text-[30px]">Log In...</button>
-				</a>
+      <div class="flex  gap-5">
+        <div class="flex items-center gap-4 mx-5">
+          <!-- <img class="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-5.jpg" alt=""> -->
+          <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+            <a href="{{ url_for('user_views.home') }}">
+              <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            </a>
+          </div>
+          <div class="font-medium dark:text-pink-900">
+            <a href="{{ url_for('user_views.home') }}">
+              <div>{{ g.user }}</div>
+            </a>
+            <a href="{{ url_for('auth_views.logout') }}">
+              <p>Log out</p>
+            </a>
+          </div>
+        </div>
+
+
+
+      </div>
+      {% else %}
+      <a href="{{ url_for('auth_views.register') }}">
+        <button type="button" class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Sign in</button>
+      </a>
+      <a href="{{ url_for('auth_views.login') }}">
+        <button type="button" class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Log in</button>
+      </a>
 			{% endif %}
 		</div>
+  </div>
 	</div>
 </div>
