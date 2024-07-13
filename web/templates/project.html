@@ -1,7 +1,7 @@
 {% extends 'userbase.html' %}
 {% block workspace %}
 <div>
-	<div class="bg-green-900 ">
+	<div class="bg-gray-500 ">
 		<p> Project :{{ project}}</p>
 		<p> Project Name:{{ project.name }}</p>
 		<p> Project Url: <a target="_blank" href="http://{{project.url}}">{{ project.url }}</a></p>
@@ -16,9 +16,9 @@
 		<div class="log">
 		</div>
 		<p>{{builds }} === builds</p>
-		<p>{{ build}} ==== build</p>
-		<p> output </p>
-		<div id="projectOutPut">
+		<!-- <p>{{ build}} ==== build</p> -->
+		<!-- <p> output </p> -->
+		<div id="projectOutPut" class="bg-gray-200">
 		</div>
 		<p>loading..........</p>
 	</div>
