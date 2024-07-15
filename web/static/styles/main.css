@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .myBigMenu {
-  @apply w-[25%] transition-all duration-500 ease-in-out;
+  @apply md:w-[25%] transition-all duration-500 ease-in-out;
 }
 
 .mySmallMenu {

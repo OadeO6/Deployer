@@ -50,12 +50,12 @@ def get_menus():
             "Settings",
             "#",
             SetingSvg
-        ],
-        [
-            "Update",
-            "#",
-            UpdateSvg
-        ]
+        ] # ,
+        # [
+        #    "Update",
+        #    "#",
+        #    UpdateSvg
+        #]
     ])
 from web.views.auth import *
 from web.views.index import *

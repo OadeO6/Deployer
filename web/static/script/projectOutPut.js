@@ -5,7 +5,21 @@ let count = 0;
 let interval = 2000;
 let mybrake = false;
 
+//not working
+const projectLink = document.getElementById("projectUrl");
+const projectMsg = document.getElementById("projectMsg");
+projectLink.addEventListener("click",(event) => {
+  if (this.classList.contains("mydisable")){
+    event.preventDefault();
+alert("aaaaa")
+    projectMsg.classList.remove("hidden");
+    setTimeout(() => {
+      projectMsg.classList.add("hidden")
+    }, 2000)
+  }
+})
 
+projectLink.classList.contains("mydisable")
 async function sleep(time){
     await new Promise(resolve => setTimeout(
       resolve,
@@ -34,6 +48,7 @@ async function updateData(){
       if (data.building == false){
         //clearInterval(intervalID);
         mybrake = true;
+        document.getElementById("building").classList.toggle("hidden")
         //return
       }
 
@@ -68,7 +83,7 @@ intervalID = setInterval(() => {
     await updateData();
     await sleep((count < 2) ? interval : (interval * count));
     console.log((count < 2) ? interval : (interval * count));
-    
+
     if (mybrake){
       break
     }

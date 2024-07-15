@@ -35,10 +35,11 @@
                         {% set view = 'user_views.dbServer' %}
 				<a href="{{ url_for(view, id=i.id) }}">
                         <button
-                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
+                          class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
                         >
                           <span class="truncate">{{ i.name }}</span>
                         </button>
+                        <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Go To Database Server Page</div>
                         </a>
                       </td>
                       <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
@@ -49,16 +50,17 @@
                       </td>
                       <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
                         <button
-                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
+                          class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
                         >
                           <span class="truncate">{{ i.url }}</span>
                         </button>
+                        <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Copy Database Server Address</div>
                       </td>
                       <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
                         {{ i.scope }}
                       </td>
                       <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
-                        {{ i.created_at }}
+                        {{ i.created_at | format_datetime}}
                       </td>
                     </tr>
                     {% endfor %}

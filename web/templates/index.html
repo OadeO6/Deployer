@@ -186,9 +186,7 @@
               </div>
             </div>
 
-
-
-    <div class="flex flex-col">
+            <div class="flex flex-col gap-10 px-4 py-10 @container">
       <div>
         <h3>Deployer fautueres:</h3>
         <div>
@@ -219,13 +217,13 @@
         <div>
         </div>
       </div>
-      <div>
-        <h3>FAQ</h3>
+        <div class="px-4 flex flex-col justify-center py-5">
+            <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em]  pb-3 pt-5">FAQ</h2>
+            <div class="flex flex-col  gap-3">
         {% from "components.html" import cardfaq %}
-        <div>
           {% set faq = ["Can i integrate database", "Yes you can, go to the database section"] %}
           {{ cardfaq(faq[0], faq[1]) }}
-        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -235,7 +233,7 @@
 {% block footer %}
 
 
-<div class="bg-white dark:bg-gray-900">
+<div class="bg-white dark:bg-gray-900 reletive">
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div class="md:flex md:justify-between">
           <div class="mb-6 md:mb-0">
