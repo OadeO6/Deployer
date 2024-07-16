@@ -12,7 +12,7 @@ class Project(Base):
     name = "project" # collection name
     def __init__(self, user_id, form=None,  _id=None):
         self.keys = ["id", "name", "created_at", "user_id", "project_type",
-                     "tag", "build_id", "current_build_num", "url"]
+                     "tag", "build_id", "current_build_num", "repo", "url"]
         # build id is the combination of build id ans build num
         super().__init__()
         if _id:
@@ -21,6 +21,7 @@ class Project(Base):
             self.name = form.projectName.data
             self.project_type = form.projectType.data
             self.form = form
+            self.repo = form.repoUrl.data
         self.user_id = User.confirm(user_id)
         self.server_ip = getenv("HOST_IP" , "54.208.115.123")
 

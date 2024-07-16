@@ -48,7 +48,8 @@ async function updateData(){
       if (data.building == false){
         //clearInterval(intervalID);
         mybrake = true;
-        document.getElementById("building").classList.toggle("hidden")
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("links").classList.remove("hidden");
         //return
       }
 
