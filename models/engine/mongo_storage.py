@@ -24,14 +24,18 @@ class MongoStorage:
             DB_PORT = 27017
         DB_HOST = getenv("DB_HOST", "localhost")
         self.intransaction = False
-        self.client = MongoClient(host=DB_HOST, port=DB_PORT)
-        self.db = self.client[DB_NAME]
-        self.db.user.create_index([("id", ASCENDING)], unique=True)
-        self.db.user.create_index([("email", ASCENDING)], unique=True)
-        self.db.build.create_index([("id", ASCENDING), ("build_num", ASCENDING)], unique=True)
-        self.db.project.create_index([("id", ASCENDING)], unique=True)
-        self.db.project.create_index([("user_id", ASCENDING), ("name", ASCENDING)], name="uniq_project", unique=True)
-        self.db.ports.create_index([("port", ASCENDING)], unique=True)
+        try:
+            self.client = MongoClient(host=DB_HOST, port=DB_PORT)
+            self.db = self.client[DB_NAME]
+            self.db.user.create_index([("id", ASCENDING)], unique=True)
+            self.db.user.create_index([("email", ASCENDING)], unique=True)
+            self.db.build.create_index([("id", ASCENDING), ("build_num", ASCENDING)], unique=True)
+            self.db.project.create_index([("id", ASCENDING)], unique=True)
+            self.db.project.create_index([("user_id", ASCENDING), ("name", ASCENDING)], name="uniq_project", unique=True)
+            self.db.ports.create_index([("port", ASCENDING)], unique=True)
+        except Exception:
+            print("No database connection available")
+            exit()
         """
         self.project = db.project.create_index([("_id", ASCENDING)], unique=True)
         self.build = db.build.create_index([("_id", ASCENDING)], unique=True)
