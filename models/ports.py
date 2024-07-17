@@ -17,7 +17,6 @@ class Ports:
         if rep == 3:
             return None
         port = models.storage.findOne(cls, {"available": True})
-        print("@1",port)
         if port:
             port = port["port"]
         else:

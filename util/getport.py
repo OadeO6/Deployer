@@ -59,5 +59,5 @@ def main():
         pass
     print("####### DONE.........................")
     return
-
-main()
+if __name__ == "__main__":
+    main()
