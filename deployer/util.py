@@ -43,8 +43,9 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
         " sh"
     )
     #do instalations
+    Build.append("#show1# Installing Dependencies...")
     Build.append(
-        f"sudo docker exec {Id}-name sh -c 'pip install -r requirements.txt'"
+        f"sudo docker exec {Id}-name sh -c 'pip install -r requirements.txt' #show2# pip install"
     )
     Run = ["Run project"]
     # add -d wil make it run in background
@@ -52,7 +53,7 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
         f'sudo docker exec -d {Id}-name sh -c ' +
         " 'python -m flask --app {} run --host 0.0.0.0' ".format(
             mainEnv.get("FLASK_APP", "app")
-        )
+        ) + "#show1# run project"
     )
     checkPort = ["skip"]
     code.append(Build)
