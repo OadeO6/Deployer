@@ -33,8 +33,9 @@ class MongoStorage:
             self.db.project.create_index([("id", ASCENDING)], unique=True)
             self.db.project.create_index([("user_id", ASCENDING), ("name", ASCENDING)], name="uniq_project", unique=True)
             self.db.ports.create_index([("port", ASCENDING)], unique=True)
-        except Exception:
+        except Exception as e:
             print("No database connection available")
+            print(e)
             exit()
         """
         self.project = db.project.create_index([("_id", ASCENDING)], unique=True)

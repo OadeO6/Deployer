@@ -221,6 +221,7 @@ class Deployer:
                 print("error in creating job")
                 raise e
         else:
+            self.server.reconfig_job(f"{self.id}-job", self.generate_xml_config(port))
             b = self.server.build_job(Id+'-job')
             print(b)
             print("*********************** build********************")

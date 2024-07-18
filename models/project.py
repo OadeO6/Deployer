@@ -67,8 +67,9 @@ class Project(Base):
         repo_url = repo_url[0]["repo"]
         build = Build(
             self.id,
+            project["project_type"],
             repo_url,
-            project["project_type"], project["build_id"])
+            project["build_id"])
         print("kkkkkkkkkkkkkkkk")
         print(project["project_type"])
         host_port = Ports.get_a_port()

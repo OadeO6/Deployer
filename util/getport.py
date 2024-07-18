@@ -20,7 +20,7 @@ def get_available_port(port_ignore):
     """
     port_ignore = port_ignore + [22,80, 443,21,25,53,110,143,993,995,3306,5432,6379,8000,8080,8888, 5000]
     ports = []
-    port_range = range(1024, 6666)
+    port_range = range(1024, 6066)
     for port in port_range:
         if port in port_ignore:
             continue

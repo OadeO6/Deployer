@@ -10,8 +10,10 @@ def handleError(err, message=None):
     handle error by loging it instead of breaking the app
     """
     mode = getenv("ERROR_MODE", "dev")
+    from models.error import error
+    print(err)
     if isinstance(err, str):
-        if err in models.error.errors:
+        if err in error:
             error = getattr(__import__("models.error"), err)
             if mode != "production":
                 raise error(message=message)

@@ -4,7 +4,7 @@ def reactSetup(code, Id, dockerEnv, mainEnv, host_port):
     # run container
     Build.append(
         "sudo docker run -d -it" +
-        f" --name {Id}-name " +
+        f" --name {Id}-name-${{currentBuild.number}} " +
         dockerEnv  +
         " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
         " -w /app " +
@@ -15,11 +15,11 @@ def reactSetup(code, Id, dockerEnv, mainEnv, host_port):
     )
     #do instalations
     Build.append(
-        f" sudo docker exec { Id }-name sh -c 'npm install'"
+        f" sudo docker exec { Id }-name-${{currentBuild.number}} sh -c 'npm install'"
     )
     Run = ["Run project"]
     Run.append(
-        f"sudo docker exec -d { Id }-name sh -c 'HOST=0.0.0.0 npm run dev '"
+        f"sudo docker exec -d { Id }-name-${{currentBuild.number}} sh -c 'HOST=0.0.0.0 npm run dev '"
     )
     checkPort = ["skip"]
     code.append(Build)
@@ -33,7 +33,7 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
     # run container
     Build.append(
         " sudo docker run -d -it" +
-        f" --name {Id}-name " +
+        f" --name {Id}-name-${{currentBuild.number}} " +
         dockerEnv +
         " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
         " -w /app " +
@@ -46,12 +46,12 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
     Build.append("echo '+ @show1@ Installing Dependencies...'")
     Build.append("echo '+ @show2@ Installing Dependencies...'")
     Build.append(
-        f"sudo docker exec {Id}-name sh -c 'pip install -r requirements.txt'"
+        f"sudo docker exec {Id}-name-${{currentBuild.number}} sh -c 'pip install -r requirements.txt'"
     )
     Run = ["Run project"]
     # add -d wil make it run in background
     Run.append(
-        f'sudo docker exec -d {Id}-name sh -c ' +
+        f'sudo docker exec -d {Id}-name-${{currentBuild.number}} sh -c ' +
         " 'python -m flask --app {} run --host 0.0.0.0' ".format(
             mainEnv.get("FLASK_APP", "app")
         ) + "#show1# run project"
@@ -80,7 +80,7 @@ def mysqlSetup(code, Id, dockerEnv, mainEnv, host_port,
         portMapping = f" -p {host_port}:{dbPort} "
     CreateServer = ["create data-base server"]
     CreateServer.append(
-        f" sudo docker run --name {Id}-name " +
+        f" sudo docker run --name {Id}-name-${{currentBuild.number}} " +
         portMapping +
         f" --network {parentId}-network-${{currentBuild.number}}" +
         f"  -e MYSQL_ROOT_PASSWORD={rootPass} " +
@@ -122,7 +122,7 @@ def mongodbSetup(code, Id, dockerEnv, mainEnv, host_port, dbDetails):
         portMapping = f" -p {host_port}:{dbPort} "
     CreateServer = ["create data-base server"]
     CreateServer.append(
-        f" sudo docker run --name {Id}-name " +
+        f" sudo docker run --name {Id}-name-${{currentBuild.number}} " +
         portMapping +
         f" --network {parentId}-network-${{currentBuild.number}}" +
             f" -e MONGO_INITDB_ROOT_USERNAME={userName} " +
@@ -137,7 +137,7 @@ def mongodbSetup(code, Id, dockerEnv, mainEnv, host_port, dbDetails):
     # be automatically created
     # CreateDatabase = ["create data-base"]
     # CreateDatabase.append(
-    #     f" sudo  docker exec -it {Id}-name mongosh " +
+    #     f" sudo  docker exec -it {Id}-name-${{currentBuild.number}} mongosh " +
     #     f" -u {userName} -p {userPass} -P {projectPort}" +
     #     f" CREATE DATABASE {dbName} "
     # )
