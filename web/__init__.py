@@ -22,6 +22,12 @@ def create_app():
         value = value.split(':')[0]
         return datetime.strptime(value, "%Y-%m-%d%H").strftime('%c')
 
+    @app.template_filter()
+    def format_build_time_stamp(value, format='medium'):
+        value = value.split("]")[0][1:] # get the time string
+        timeObj = datetime.fromisoformat(value)
+        return f'[{timeObj.strftime("%H:%M:%S")}]'
+
     from web.views import auth_views, app_views, user_views
 
     app.register_blueprint(auth_views)

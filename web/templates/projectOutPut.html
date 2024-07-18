@@ -2,9 +2,12 @@
 <div>
   {% for i in data %}
   <div>
-    <strong>
-      {{ i[0] | safe }}
-    </strong>
+    <div class="flex gap-2">
+      <p>{{ i[0][1] | format_build_time_stamp }}</p>
+      <strong>
+        {{ i[0][0] | safe }}
+      </strong>
+    </div>
     <div>
       {{ i[1] | replace("\n", "<br>") | safe }}
     </div>

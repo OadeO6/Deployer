@@ -188,24 +188,30 @@ def projectApi(id):
     output = [a for a in output.split('\n') if "[Pipeline]" not in a]
     skip = 0
     length = len(output)
+    from re import search
+    reg = "^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] +"
     for i in range(length):
         if skip:
             skip -= 1
             continue
         _line: str = output[i]
-        if _line.startswith('+ '):
+        matches = search(reg, _line)
+        _line = [_line[matches.end():], matches.group()] if matches else [_line, None]
+        # if search(reg, _line):
+        if _line[0].startswith("+ "):
+            print(_line[0])
             l2 = [None, None]
-            if '@show1@' in _line:
-                l2 = [_line.split("@show1@")[-1], None]
+            if '@show1@' in _line[0]:
+                l2 = [[_line[0].split("@show1@")[-1], _line[1]], None]
                 l1.append(l2)
                 print(l2)
-            elif "@show2@" in _line:
-                l2 = [_line.split("@show2@")[-1], ""]
+            elif "@show2@" in _line[0]:
+                l2 = [[_line[0].split("@show2@")[-1], _line[1]], ""]
                 l1.append(l2)
                 skip = 2 # skip next two lines
                 print(l2)
         elif l2[1] != None:
-            l2[1] = f"{l2[1]}\n{_line}"
+            l2[1] = f"{l2[1]}\n{_line[0]}"
 
     output = l1
     print(l1)
