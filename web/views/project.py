@@ -154,6 +154,7 @@ def newProject(id=None):
                            menubar=get_menus())
 
 @user_views.route('/project/<string:id>', methods=['GET'])
+@need_login
 def project(id):
     project = Project.find({"id":id})
     if project:
@@ -182,6 +183,32 @@ def projectApi(id):
     BuildData = Project.getBuildData(project["build_id"], project["current_build_num"])
     building = BuildData["building"]
     output = BuildData["output"]
+    l1 = []
+    l2 = [None, None]
+    output = [a for a in output.split('\n') if "[Pipeline]" not in a]
+    skip = 0
+    length = len(output)
+    for i in range(length):
+        if skip:
+            skip -= 1
+            continue
+        _line: str = output[i]
+        if _line.startswith('+ '):
+            l2 = [None, None]
+            if '@show1@' in _line:
+                l2 = [_line.split("@show1@")[-1], None]
+                l1.append(l2)
+                print(l2)
+            elif "@show2@" in _line:
+                l2 = [_line.split("@show2@")[-1], ""]
+                l1.append(l2)
+                skip = 2 # skip next two lines
+                print(l2)
+        elif l2[1] != None:
+            l2[1] = f"{l2[1]}\n{_line}"
+
+    output = l1
+    print(l1)
     # make output a render_template object instaed
     return jsonify({
         "output": render_template("projectOutPut.html", data=output),

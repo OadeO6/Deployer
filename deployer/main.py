@@ -85,10 +85,10 @@ class Deployer:
                  script {{
                     def theRepo = sh(script: "ls -d theRepo-* | head -n 1", returnStdout: true).trim()
                     if (theRepo){{
-                            sh "cp -r ${{theRepo}} theRepo-${{currentBuild.number}} #show1# copying available repository"
-                            sh "cd theRepo-${{currentBuild.number}}; git pull #show1# updating copied repository"
+                            sh "cp -r ${{theRepo}} theRepo-${{currentBuild.number}}; echo '+ @show1@ copying available repository'"
+                            sh "cd theRepo-${{currentBuild.number}}; git pull ; echo '+ @show1@ updating copied repository'"
                         }} else {{
-                        sh "git clone {self.repo} theRepo-${{currentBuild.number}} #show1# cloning repository"
+                        sh "git clone {self.repo} theRepo-${{currentBuild.number}} ;echo '+ @show1@ cloning repository'"
                     }}
                 }}
                  """]

@@ -32,9 +32,9 @@ def generate_pipe(Id, code, port, apiEndpoint, check, abort, fail):
                         "\t\t\tretry(40)\n" +
                    "\t\t}\n" +
                     "\t\tsteps {\n" +
-                        '\t\t\techo "#show1# cheacking if project is ready..."\n' +
+                        '\t\t\techo "+ @show1@ cheacking if project is ready..."\n' +
                         f"\t\t\tsh \"sudo docker exec { Id }-name sh -c 'netstat -tnlp | grep { port }'\"\n" +
-                        f"\t\t\techo '#show1# Project listenig on { port } '\n" +
+                        f"\t\t\techo '+ @show1@ Project listenig on { port } '\n" +
                     "\t\t}\n" +
                 "\t}\n" if check else "")
     abort = [a+'\n' for a in abort]
@@ -68,7 +68,7 @@ def generate_pipe(Id, code, port, apiEndpoint, check, abort, fail):
                     def original = currentBuild.currentResult
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){{
                          def response = httpRequest(httpMode: 'PUT', url: '{ apiEndpoint }', contentType: 'APPLICATION_JSON')
-                         echo "#show1# Status: ${{response.status}}"
+                         echo "Status: ${{response.status}}"
                     }}
                     currentBuild.result = original
                 }}

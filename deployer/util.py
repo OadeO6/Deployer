@@ -43,9 +43,10 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
         " sh"
     )
     #do instalations
-    Build.append("#show1# Installing Dependencies...")
+    Build.append("echo '+ @show1@ Installing Dependencies...'")
+    Build.append("echo '+ @show2@ Installing Dependencies...'")
     Build.append(
-        f"sudo docker exec {Id}-name sh -c 'pip install -r requirements.txt' #show2# pip install"
+        f"sudo docker exec {Id}-name sh -c 'pip install -r requirements.txt'"
     )
     Run = ["Run project"]
     # add -d wil make it run in background
