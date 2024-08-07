@@ -1,6 +1,7 @@
 """
 user object model
 """
+import uuid
 from models.base import Base
 # tendency of circular import if storage is inported directly
 import models
@@ -19,11 +20,34 @@ class Project(Base):
             self.id = _id
         if form:
             self.name = form.projectName.data
-            self.project_type = form.projectType.data
-            self.form = form
-            self.repo = form.repoUrl.data
+            if form.deployOrNot.data == "notDeploy":
+                print("@1....")
+                # when the project is created witout deploying
+                self.network = "create1"
+            else:
+                if form.stage.data == "post":
+                    print("@2...")
+                    # when the project has been created befor and just need to be deployed
+                    self.built = True
+                    self.network = None
+                else:
+                    # when theo project is just been created and needs to be deployed
+                    print("@3...")
+                    self.network = "create2"
+                self.project_type = form.projectType.data
+                self.form = form
+                self.repo = form.repoUrl.data
         self.user_id = User.confirm(user_id)
         self.server_ip = getenv("HOST_IP" , "54.208.115.123")
+
+    def prebuild(self):
+        """
+        setup project network only
+        """
+        generate_id = str(uuid.uuid4())
+        self.build_id = generate_id
+        self.current_build_num = 0
+        Build.prebuild(generate_id)
 
     def build(self):
         """
@@ -31,9 +55,17 @@ class Project(Base):
         returns True if it was successfull
         """
         from models.ports import Ports
+        Id = None
+        if self.network is None:
+            project = self.__class__.find({"id": self.id})
+            if len(project) < 1:
+                return False
+            project = project[0]
+            Id = project["build_id"]
+
         build = Build(self.id,
                       self.form.projectType.data,
-                      self.form.repoUrl.data)
+                      self.form.repoUrl.data, Id,  network=self.network)
         host_port = Ports.get_a_port()
         print("@@@ ", host_port)
         if not host_port:

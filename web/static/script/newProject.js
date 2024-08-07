@@ -4,7 +4,10 @@ const project3 = document.getElementById('project3');
 const projectType = document.getElementById('projectType');
 const projectUrl = document.getElementById('projectUrl');
 const formSubmit = document.getElementById('formSubmit');
-const apiUrl = document.getElementById('apiurlnew').value;
+const toDeploy = document.getElementById('toDeploy');
+const notDeploy = document.getElementById('notDeploy');
+const section1 = document.getElementById('section1');
+const apiUrl = document.getElementById('apiurlnew');
 
 let projectUrlValue = projectUrl.value;
 let projectNameValue = projectName.value;
@@ -15,7 +18,7 @@ let projectUrlAvailable = false
 
 async function verifyName(name){
   try {
-    const response = await fetch(`${apiUrl}/${name}/api4`);
+    const response = await fetch(`${apiUrl.value}/${name}/api4`);
     if (response.status === 200) {
       let data = await response.json()
       data = data.data;
@@ -31,7 +34,7 @@ async function verifyName(name){
 async function verifyUrl(repoUrl){
   try {
     let repo = encodeURIComponent(repoUrl)
-    const response = await fetch(`${apiUrl}/api5/api5`, {
+    const response = await fetch(`${apiUrl.value}/api5/api5`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -76,7 +79,7 @@ async function verifyUrl(repoUrl){
 async function getRemainingForm(type){
   let data = null;
   try {
-    const res = await fetch(`${apiUrl}/${type}/api3`);
+    const res = await fetch(`${apiUrl.value}/${type}/api3`);
     if (res.status === 200) {
       data = await  res.json();
       console.log(data, "data")
@@ -128,6 +131,15 @@ async function projectNameEventHandler(event){
 projectName.addEventListener('change', projectNameEventHandler);
 projectName.addEventListener('input', projectNameEventHandler);
 
+toDeploy.addEventListener('click', async () => {
+  section1.classList.remove("hidden");
+  formSubmit.children[0].value = "Deploy Project";
+})
+
+notDeploy.addEventListener('click', async () => {
+  section1.classList.add("hidden");
+  formSubmit.children[0].value = "Create Project";
+})
 
 async function projectUrlEventHandler(event){
   const value = event.target.value;

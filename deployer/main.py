@@ -22,6 +22,8 @@ class Deployer:
         self.pType = kwargs.get("projectType", "flask")
         self.projectPort = kwargs.get("projectPort")
         self.repo = kwargs.get("repoUrl") # remove cration od id #temp
+        self.network = kwargs.get("network")
+        print("@network", self.network)
         #"https://github.com/Ade06AA/mytest"
         if self.server.job_exists(f"{self.id}-job"):
             self.buildNum = self.server.get_job_info(f'{self.id}-job')['nextBuildNumber']
@@ -78,8 +80,12 @@ class Deployer:
     def generate_xml_config(self, host_port):
         code = []
         projectPort = self.envDict.get("FLASK_RUN_PORT", "5000")
+        if self.network == 'create2':
+            network = f"sudo docker network  create {self.id}-network"
+        else:
+            network = "echo 'do docker network check'"
         Setup = ["set up ",
-                f"sudo docker network  create {self.id}-network-${{currentBuild.number}}",
+                 network,
                 "scriptNext", # the script shoud be removed because this file is not meant to understand hoe to interact with jenkins
                  f"""
                  script {{
@@ -212,6 +218,9 @@ class Deployer:
 
     def build(self, port, Id=None):
         if not Id:
+            if self.network == "create1":
+                # create network using fabric
+                return
             try:
                 self.server.create_job(
                     f'{self.id}-job', self.generate_xml_config(port)

@@ -4,22 +4,22 @@ def reactSetup(code, Id, dockerEnv, mainEnv, host_port):
     # run container
     Build.append(
         "sudo docker run -d -it" +
-        f" --name {Id}-name-${{currentBuild.number}} " +
+        f" --name {Id}-name " +
         dockerEnv  +
         " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
         " -w /app " +
         f" -p {host_port}:{projectPort  } " +
-        f" --network { Id }-network-${{currentBuild.number}} " +
+        f" --network { Id }-network " +
         " node:16-alpine " +
         " sh"
     )
     #do instalations
     Build.append(
-        f" sudo docker exec { Id }-name-${{currentBuild.number}} sh -c 'npm install'"
+        f" sudo docker exec { Id }-name sh -c 'npm install'"
     )
     Run = ["Run project"]
     Run.append(
-        f"sudo docker exec -d { Id }-name-${{currentBuild.number}} sh -c 'HOST=0.0.0.0 npm run dev '"
+        f"sudo docker exec -d { Id }-name sh -c 'HOST=0.0.0.0 npm run dev '"
     )
     checkPort = ["skip"]
     code.append(Build)
@@ -33,12 +33,12 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
     # run container
     Build.append(
         " sudo docker run -d -it" +
-        f" --name {Id}-name-${{currentBuild.number}} " +
+        f" --name {Id}-name " +
         dockerEnv +
         " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
         " -w /app " +
         f" -p {host_port}:{projectPort} " +
-        f" --network {Id}-network-${{currentBuild.number}}" +
+        f" --network {Id}-network" +
         " python:3.9-alpine " +
         " sh"
     )
@@ -46,12 +46,12 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
     Build.append("echo '+ @show1@ Installing Dependencies...'")
     Build.append("echo '+ @show2@ Installing Dependencies...'")
     Build.append(
-        f"sudo docker exec {Id}-name-${{currentBuild.number}} sh -c 'pip install -r requirements.txt'"
+        f"sudo docker exec {Id}-name sh -c 'pip install -r requirements.txt'"
     )
     Run = ["Run project"]
     # add -d wil make it run in background
     Run.append(
-        f'sudo docker exec -d {Id}-name-${{currentBuild.number}} sh -c ' +
+        f'sudo docker exec -d {Id}-name sh -c ' +
         " 'python -m flask --app {} run --host 0.0.0.0' ".format(
             mainEnv.get("FLASK_APP", "app")
         ) + "#show1# run project"
@@ -80,9 +80,9 @@ def mysqlSetup(code, Id, dockerEnv, mainEnv, host_port,
         portMapping = f" -p {host_port}:{dbPort} "
     CreateServer = ["create data-base server"]
     CreateServer.append(
-        f" sudo docker run --name {Id}-name-${{currentBuild.number}} " +
+        f" sudo docker run --name {Id}-name " +
         portMapping +
-        f" --network {parentId}-network-${{currentBuild.number}}" +
+        f" --network {parentId}-network" +
         f"  -e MYSQL_ROOT_PASSWORD={rootPass} " +
         f" -e MYSQL_USER={userName} " +
         f" -e MYSQL_TCP_PORT={dbPort} " +
@@ -122,9 +122,9 @@ def mongodbSetup(code, Id, dockerEnv, mainEnv, host_port, dbDetails):
         portMapping = f" -p {host_port}:{dbPort} "
     CreateServer = ["create data-base server"]
     CreateServer.append(
-        f" sudo docker run --name {Id}-name-${{currentBuild.number}} " +
+        f" sudo docker run --name {Id}-name " +
         portMapping +
-        f" --network {parentId}-network-${{currentBuild.number}}" +
+        f" --network {parentId}-network" +
             f" -e MONGO_INITDB_ROOT_USERNAME={userName} " +
             f" -e MONGO_PORT={dbPort} " +
             f" -e MONGO_INITDB_ROOT_PASSWORD={userPass} " +

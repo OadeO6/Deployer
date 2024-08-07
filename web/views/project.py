@@ -119,7 +119,7 @@ def projects():
 
 
 @user_views.route('/project/new', methods=['GET', 'POST'])
-@user_views.route('/project/new/<string:id>', methods=['POST'])
+@user_views.route('/project/new/<string:id>', methods=['GET', 'POST'])
 @need_login
 def newProject(id=None):
     form = projectForm()
@@ -139,14 +139,24 @@ def newProject(id=None):
         deployCommans = request.form["deployCommans"]
         """
         if id:
-            project = Project(session.get("user_id"), _id=id)
-            project.rebuild()
+            if form.stage.data == "post":
+                project = Project(session.get("user_id"), form, _id=id)
+                project.build()
+            else:
+                project = Project(session.get("user_id"), _id=id)
+                project.rebuild()
         else:
-            project = Project(session.get("user_id"), form)
-            project.build()
+            if form.deployOrNot.data == "notDeploy":
+                project = Project(session.get("user_id"), form)
+                project.prebuild()
+            else:
+                project = Project(session.get("user_id"), form)
+                project.build()
         project.save()
         return redirect(url_for("user_views.project", id=project.id))
     #form = {"submit":2}
+    if id:
+        form.stage.data = "post"
     return render_template("newProject.html",
                            form=form,
                            apiUrl= 'http://localhost:5000/user/project',

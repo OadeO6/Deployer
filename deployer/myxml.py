@@ -7,7 +7,7 @@ def generate_pipe(Id, code, port, apiEndpoint, check, abort, fail):
         if i[0] == "skip":
             stages += (f'\n\t\t\tstage("Checkin port"){{\n\t\t\t\tsteps {{' +
             '\n\t\t\t\t\tscript {'+
-            f'\n\t\t\t\t\t\tdef status = sh(script: \'sudo docker exec  {Id}-name-${{currentBuild.number}} -c \"netstat -tnlp | grep {port}\"\', returnStatus: true)\n\t\t\t\t\t\tif (status == 0) {{\n\t\t\t\t\t\t\tcurrentBuild.result = \'FAILURE\'\n\t\t\t\t\t\t\techo \'commande failed costum\'\n\t\t\t\t\t\t}} else {{\n\t\t\t\t\t\t\tcurrentBuild.result = \'SUCCESS\'\n\t\t\t\t\t\t}}' +
+            f'\n\t\t\t\t\t\tdef status = sh(script: \'sudo docker exec  {Id}-name -c \"netstat -tnlp | grep {port}\"\', returnStatus: true)\n\t\t\t\t\t\tif (status == 0) {{\n\t\t\t\t\t\t\tcurrentBuild.result = \'FAILURE\'\n\t\t\t\t\t\t\techo \'commande failed costum\'\n\t\t\t\t\t\t}} else {{\n\t\t\t\t\t\t\tcurrentBuild.result = \'SUCCESS\'\n\t\t\t\t\t\t}}' +
             '\n\t\t\t\t\t}\n' +
             '\n\t\t\t\t}\n\t\t\t}\n'
         )
@@ -33,7 +33,7 @@ def generate_pipe(Id, code, port, apiEndpoint, check, abort, fail):
                    "\t\t}\n" +
                     "\t\tsteps {\n" +
                         '\t\t\techo "+ @show1@ cheacking if project is ready..."\n' +
-                        f"\t\t\tsh \"sudo docker exec { Id }-name-${{currentBuild.number}} sh -c 'netstat -tnlp | grep { port }'\"\n" +
+                        f"\t\t\tsh \"sudo docker exec { Id }-name sh -c 'netstat -tnlp | grep { port }'\"\n" +
                         f"\t\t\techo '+ @show1@ Project listenig on { port } '\n" +
                     "\t\t}\n" +
                 "\t}\n" if check else "")

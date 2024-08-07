@@ -1,15 +1,18 @@
 """
 user object model
 """
+from os import getenv
+from fabric import Connection
+
 from models.base import Base
 import models
 from deployer.main import Deployer
 
 class Build(Base):
     name = "build"
-    def __init__(self, project_id, _type: str , _repo=None, _id=None,
+    def __init__(self, project_id, _type: str, _repo=None, _id=None,
                  userName=None, userPass=None, rootPass=None, dbName=None,
-                 projectPort=None, relativeProjectId=None):
+                 projectPort=None, relativeProjectId=None, network=None):
         """
         to add build finis time
         """
@@ -33,8 +36,36 @@ class Build(Base):
             kwargs = {"userName": userName, "userPass": userPass,
                      "project_id": relativeProjectId, "rootPass": rootPass}
         self.job = Deployer(id=self.id,
-                            projectType=_type, projectPort=projectPort, **kwargs)
+                            projectType=_type, projectPort=projectPort, network=network, **kwargs)
         self.build_num = self.job.buildNum
+
+
+    def deletedeploy(self):
+        # delete container and also build data in jenkins
+        # but if it is suspend only delete the the container
+        command = f"sudo docker rm -f {self.id}-name"
+        host = getenv("HOST_IP")
+        user = "ubuntu"
+        certificate = "/home/kali/ssh_p_key1"
+        res = Connection(host=host, user=user,
+                         connect_kwargs={"key_filename": certificate})
+        res.run(command)
+        return
+
+    @classmethod
+    def prebuild(cls, Id):
+        # use fabric to create network
+        command = f"sudo docker network create {Id}-network"
+        host = getenv("HOST_IP")
+        user = "ubuntu"
+        certificate = "/home/kali/ssh_p_key1"
+        res = Connection(host=host, user=user,
+                         connect_kwargs={"key_filename": certificate})
+        res.run(command)
+        print("@running")
+        # raise error in case of fail
+
+        return True
 
     def build(self, port):
         """
@@ -54,6 +85,7 @@ class Build(Base):
         rebuild
         """
         try:
+            self.deletedeploy()
             self.job.build(port, self.id)
         except Exception as e:
             models.handleError(e)

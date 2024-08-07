@@ -1,7 +1,10 @@
 {% extends 'userbase.html' %}
-{% block workspace %}
+  {% block workspace %}
 <div class="px-40 flex flex-1 justify-center py-5">
   <form method="POST", class="bg-gray-950 p-3 md:p-7 rounded-xl layout-content-container flex flex-col py-5  flex-1">
+    <div class="hidden">
+      {{ form.stage(id="formStage") }}
+    </div>
     <div class="flex flex-wrap justify-between gap-3 p-4">
       <div class="flex min-w-72 flex-col gap-3">
         <p class="text-white tracking-light text-[32px] font-bold leading-tight">Add a new project</p>
@@ -18,116 +21,143 @@
         ) }}
       </label>
     </div>
-    <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-      <label class="flex flex-col min-w-40 flex-1">
-        {{ form.repoUrl.label(class="text-white text-base font-medium leading-normal pb-2") }}
-        {{ form.repoUrl(
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-        placeholder="https://github.com/ade/myecommerce-website",
-      id="projectUrl"
-        ) }}
-      </label>
-    </div>
-        <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-          <label class="flex flex-col min-w-40 flex-1">
-            {{ form.projectType.label(class="text-white text-base font-medium leading-normal pb-2") }}
-            {{ form.projectType(
-            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal"
-            ) }}
-          </label>
-        </div>
-        <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-          <label class="flex flex-col min-w-40 flex-1">
-            {{ form.projectDirectory.label(class="text-white text-base font-medium leading-normal pb-2")}}
-            {{ form.projectDirectory(
-            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-            placeholder="/"
-            ) }}
-          </label>
-        </div>
-    <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Deployment mode</h2>
+    <!-- <div class="flex flex-wrap items-center justify-center"> -->
+    <!--   <input type="radio" id="radio-1" name="radio" checked class="hidden"> -->
+    <!--   <label for="radio-1" class="py-2 px-4 bg-white border border-gray-300 rounded-md cursor-pointer">Option 1</label> -->
+    <!--   <input type="radio" id="radio-2" name="radio" class="hidden"> -->
+    <!--   <label for="radio-2" class="py-2 px-4 bg-white border border-gray-300 rounded-md cursor-pointer">Option 2</label> -->
+    <!--   <input type="radio" id="radio3" name="radio"> -->
+    <!--   <label for="radio3">tttttttt</label> -->
+    <!-- </div> -->
+
     <div class="flex flex-col gap-3 p-4">
-      {% for radio in form.mode  %}
-      <label class="flex items-center gap-4 rounded-xl border border-solid border-[#3c4753] p-[15px]">
-        {% if radio.label == 'Production' %}
-        {{ radio(
-        disabled=True,
-        class="h-5 w-5  border-[#3c4753] bg-transparent text-transparent checked:border-white checked:bg-[image:--radio-dot-svg] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-white"
-        )}}
-        {% else %}
+      {% set ids = ["notDeploy", "toDeploy"] %}
+      {% set counter = 0 %}
+      {% for radio in form.deployOrNot %}
+      <label id="{{ ids[loop.index - 1] }}" class="flex items-center gap-4 rounded-xl border border-solid border-[#3c4753] p-[15px]">
         {{ radio(
         class="",
         class="h-5 w-5 border-2 border-[#3c4753] bg-transparent text-transparent checked:border-white checked:bg-[image:--radio-dot-svg] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-white"
         )}}
-        {% endif%}
         <div class="flex grow flex-col">
           {{radio.label(class="", class="text-white text-sm font-medium leading-normal")}}
-          </div>
-          </label>
-          {% endfor %}
         </div>
-        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Environment variables</h2>
-        <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-          <label class="flex flex-col min-w-40 flex-1">
-            <p class="text-white text-base font-medium leading-normal pb-2">Variable</p>
-            <input
-              placeholder="API_URL"
-              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal"
-              value=""
-            />
-          </label>
-          <label class="flex flex-col min-w-40 flex-1">
-            <p class="text-white text-base font-medium leading-normal pb-2">Value</p>
-            <input
-              placeholder="https://api.acme.co"
-              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal"
-              value=""
-            />
-          </label>
-        </div>
-        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Run and build commands</h2>
-        <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-          <label class="flex flex-col min-w-40 flex-1">
-            {{ form.buildCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
-            {{ form.buildCommand(
-            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-            placeholder="npm run build"
-            )}}
-          </label>
-          <label class="flex flex-col min-w-40 flex-1">
-            {{ form.deployCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
-            {{ form.deployCommand(
-            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-            placeholder="npm run build"
-            )}}
-          </label>
-        </div>
-        <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-          <label class="flex flex-col min-w-40 flex-1">
-            {{ form.installCommand.label(class="text-white text-base font-medium leading-normal pb-2")}}
-            {{ form.installCommand(
-            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-            placeholder="npm install"
-            ) }}
-          </label>
-        </div>
-        <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Web Server</h3>
-        <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-          <label class="flex flex-col min-w-40 flex-1">
-            {{ form.webServer.label(class="text-white text-base font-medium leading-normal pb-2") }}
-            {{ form.webServer(
-            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal"
-            ) }}
-          </label>
-        </div>
-
-        <div id="formSubmit" class="flex px-4 py-3 justify-end">
-          {{ form.submit(
-          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#3289e7] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+      </label>
+      {% set counter = counter + 1 %}
+      {% endfor %}
+    </div>
+    <div id="section1">
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.repoUrl.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{ form.repoUrl(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+          placeholder="https://github.com/ade/myecommerce-website",
+          id="projectUrl"
           ) }}
-        </div>
+        </label>
+      </div>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.projectType.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{ form.projectType(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal"
+          ) }}
+        </label>
+      </div>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.projectDirectory.label(class="text-white text-base font-medium leading-normal pb-2")}}
+          {{ form.projectDirectory(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+          placeholder="/"
+          ) }}
+        </label>
+      </div>
+      <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Deployment mode</h2>
+      <div class="flex flex-col gap-3 p-4">
+        {% for radio in form.mode  %}
+        <label class="flex items-center gap-4 rounded-xl border border-solid border-[#3c4753] p-[15px]">
+          {% if radio.label == 'Production' %}
+          {{ radio(
+          disabled=True,
+          class="h-5 w-5  border-[#3c4753] bg-transparent text-transparent checked:border-white checked:bg-[image:--radio-dot-svg] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-white"
+          )}}
+          {% else %}
+          {{ radio(
+          class="",
+          class="h-5 w-5 border-2 border-[#3c4753] bg-transparent text-transparent checked:border-white checked:bg-[image:--radio-dot-svg] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-white"
+          )}}
+          {% endif%}
+          <div class="flex grow flex-col">
+            {{radio.label(class="", class="text-white text-sm font-medium leading-normal")}}
+          </div>
+        </label>
+        {% endfor %}
+      </div>
+      <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Environment variables</h2>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          <p class="text-white text-base font-medium leading-normal pb-2">Variable</p>
+          <input
+            placeholder="API_URL"
+            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal"
+            value=""
+          />
+        </label>
+        <label class="flex flex-col min-w-40 flex-1">
+          <p class="text-white text-base font-medium leading-normal pb-2">Value</p>
+          <input
+            placeholder="https://api.acme.co"
+            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal"
+            value=""
+          />
+        </label>
+      </div>
+      <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Run and build commands</h2>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.buildCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{ form.buildCommand(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+          placeholder="npm run build"
+          )}}
+        </label>
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.deployCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{ form.deployCommand(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+          placeholder="npm run build"
+          )}}
+        </label>
+      </div>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.installCommand.label(class="text-white text-base font-medium leading-normal pb-2")}}
+          {{ form.installCommand(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+          placeholder="npm install"
+          ) }}
+        </label>
+      </div>
+      <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Web Server</h3>
+      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col min-w-40 flex-1">
+          {{ form.webServer.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{ form.webServer(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal"
+          ) }}
+        </label>
+      </div>
+    </div>
+
+    <div id="formSubmit" class="flex px-4 py-3 justify-end">
+      {{ form.submit(
+      class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#3289e7] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+      ) }}
+    </div>
   </form>
-    <script src="{{ url_for('static', filename='script/newProject.js')}}"></script>
+  <script src="{{ url_for('static', filename='script/newProject.js')}}"></script>
 </div>
 
 {% endblock workspace %}
@@ -136,37 +166,37 @@
 
 {#
 <div>
-	{% set style5 = "w-auto bg-gray-400 rounded-md inline-block" %}
-	<form method="POST" class="bg-gray-800 m-[20px] p-[20px] rounded min-h-[calc(100vh-40px-60px)] flex flex-col justify-between">
-		<div>
-			<div class="border-b border-b-green-900 py-[20px] my-5">
-				<div  class="{{ style5 }}">
-					{{ form.projectName.label(class="p-2 m-5 text-[20px] m-2 m-auto") }}
-					{{ form.projectName(class="rounded-md p-2", placeholder="Project", id="projectName") }}
-				</div>
-			</div>
-            <div id="project2" class="hidden">
-                <div>
-                    {{ form.mode.label(class="") }}
-                    {{ form.mode(class="", id="projectMode") }}
-                </div>
-                <div>
-                    {{ form.projectType.label(class="") }}
-                    {{ form.projectType(class="", id="projectType") }}
-                </div>
-                <div>
-                    {{ form.repoUrl.label(class="") }}
-                    {{ form.repoUrl(class="", id="projectUrl") }}
-                </div>
-                <div id="project3" class="border-l-gray-50 border-l-[30px] p-2 m-3">
-                </div>
-            </div>
-		</div>
-		<div id="formSubmit" class="mx-auto">
-			{{ form.submit(class="hover:cursor-pointer bg-green-900 text-[20px] py-3 px-5  m-5 rounded-md bottom-0") }}
-		</div>
-        <input type="hidden" id="apiurlnew" value="{{apiUrl}}">
-	</form>
-    <script src="{{url_for('static', filename='script/newProject.js')}}"></script>
+{% set style5 = "w-auto bg-gray-400 rounded-md inline-block" %}
+<form method="POST" class="bg-gray-800 m-[20px] p-[20px] rounded min-h-[calc(100vh-40px-60px)] flex flex-col justify-between">
+<div>
+<div class="border-b border-b-green-900 py-[20px] my-5">
+<div  class="{{ style5 }}">
+{{ form.projectName.label(class="p-2 m-5 text-[20px] m-2 m-auto") }}
+{{ form.projectName(class="rounded-md p-2", placeholder="Project", id="projectName") }}
+</div>
+</div>
+<div id="project2" class="hidden">
+<div>
+{{ form.mode.label(class="") }}
+{{ form.mode(class="", id="projectMode") }}
+</div>
+<div>
+{{ form.projectType.label(class="") }}
+{{ form.projectType(class="", id="projectType") }}
+</div>
+<div>
+{{ form.repoUrl.label(class="") }}
+{{ form.repoUrl(class="", id="projectUrl") }}
+</div>
+<div id="project3" class="border-l-gray-50 border-l-[30px] p-2 m-3">
+</div>
+</div>
+</div>
+<div id="formSubmit" class="mx-auto">
+{{ form.submit(class="hover:cursor-pointer bg-green-900 text-[20px] py-3 px-5  m-5 rounded-md bottom-0") }}
+</div>
+<input type="hidden" id="apiurlnew" value="{{apiUrl}}">
+</form>
+<script src="{{url_for('static', filename='script/newProject.js')}}"></script>
 </div>
 #}

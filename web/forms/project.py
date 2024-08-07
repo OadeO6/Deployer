@@ -2,7 +2,14 @@ from . import FlaskForm, StringField, SubmitField, RadioField, SelectField, Sele
 
 class projectForm(FlaskForm):
     mode = RadioField("Deployment Mode", default="dev", choices=["Production","Development"])
+    stage = RadioField("", default="full", choices=["full", "pre", "post"])
     projectName = StringField("Project Name")
+    deployOrNot = RadioField("deployOrNot",
+                             default= "deploy",
+                             choices=[
+                             ("notDeploy", "create project witout deploying"),
+                             ("deploy" ,"create and deploy")
+                             ])
     repoUrl = StringField("Repository URL") #, default="https://github.com/Ade06AA/mytest")
     envKey = StringField("Key")
     envValue = StringField("Value")

@@ -27,6 +27,13 @@
     <button class="p-2 rounded-md bg-gray-950 border">Visit Site</button>
   </a>
 </div>
+{% if not build  %}
+<div class="flex gap-5 my-3 ">
+    <a class="mydisable" href="{{ url_for("user_views.newProject", id=id) }}">
+    <button class="p-2 rounded-md bg-gray-950 border">Deploy current Project</button>
+  </a>
+</div>
+{% endif %}
 <details class="border p-1 rounded-lg group" {% if build.building == True %}  open="" {% endif %}>
   <summary class="log flex px-4 py-2 justify-between ">
     <p class="text-lg font-medium leading-normal">Deployment Log</p>
