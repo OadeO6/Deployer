@@ -1,59 +1,104 @@
 {% extends 'userbase.html' %}
-{% block workspace %}
+  {% block workspace %}
 <div class="bg-gray-900 min-h-full rounded-lg w-full px-20 py-5 text-white">
-<div class=" text-sm flex flex-col">
-  <!-- <p> Project :{{ project}}</p> -->
-  <p class="p-2 border-b border-b-gray-700 text-2xl"> Project Name: {{ project.name }}</p>
-  <p class="p-2 border-b border-b-gray-700"> Project Repository: <a href="{{ project.repo }}">{{ project.repo }}</a></p>
-  <p class="p-2 border-b border-b-gray-700"> Project Type: {{ project.project_type }}</p>
-  <p class="p-2 border-b border-b-gray-700"> Project Status: {{ build.status }}</p>
-  <p class="p-2 border-b border-b-gray-700"> First Deploy Date: {{ project.created_at | format_datetime }}</p>
-  <p class="p-2 border-b border-b-gray-700"> Last Deploy Date: {{ project.created_at | format_datetime }}</p>
-  <p class="p-2 border-b border-b-gray-700"> Current Deploy Number: {{ project.current_build_num }}</p>
-  <div class="relative">
-    <p class="p-2 border-b border-b-gray-700 " > Project Url: <a id="projectUrl" target="_blank" class="mydisable" href="http://{{project.url}}">{{ project.url }}</a></p>
-    <div id="projectMsg" class="p-2 rounded-md bg-red hidden absolute opacity-40">
-      <p>The project is still in deployment process</p>
+  <div class=" text-sm flex flex-col">
+    <!-- <p> Project :{{ project}}</p> -->
+    <p class="p-2 border-b border-b-gray-700 text-2xl"> Project Name: {{ project.name }}</p>
+    <p class="p-2 border-b border-b-gray-700"> Project Repository: <a href="{{ project.repo }}">{{ project.repo }}</a></p>
+    <p class="p-2 border-b border-b-gray-700"> Project Type: {{ project.project_type }}</p>
+    <p class="p-2 border-b border-b-gray-700"> Project Status: {{ build.status }}</p>
+    <p class="p-2 border-b border-b-gray-700"> First Deploy Date: {{ project.created_at | format_datetime }}</p>
+    <p class="p-2 border-b border-b-gray-700"> Last Deploy Date: {{ project.created_at | format_datetime }}</p>
+    <p class="p-2 border-b border-b-gray-700"> Current Deploy Number: {{ project.current_build_num }}</p>
+    <div class="relative">
+      <p class="p-2 border-b border-b-gray-700 " > Project Url: <a id="projectUrl" target="_blank" class="mydisable" href="http://{{project.url}}">{{ project.url }}</a></p>
+      <div id="projectMsg" class="p-2 rounded-md bg-red hidden absolute opacity-40">
+        <p>The project is still in deployment process</p>
+      </div>
     </div>
+    <p class="p-2 border-b border-b-gray-700"> Deploying: {{ build.building }}</p>
   </div>
-  <p class="p-2 border-b border-b-gray-700"> Deploying: {{ build.building }}</p>
-</div>
-<div id="links" class="flex gap-5 my-3 {% if build.building == True %} hidden {% endif %}">
+  <div id="links" class="flex gap-5 my-3 {% if build.building == True %} hidden {% endif %}">
 
-  <form action="{{url_for("user_views.newProject")}}/{{id}}" method="POST">
-    <button type="submit" class="p-2 rounded-md bg-gray-950 border">ReDeploy</button>
-  </form>
-  <a target="_blank" class="mydisable" href="http://{{project.url}}">
-    <button class="p-2 rounded-md bg-gray-950 border">Visit Site</button>
-  </a>
-</div>
-{% if not build  %}
-<div class="flex gap-5 my-3 ">
-    <a class="mydisable" href="{{ url_for("user_views.newProject", id=id) }}">
-    <button class="p-2 rounded-md bg-gray-950 border">Deploy current Project</button>
-  </a>
-</div>
-{% endif %}
-<details class="border p-1 rounded-lg group" {% if build.building == True %}  open="" {% endif %}>
-  <summary class="log flex px-4 py-2 justify-between ">
-    <p class="text-lg font-medium leading-normal">Deployment Log</p>
-    <div class="group-open:rotate-180">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-        <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
-      </svg>
-    </div>
-  </summary>
-  {#
-  <p>{{builds }} === builds</p>
-  <!-- <p>{{ build}} ==== build</p> -->
-  <!-- <p> output </p> -->
-  #}
-  <div id="projectOutPut" class="bg-gray-700 rounded-lg p-2">
+    <form action="{{url_for("user_views.newProject")}}/{{id}}" method="POST">
+      <button type="submit" class="p-2 rounded-md bg-gray-950 border">ReDeploy</button>
+    </form>
+    <a target="_blank" class="mydisable" href="http://{{project.url}}">
+      <button class="p-2 rounded-md bg-gray-950 border">Visit Site</button>
+    </a>
   </div>
-</details>
-<div id="loading" class="{% if build.building == False %} hidden {% endif  %}">
-  <p>loading..........</p>
-</div>
-<script src="{{url_for('static', filename='script/projectOutPut.js')}}" defer></script>
+  {% if not build  %}
+  <div class="flex gap-5 my-3 ">
+    <a class="mydisable" href="{{ url_for("user_views.newProject", id=id) }}">
+      <button class="p-2 rounded-md bg-gray-950 border">Deploy current Project</button>
+    </a>
+  </div>
+  {% endif %}
+  <div class="border rounded-lg">
+    <div class="p-1">
+        <p class="text-lg font-medium leading-normal">Deployment Log</p>
+              <div class="flex overflow-hidden rounded-xl border border-[#314f68] bg-[#101a23]">
+                <table class="flex-1">
+                  <thead>
+                    <tr class="bg-[#182834]">
+                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Build Num</th>
+                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Deploying</th>
+                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Status</th>
+                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-720 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
+                        Created
+                      </th>
+                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480 px-4 py-3 text-left text-white w-60 text-sm font-medium leading-normal">Output Log</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+  {% for i in builds %}
+                    <tr class="border-t border-t-[#314f68]">
+                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-240 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">{{ i.build_num }}</span>
+                        </button>
+                        <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Go to Project Page</div>
+                      </td>
+                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
+                        {{ i.building }}
+                      </td>
+                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
+                        {{ i.status }}
+                      </td>
+                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
+                        {{ i.created_at | format_datetime }}
+                      </td>
+                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
+                        <p>Output</p>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+      {% for i in builds %}
+      <div></div>
+      {% endfor %}
+    </div>
+    <details class="border p-1 rounded-lg group" {% if build.building == True %}  open="" {% endif %}>
+      <summary class="log flex px-4 py-2 justify-between ">
+        <p class="text-lg font-medium leading-normal">Deployment Log</p>
+        <div class="group-open:rotate-180">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+            <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+          </svg>
+        </div>
+      </summary>
+      <div id="projectOutPut" class="bg-gray-700 rounded-lg p-2">
+      </div>
+    </details>
+  </div>
+  <div id="loading" class="{% if build.building == False %} hidden {% endif  %}">
+    <p>loading..........</p>
+  </div>
+  <script src="{{url_for('static', filename='script/projectOutPut.js')}}" defer></script>
 </div>
 {% endblock workspace %}
