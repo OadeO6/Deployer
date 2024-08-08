@@ -1,4 +1,4 @@
-def reactSetup(code, Id, dockerEnv, mainEnv, host_port):
+def reactSetup(code, Id, Nid, dockerEnv, mainEnv, host_port):
     projectPort = 3000 # or get costum port
     Build = ["run next project"]
     # run container
@@ -9,7 +9,7 @@ def reactSetup(code, Id, dockerEnv, mainEnv, host_port):
         " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
         " -w /app " +
         f" -p {host_port}:{projectPort  } " +
-        f" --network { Id }-network " +
+        f" --network { Nid }-network " +
         " node:16-alpine " +
         " sh"
     )
@@ -27,7 +27,7 @@ def reactSetup(code, Id, dockerEnv, mainEnv, host_port):
     code.append(Run)
     return code, projectPort
 
-def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
+def flaskSetup(code, Id, Nid, dockerEnv, mainEnv, host_port):
     projectPort = 5000
     Build = ["build flask project"]
     # run container
@@ -38,7 +38,7 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
         " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
         " -w /app " +
         f" -p {host_port}:{projectPort} " +
-        f" --network {Id}-network" +
+        f" --network {Nid}-network" +
         " python:3.9-alpine " +
         " sh"
     )
@@ -62,7 +62,7 @@ def flaskSetup(code, Id, dockerEnv, mainEnv, host_port):
     code.append(Run)
     return code, projectPort
 
-def mysqlSetup(code, Id, dockerEnv, mainEnv, host_port,
+def mysqlSetup(code, Id, Nid, dockerEnv, mainEnv, host_port,
                dbDetails, parentId=None, dbName=None):
     """
     create a mysql database
@@ -70,11 +70,15 @@ def mysqlSetup(code, Id, dockerEnv, mainEnv, host_port,
     userName = dbDetails.get("userName")
     userPass = dbDetails.get("userPass")
     rootPass = dbDetails.get("rootPass")
-    dbPort = dbDetails.get("projectPort", 3306)
+    dbPort = dbDetails.get("projectPort")
+    print(dbPort)
+    if not dbPort:
+        dbPort = 3306
+    print(dbPort)
     parentId = dbDetails.get("parent_id")
     if parentId:
         parentId = parentId
-        portMapping = ""
+        portMapping = f" -p {host_port}:{dbPort} "
     else:
         parentId = Id
         portMapping = f" -p {host_port}:{dbPort} "
@@ -82,7 +86,7 @@ def mysqlSetup(code, Id, dockerEnv, mainEnv, host_port,
     CreateServer.append(
         f" sudo docker run --name {Id}-name " +
         portMapping +
-        f" --network {parentId}-network" +
+        f" --network {Nid}-network" +
         f"  -e MYSQL_ROOT_PASSWORD={rootPass} " +
         f" -e MYSQL_USER={userName} " +
         f" -e MYSQL_TCP_PORT={dbPort} " +
@@ -106,17 +110,19 @@ def mysqlSetup(code, Id, dockerEnv, mainEnv, host_port,
     #code.append(CreateDatabase)
     return code, dbPort
 
-def mongodbSetup(code, Id, dockerEnv, mainEnv, host_port, dbDetails):
+def mongodbSetup(code, Id, Nid,  dockerEnv, mainEnv, host_port, dbDetails):
     """
     create a mysql database
     """
     userName = dbDetails.get("userName")
     userPass = dbDetails.get("userPass")
     parentId = dbDetails.get("parent_id")
-    dbPort = dbDetails.get("projectPort", 3306)
+    dbPort = dbDetails.get("projectPort")
+    if not dbPort:
+        dbPort = 27017
     if parentId:
         parentId = parentId
-        portMapping = ""
+        portMapping = f" -p {host_port}:{dbPort} "
     else:
         parentId = Id
         portMapping = f" -p {host_port}:{dbPort} "
@@ -124,7 +130,7 @@ def mongodbSetup(code, Id, dockerEnv, mainEnv, host_port, dbDetails):
     CreateServer.append(
         f" sudo docker run --name {Id}-name " +
         portMapping +
-        f" --network {parentId}-network" +
+        f" --network {Nid}-network" +
             f" -e MONGO_INITDB_ROOT_USERNAME={userName} " +
             f" -e MONGO_PORT={dbPort} " +
             f" -e MONGO_INITDB_ROOT_PASSWORD={userPass} " +

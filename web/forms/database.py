@@ -18,7 +18,7 @@ class dbServerForm(FlaskForm):
     dataBaseName = StringField("Name")
     dataBasePort = StringField("Port")
     dataBaseScope = RadioField("Scope", default="global", choices=["global", "local"])
-    dataBaseType = SelectField("Select an option", choices=[("Mongo Db", "MongoDb"), ("Mysql", "Mysql")])
+    dataBaseType = SelectField("Select an option", choices=[("MongoDb", "Mongo Db"), ("Mysql", "Mysql")])
     dataBaseUser = StringField("User name")
     dataBasePass = StringField("User password")
     dbProjectName = StringField("Project Name")

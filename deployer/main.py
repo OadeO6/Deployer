@@ -11,6 +11,9 @@ from deployer.util import flaskSetup, reactSetup, mysqlSetup, mongodbSetup
 class Deployer:
     def __init__(self, **kwargs):
         self.id = kwargs.get("id") # remove cration od id #temp
+        self.Nid = kwargs.get("Nid") # network id
+        if self.Nid is None:
+            self.Nid = self.id
         self.server = jenkins.Jenkins(
             url=  getenv("JENKINS_URL","http://localhost:8080"),
             username= getenv("JENKINS_USER", "OadeO6"), # use an env file
@@ -23,7 +26,7 @@ class Deployer:
         self.projectPort = kwargs.get("projectPort")
         self.repo = kwargs.get("repoUrl") # remove cration od id #temp
         self.network = kwargs.get("network")
-        print("@network", self.network)
+        print("@network")
         #"https://github.com/Ade06AA/mytest"
         if self.server.job_exists(f"{self.id}-job"):
             self.buildNum = self.server.get_job_info(f'{self.id}-job')['nextBuildNumber']
@@ -81,7 +84,7 @@ class Deployer:
         code = []
         projectPort = self.envDict.get("FLASK_RUN_PORT", "5000")
         if self.network == 'create2':
-            network = f"sudo docker network  create {self.id}-network"
+            network = f"sudo docker network  create {self.Nid}-network"
         else:
             network = "echo 'do docker network check'"
         Setup = ["set up ",
@@ -101,6 +104,8 @@ class Deployer:
 
         pType = self.pType
         if pType:
+
+            print(pType, "type")
             if pType.casefold() == "mysql":
                 if not self.kwargs.get("project_id"):
                     code.append(Setup[:2])
@@ -111,7 +116,7 @@ class Deployer:
                     "parent_id": self.kwargs.get("project_id"),
                     "projectPort": self.projectPort
                 }
-                code, projectPort = mysqlSetup(code, self.id,
+                code, projectPort = mysqlSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port, dbDetails, dbDetails)
 
@@ -125,42 +130,20 @@ class Deployer:
                     "parent_id": self.kwargs.get("project_id"),
                     "projectPort": self.projectPort
                 }
-                code, projectPort = mongodbSetup(code, self.id,
+                code, projectPort = mongodbSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port, dbDetails)
 
             if pType.casefold() == "flask":
                 code.append(Setup)
-                code, projectPort = flaskSetup(code, self.id,
+                code, projectPort = flaskSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port)
 
 
             if pType.casefold() == "react":
-                # projectPort = 3000
-                # Build = ["run next project"]
-                # # run container
-                # Build.append(
-                #     "sudo docker run -d -it" +
-                #     f" --name {self.id}-name " +
-                #     self.getDEnv(self.envDict) +
-                #     " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
-                #     " -w /app " +
-                #     f" -p {host_port}:{projectPort} " +
-                #     f" --network {self.id}-network-${{currentBuild.number}} " +
-                #     " node:16-alpine " +
-                #     " sh"
-                # )
-                # #do instalations
-                # Build.append(
-                #     f" sudo docker exec {self.id}-name sh -c 'npm install'"
-                # )
-                # Run = ["Run project"]
-                # Run.append(
-                #     f"sudo docker exec -d {self.id}-name sh -c 'HOST=0.0.0.0 npm run dev '"
-                # )
                 code.append(Setup)
-                code, projectPort = reactSetup(code,
+                code, projectPort = reactSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port)
 
@@ -189,7 +172,7 @@ class Deployer:
                 #     f"sudo docker exec  -d {self.id}-name sh -c 'HOST=0.0.0.0 npm run dev'"
                 # )
                 code.append(Setup)
-                code, projectPort = reactSetup(code,
+                code, projectPort = reactSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port)
         # checkPort = ["skip"]
@@ -199,14 +182,14 @@ class Deployer:
         # code.append(Run)
         # print(code)
         abort = [
-                f'sh "sudo docker rm -f { self.id }-name"',
-                f'sh "sudo docker network rm { self.id }-network"'
+                f'sh "sudo docker rm -f { self.id }-name"'
+                # f'sh "sudo docker network rm { self.id }-network"'
         ]
         fail = [
-                f'sh "sudo docker rm { self.id }-name -f"',
-                f'sh "sudo docker network rm { self.id }-network"'
+                f'sh "sudo docker rm { self.id }-name -f"'
+                # f'sh "sudo docker network rm { self.id }-network"'
         ]
-        xml = generate_xml(self.id, code, projectPort, self.api2Endpoint,
+        xml = generate_xml(self.id, code, projectPort, host_port, self.api2Endpoint,
                            True, abort, fail)
         return xml
 

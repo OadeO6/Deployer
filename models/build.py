@@ -11,7 +11,7 @@ from deployer.main import Deployer
 class Build(Base):
     name = "build"
     def __init__(self, project_id, _type: str, _repo=None, _id=None,
-                 userName=None, userPass=None, rootPass=None, dbName=None,
+                 userName=None, userPass=None, Nid=None, rootPass=None, dbName=None,
                  projectPort=None, relativeProjectId=None, network=None):
         """
         to add build finis time
@@ -35,7 +35,7 @@ class Build(Base):
         elif _type == "mysql":
             kwargs = {"userName": userName, "userPass": userPass,
                      "project_id": relativeProjectId, "rootPass": rootPass}
-        self.job = Deployer(id=self.id,
+        self.job = Deployer(id=self.id, Nid=Nid,
                             projectType=_type, projectPort=projectPort, network=network, **kwargs)
         self.build_num = self.job.buildNum
 

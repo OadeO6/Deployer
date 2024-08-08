@@ -10,13 +10,11 @@ from os import getenv
 
 class DBServer(Base):
     name = "db_server" # collection name
-    def __init__(self, user_id, project_id, form=None,  _id=None):
+    def __init__(self, user_id, project_id, form=None,  network_id=None):
         self.keys = ["id", "name", "created_at", "user_id", "data_bases",
                      "scope", "db_type", "build_id", "url", "project_id"]
         # build id is the combination of build id ans build num
         super().__init__()
-        if _id:
-            self.id = _id
         if form:
             self.name = form.dataBaseName.data
             self.db_type = form.dataBaseType.data
@@ -33,6 +31,7 @@ class DBServer(Base):
             self.project_id = None
         self.server_ip = getenv("HOST_IP" , "54.208.115.123")
         self.root_pass = "rootpass"
+        self.Nid = network_id
 
     # def create(self):
     def build(self):
@@ -41,10 +40,15 @@ class DBServer(Base):
         returns True if it was successfull
         """
         from models.ports import Ports
+        if self.project_id:
+            network = None
+        else:
+            network = "create2"
         build = Build(self.id,
-                      self.db_type, projectPort=self.port,
+                      self.db_type, Nid=self.Nid, projectPort=self.port,
                       userPass=self.user_pass, userName=self.user_name,
                       rootPass=self.root_pass,
+                      network=network,
                       relativeProjectId=self.project_id)
         host_port = Ports.get_a_port()
         if not host_port:

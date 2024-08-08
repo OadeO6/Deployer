@@ -1,4 +1,4 @@
-def generate_pipe(Id, code, port, apiEndpoint, check, abort, fail):
+def generate_pipe(Id, code, port, host_port, apiEndpoint, check, abort, fail):
     """
     create a pieline code using the two di,entional list of commands
     """
@@ -33,7 +33,7 @@ def generate_pipe(Id, code, port, apiEndpoint, check, abort, fail):
                    "\t\t}\n" +
                     "\t\tsteps {\n" +
                         '\t\t\techo "+ @show1@ cheacking if project is ready..."\n' +
-                        f"\t\t\tsh \"sudo docker exec { Id }-name sh -c 'netstat -tnlp | grep { port }'\"\n" +
+                        f"\t\t\tsh \"netstat -tnlp | grep { host_port }\"\n" +
                         f"\t\t\techo '+ @show1@ Project listenig on { port } '\n" +
                     "\t\t}\n" +
                 "\t}\n" if check else "")
@@ -78,12 +78,12 @@ def generate_pipe(Id, code, port, apiEndpoint, check, abort, fail):
     }}"""
     return pipeline_code
 
-def generate_xml(Id, code=[[]], port=None,
+def generate_xml(Id, code=[[]], port=None, host_port=None,
                  apiEndpoint=None, check=False,
                  abort=["echo 'no command to run after abort'"],
                  fail=["echo 'no command to run after fail'"],
                  description="no description"):
-    pipeline_code = generate_pipe(Id, code, port, apiEndpoint, check, abort, fail)
+    pipeline_code = generate_pipe(Id, code, port, host_port, apiEndpoint, check, abort, fail)
     xml_config = f"""<?xml version="1.1" encoding="UTF-8" standalone="no"?>
     <flow-definition plugin="workflow-job@1400.v7fd111b_ec82f">
       <actions>

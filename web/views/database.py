@@ -25,13 +25,17 @@ def newDBServer():
             project_id = Project.find({"name": form.dbProjectName.data})
             if len(project_id) == 1:
                 project_id = project_id[0]
+                build_id = project_id["build_id"]
+                project_id = project_id["id"]
             else:
                 flash("No Relative project found defaulting to global DB server",
                       "warning")
                 project_id = None
+                build_id = None
         else:
             project_id = None
-        dataBase = DBServer(session.get("user_id"), project_id, form)
+            build_id = None
+        dataBase = DBServer(session.get("user_id"), project_id, form, build_id)
         dataBase.build()
         dataBase.save()
     return render_template("newDBServer.html", form=form,
