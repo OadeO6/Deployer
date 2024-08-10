@@ -1,13 +1,20 @@
 const projectName = document.getElementById('projectName')
-const project2 = document.getElementById('project2');
+// const project2 = document.getElementById('project2');
+// const errorIcon = document.getElementById('errorIcon');
+// const successIcon = document.getElementById('successIcon');
 const project3 = document.getElementById('project3');
 const projectType = document.getElementById('projectType');
 const projectUrl = document.getElementById('projectUrl');
 const formSubmit = document.getElementById('formSubmit');
 const toDeploy = document.getElementById('toDeploy');
 const notDeploy = document.getElementById('notDeploy');
+const production = document.getElementById('production');
+const development = document.getElementById('development');
 const section1 = document.getElementById('section1');
 const apiUrl = document.getElementById('apiurlnew');
+const more = document.getElementById('more');
+console.log(more, "sssss")
+const env_vars = document.getElementById('env-vars');
 
 let projectUrlValue = projectUrl.value;
 let projectNameValue = projectName.value;
@@ -119,11 +126,16 @@ async function updateForm(timeOut){
 
 async function projectNameEventHandler(event){
   const value = event.target.value;
-  let available = await verifyName(value);
+  const errorIcon = projectName.parentElement.getElementsByClassName("errorIcon")[0];
+  const successIcon = projectName.parentElement.getElementsByClassName("successIcon")[0];
+  console.log(1111)
+  let available = value ? await verifyName(value) : false ;
   if (available) {
-    project2.classList.remove('hidden');
+    errorIcon.classList.add('hidden');
+    successIcon.classList.remove('hidden');
   } else {
-    project2.classList.add('hidden');
+    errorIcon.classList.remove('hidden');
+    successIcon.classList.add('hidden');
   }
 }
 
@@ -141,18 +153,36 @@ notDeploy.addEventListener('click', async () => {
   formSubmit.children[0].value = "Create Project";
 })
 
+production.addEventListener('click', async () => {
+  document.querySelectorAll('.production').forEach((el)=>{
+    el.classList.remove('hidden')
+  })
+})
+
+development.addEventListener('click', async () => {
+  document.querySelectorAll('.production').forEach((el)=>{
+    el.classList.add('hidden')
+  })
+})
+
 async function projectUrlEventHandler(event){
   const value = event.target.value;
   const available = await verifyUrl(value);
+  const errorIcon = projectUrl.parentElement.getElementsByClassName("errorIcon")[0];
+  const successIcon = projectUrl.parentElement.getElementsByClassName("successIcon")[0];
   let timeOut = 0;
 
   if (available) {
     // implement project type checking later
-    projectUrlAvailable = true;
+    projectUrlAvailable = true; // to be removed
     timeOut = 20;
+    errorIcon.classList.add('hidden');
+    successIcon.classList.remove('hidden');
   } else {
     projectUrlAvailable = false;
     timeOut = 10;
+    errorIcon.classList.remove('hidden');
+    successIcon.classList.add('hidden');
   }
   updateForm(timeOut);
 }
@@ -163,3 +193,39 @@ projectUrl.addEventListener('change', projectUrlEventHandler);
 projectType.addEventListener('change', () => {
   updateForm(2000);
 });
+
+
+let envCount = 1
+const items = document.getElementById("items");
+const items0 = document.getElementById("items-0").parentElement;
+const envKey = document.getElementById("envKey");
+const envValue = document.getElementById("envValue");
+const envTemplate = items0.outerHTML;
+more.addEventListener('click', () => {
+
+	if (envKey.value && envValue.value) {
+		let bb = envTemplate.replaceAll('items-0', `items-${++envCount}`)
+		bb = bb.replace(' hidden ', '')
+		items.insertAdjacentHTML('beforeend', bb)
+		let temp = document.getElementById(`items-${envCount}`)
+		let temp2 = document.getElementById(`items-${envCount}-label`)
+		temp.value = envKey.value + '=' + envValue.value
+		temp2.innerHTML = `<b>${envKey.value}=${envValue.value}</b>`
+		envKey.value = ''
+		envValue.value = ''
+	}
+//	console.log(11111111);
+//  const keyF = document.createElement('input');
+//  keyF.type = 'text';
+//  keyF.name = 'key';
+//  keyF.placeholder = 'key';
+//
+//  const valueF = document.createElement('input');
+//  valueF.type = 'text';
+//  valueF.name = 'value';
+//  valueF.placeholder = 'value';
+//
+//  env_vars.appendChild(keyF);
+//  env_vars.appendChild(valueF);
+})
+

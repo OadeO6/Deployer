@@ -9,7 +9,7 @@ def create_app():
     main app func
     """
     app = Flask(__name__)
-    # CORS(app,  origins='*')
+    CORS(app,  origins='*')
     # CORS(app,  resources={r"/*": {"origins":'*'}}, methods=['GET'])
     app.config.from_mapping(SECRET_KEY='dev')
 

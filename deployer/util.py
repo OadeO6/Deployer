@@ -10,10 +10,11 @@ def reactSetup(code, Id, Nid, dockerEnv, mainEnv, host_port):
         " -w /app " +
         f" -p {host_port}:{projectPort  } " +
         f" --network { Nid }-network " +
-        " node:16-alpine " +
+        " node:21.7.1-alpine " +
         " sh"
     )
     #do instalations
+    Build.append("echo '+ @show2@ Installing Dependencies...'")
     Build.append(
         f" sudo docker exec { Id }-name sh -c 'npm install'"
     )

@@ -10,6 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from web.forms import projectForm
 from models.project import Project
 from models.build import Build
+from web.views.images import ErrorSvg, InfoSvg, SuccessSvg, CancelSvg
 from . import user_views, need_login, get_menus
 
 @user_views.route('/projects', methods=['GET'])
@@ -123,6 +124,7 @@ def projects():
 @need_login
 def newProject(id=None):
     form = projectForm()
+    icons = [ErrorSvg, SuccessSvg, InfoSvg, CancelSvg]
     if request.method == "POST":
     #if form.validate_on_submit():
         #return redirect(url_for("user_views.newproject"))
@@ -138,6 +140,12 @@ def newProject(id=None):
         installCommand = request.form["installCommand"]
         deployCommans = request.form["deployCommans"]
         """
+        print(form.items.data)
+        print("aaa")
+        print(form.envValue.data)
+        print(form.envKey.data)
+        print(form.data)
+        return "yes"
         if id:
             if form.stage.data == "post":
                 project = Project(session.get("user_id"), form, _id=id)
@@ -158,6 +166,7 @@ def newProject(id=None):
     if id:
         form.stage.data = "post"
     return render_template("newProject.html",
+                           icons=icons,
                            form=form,
                            apiUrl= 'http://localhost:5000/user/project',
                            curentUrl=url_for("user_views.newProject"),

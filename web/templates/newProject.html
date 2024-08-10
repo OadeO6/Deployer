@@ -5,20 +5,32 @@
     <div class="hidden">
       {{ form.stage(id="formStage") }}
     </div>
-    <div class="flex flex-wrap justify-between gap-3 p-4">
+    <div class="flex  flex-wrap justify-between gap-3 p-4">
       <div class="flex min-w-72 flex-col gap-3">
         <p class="text-white tracking-light text-[32px] font-bold leading-tight">Add a new project</p>
         <p class="text-[#9daab8] text-sm font-normal leading-normal">We'll guide you through the process</p>
       </div>
     </div>
-    <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-      <label class="flex flex-col min-w-40 flex-1">
+    <div class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
+      <label class="flex  flex-col min-w-40 flex-1 ">
         {{ form.projectName.label( class="text-white text-base font-medium leading-normal pb-2") }}
-        {{ form.projectName(
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-        placeholder="My E-commerce Website",
-        id="projectName"
-        ) }}
+          {% set form_field =
+           form.projectName(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+          placeholder="My E-commerce Website",
+          id="projectName"
+          ) %}
+
+          {% set error_msg = "
+                <p>Project Name Not Available</p>
+          "%}
+          {% set success_msg = "
+                <p>Project Name Is Available</p>
+          "%}
+          {% set info_msg = "
+                <p>Project Name</p>
+          "%}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
       </label>
     </div>
     <!-- <div class="flex flex-wrap items-center justify-center"> -->
@@ -47,45 +59,77 @@
       {% endfor %}
     </div>
     <div id="section1">
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
+      <div class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex relative flex-col min-w-40 flex-1">
           {{ form.repoUrl.label(class="text-white text-base font-medium leading-normal pb-2") }}
-          {{ form.repoUrl(
-          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-          placeholder="https://github.com/ade/myecommerce-website",
-          id="projectUrl"
-          ) }}
+          {% set form_field =
+             form.repoUrl(
+            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+            placeholder="https://github.com/ade/myecommerce-website",
+            id="projectUrl"
+          ) %}
+          {% set error_msg = "
+          <p>No Such Repository</p>
+          "%}
+          {% set success_msg = "
+          <p>Repository Recognized</p>
+          "%}
+          {% set info_msg = "
+          <p>Project Repository Url</p>
+          <p><b>Format:</b></p>
+          <p>https://github.com/{user}/{repo-name}</p>
+          <p>https://{token}@github.com/{user}/{repo-name}</p>
+          "%}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
         </label>
       </div>
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
+      <div class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex relative flex-col min-w-40 flex-1">
           {{ form.projectType.label(class="text-white text-base font-medium leading-normal pb-2") }}
-          {{ form.projectType(
-          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal"
-          ) }}
+          {% set form_field =
+             form.projectType(
+            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal"
+          ) %}
+          {% set error_msg =
+                  "<p>No Frame-Work/Language Selected</p>"
+          %}
+          {% set success_msg =
+                  "<p>Frame-Work/Language Selected</p>"
+          %}
+          {% set info_msg = "
+                  <p>Select Project Frame-Work Or Language</p>
+          "%}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg, False) }}
         </label>
       </div>
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
+      <div class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex relative flex-col min-w-40 flex-1">
           {{ form.projectDirectory.label(class="text-white text-base font-medium leading-normal pb-2")}}
-          {{ form.projectDirectory(
+          {% set form_field = form.projectDirectory(
           class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-          placeholder="/"
-          ) }}
+          placeholder="./"
+          ) %}
+          {% set error_msg = "<p>Root Directory Is Required</p> " %}
+          {% set success_msg = "<p>Root Directory Field Filled</p>" %}
+          {% set info_msg = "
+          <p>Project Root Directory</p>
+          <p>Default: Repo root directory <b>./</b></p>"
+          %}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg, False) }}
         </label>
       </div>
       <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Deployment mode</h2>
       <div class="flex flex-col gap-3 p-4">
         {% for radio in form.mode  %}
         <label class="flex items-center gap-4 rounded-xl border border-solid border-[#3c4753] p-[15px]">
-          {% if radio.label == 'Production' %}
+          {% if loop.index == 1 %}
           {{ radio(
-          disabled=True,
+          id="production",
           class="h-5 w-5  border-[#3c4753] bg-transparent text-transparent checked:border-white checked:bg-[image:--radio-dot-svg] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-white"
           )}}
           {% else %}
           {{ radio(
-          class="",
+          id="development",
           class="h-5 w-5 border-2 border-[#3c4753] bg-transparent text-transparent checked:border-white checked:bg-[image:--radio-dot-svg] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-white"
           )}}
           {% endif%}
@@ -96,52 +140,103 @@
         {% endfor %}
       </div>
       <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Environment variables</h2>
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          <p class="text-white text-base font-medium leading-normal pb-2">Variable</p>
-          <input
-            placeholder="API_URL"
-            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal"
-            value=""
-          />
-        </label>
-        <label class="flex flex-col min-w-40 flex-1">
-          <p class="text-white text-base font-medium leading-normal pb-2">Value</p>
-          <input
-            placeholder="https://api.acme.co"
-            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal"
-            value=""
-          />
-        </label>
+      <div id="items" class="flex px-4 dark:text-white gap-2 flex-wrap">
+        {% for i in form.items %}
+        <div class=" hidden rounded-md flex-grow-0 bg-gray-700 hidde flex">
+          {{ i(
+          class="hidden"
+          ) }}
+          <div class=" border-green-300 border rounded-md p-2 m-1 gap-2 flex">
+            <p id="items-0-label" class="text-black"> temp=temp </p>
+          <div onclick="this.parentElement.remove()" class="h-5 my-auto w-5 cursor-pointer">
+              {{ icons[3] | safe }}
+          </div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
-      <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Run and build commands</h2>
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+      <div id="ienv-vars" class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
         <label class="flex flex-col min-w-40 flex-1">
-          {{ form.buildCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
-          {{ form.buildCommand(
-          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-          placeholder="npm run build"
-          )}}
+          {{ form.envKey.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{ form.envKey(
+            placeholder="API_URL",
+            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+            value=""
+          ) }}
         </label>
         <label class="flex flex-col min-w-40 flex-1">
-          {{ form.deployCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
-          {{ form.deployCommand(
-          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-          placeholder="npm run build"
-          )}}
-        </label>
-      </div>
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          {{ form.installCommand.label(class="text-white text-base font-medium leading-normal pb-2")}}
-          {{ form.installCommand(
-          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-          placeholder="npm install"
+          {{ form.envValue.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {{ form.envValue(
+            placeholder="https://api.acme.co",
+            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+            value=""
           ) }}
         </label>
       </div>
-      <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Web Server</h3>
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+      <div class="px-4 flex text-white">
+      <p class="cursor-pointer rounded-md  p-2 border hover:bg-gray-800 bg-gray-950" id="more">Add Environmental Variable</p>
+      </div>
+      <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Run and build commands</h2>
+      <div class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex hidden production flex-col relative min-w-40 flex-1">
+          {{ form.buildCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {% set form_field =
+          form.buildCommand(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+          placeholder="npm run build"
+          ) %}
+          {% set error_msg = "
+            Build Command Required
+          "%}
+          {% set success_msg = "
+            Build Comman Gotten
+          "%}
+          {% set info_msg = "
+          <p>Build Command For Production Deploument</p>
+          "%}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
+        </label>
+        <label class="flex flex-col min-w-40 relative flex-1">
+          {{ form.deployCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
+          {% set form_field =
+          form.deployCommand(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+          placeholder="npm run build"
+          ) %}
+          {% set error_msg = "
+          Deploy Command Needed
+          "%}
+          {% set success_msg = "
+          Deloy Command Filed Filled
+          "%}
+          {% set info_msg = "
+          Enter Command For Running Or Deploying Project
+          "%}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
+        </label>
+      </div>
+      <div class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
+        <label class="flex flex-col relative min-w-40 flex-1">
+          {{ form.installCommand.label(class="text-white text-base font-medium leading-normal pb-2")}}
+          {% set form_field =
+         form.installCommand(
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+          placeholder="npm install"
+          ) %}
+          {% set error_msg = "
+          Instalation Command Required
+          "%}
+          {% set success_msg = "
+          Field Filled
+          "%}
+          {% set info_msg = "
+          Enter The Instalation Command
+          "%}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
+        </label>
+      </div>
+      <h3 class="text-white production python hidden text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Web Server</h3>
+      <div class="hidden production python flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
         <label class="flex flex-col min-w-40 flex-1">
           {{ form.webServer.label(class="text-white text-base font-medium leading-normal pb-2") }}
           {{ form.webServer(
@@ -156,11 +251,47 @@
       class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#3289e7] text-white text-sm font-bold leading-normal tracking-[0.015em]"
       ) }}
     </div>
+    <input type="hidden" id="apiurlnew" value="{{apiUrl}}">
   </form>
   <script src="{{ url_for('static', filename='script/newProject.js')}}"></script>
 </div>
 
 {% endblock workspace %}
+
+
+
+{% macro form_icons(form_field, error_msg, success_msg, info_msg, hide=True) %}
+<div class="flex">
+  {{ form_field }}
+  <div class="flex my-auto m-1 ">
+    <div class="group">
+      <div  class="errorIcon ml-1 icon-1 hidden  h-5 w-5">
+        {{ icons[0] | safe }}
+      </div>
+      <div class="hidden absolute group-hover:flex w-auto whitespace-nowrap rounded-md h-auto bg-gray-200 p-2">
+        {{ error_msg | safe }}
+      </div>
+    </div>
+    <div class="group">
+      <div class="ml-1 successIcon {% if hide %} hidden {% endif %}  icon-2 h-5 w-5">
+        {{ icons[1] | safe }}
+      </div>
+      <div class="hidden absolute group-hover:flex w-auto whitespace-nowrap rounded-md h-auto bg-gray-200 p-2">
+        {{ success_msg | safe }}
+      </div>
+    </div>
+    <div class="group">
+      <div class="icon-3   h-5 w-5 ml-1">
+        {{ icons[2] | safe }}
+      </div>
+      <div class="hidden absolute group-hover:block w-auto whitespace-nowrap rounded-md h-auto bg-gray-200 p-2">
+        {{ info_msg | safe }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
 
 
 
