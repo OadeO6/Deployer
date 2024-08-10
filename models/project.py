@@ -37,6 +37,12 @@ class Project(Base):
                 self.project_type = form.projectType.data
                 self.form = form
                 self.repo = form.repoUrl.data
+                self.env = form.items.data
+                self.installCmd = form.installCommand.data
+                self.runCmd = form.deployCommand.data
+                self.buildCmd = form.buildCommand.data
+                self.pDir = form.projectDirectory.data
+
         self.user_id = User.confirm(user_id)
         self.server_ip = getenv("HOST_IP" , "54.208.115.123")
 
@@ -63,9 +69,14 @@ class Project(Base):
             project = project[0]
             Id = project["build_id"]
 
+        kwargs = {
+            "runCommand": self.runCmd, "buildCommand": self.buildCmd,
+            "installCommand": self.installCmd, "envs": self.env,
+            "projectDir": self.pDir, "network": self.network
+        }
         build = Build(self.id,
                       self.form.projectType.data,
-                      self.form.repoUrl.data, Id,  network=self.network)
+                      self.form.repoUrl.data, Id, **kwargs)
         host_port = Ports.get_a_port()
         print("@@@ ", host_port)
         if not host_port:

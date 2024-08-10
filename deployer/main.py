@@ -21,11 +21,18 @@ class Deployer:
         )
         self.kwargs = kwargs
         # FLASK_RUN_PORT FLASK_APP
-        self.envDict = {}
+        envs = kwargs.get("envs")
+        envs = [] if not envs else envs[1:]
+        self.envDict = {} if not envs else {b.split('=')[0]: b.split('=')[1]  for b in envs}
         self.pType = kwargs.get("projectType", "flask")
         self.projectPort = kwargs.get("projectPort")
         self.repo = kwargs.get("repoUrl") # remove cration od id #temp
         self.network = kwargs.get("network")
+        self.runCommand = kwargs.get("runCommand")
+        self.installCommand = kwargs.get("installCommand")
+        self.buildCommand = kwargs.get("buildCommand")
+        self.projectDir = kwargs.get("projectDir")
+        self.webServer = kwargs.get("webServer")
         print("@network")
         #"https://github.com/Ade06AA/mytest"
         if self.server.job_exists(f"{self.id}-job"):
@@ -106,6 +113,12 @@ class Deployer:
         if pType:
 
             print(pType, "type")
+            kwargs = {
+                "runCommand": self.runCommand,
+                "buildCommand": self.buildCommand, "installCommand": self.installCommand,
+                "projectDir": self.projectDir, "webServer": self.webServer
+            }
+
             if pType.casefold() == "mysql":
                 if not self.kwargs.get("project_id"):
                     code.append(Setup[:2])
@@ -120,7 +133,7 @@ class Deployer:
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port, dbDetails, dbDetails)
 
-            if pType.casefold() == "mongodb":
+            elif pType.casefold() == "mongodb":
 
                 if not self.kwargs.get("project_id"):
                     code.append(Setup[:2])
@@ -134,21 +147,40 @@ class Deployer:
                                                self.getDEnv(self.envDict),
                                                self.envDict, host_port, dbDetails)
 
-            if pType.casefold() == "flask":
+
+            elif pType.casefold() == "flask":
                 code.append(Setup)
                 code, projectPort = flaskSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port)
+                                               self.envDict, host_port, kwargs)
+
+            elif pType.casefold() == "python":
+                code.append(Setup)
+                code, projectPort = flaskSetup(code, self.id, self.Nid,
+                                               self.getDEnv(self.envDict),
+                                               self.envDict, host_port, kwargs)
 
 
-            if pType.casefold() == "react":
+            elif pType.casefold() == "react":
                 code.append(Setup)
                 code, projectPort = reactSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port)
+                                               self.envDict, host_port, kwargs)
+
+            elif pType.casefold() == "javascript":
+                code.append(Setup)
+                code, projectPort = reactSetup(code, self.id, self.Nid,
+                                               self.getDEnv(self.envDict),
+                                               self.envDict, host_port, kwargs)
+
+            elif pType.casefold() == "node":
+                code.append(Setup)
+                code, projectPort = reactSetup(code, self.id, self.Nid,
+                                               self.getDEnv(self.envDict),
+                                               self.envDict, host_port, kwargs)
 
 
-            if pType.casefold() == "next":
+            elif pType.casefold() == "next":
                 # projectPort = 3000
                 # Build = ["run next project"]
                 # # run container
@@ -174,7 +206,7 @@ class Deployer:
                 code.append(Setup)
                 code, projectPort = reactSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port)
+                                               self.envDict, host_porti, kwargs)
         # checkPort = ["skip"]
         # code.append(Setup)
         # code.append(Build)

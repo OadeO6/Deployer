@@ -140,12 +140,12 @@ def newProject(id=None):
         installCommand = request.form["installCommand"]
         deployCommans = request.form["deployCommans"]
         """
-        print(form.items.data)
-        print("aaa")
-        print(form.envValue.data)
-        print(form.envKey.data)
-        print(form.data)
-        return "yes"
+        # print(form.items.data)
+        # print("aaa")
+        # print(form.envValue.data)
+        # print(form.envKey.data)
+        # print(form.data)
+        # return "yes"
         if id:
             if form.stage.data == "post":
                 project = Project(session.get("user_id"), form, _id=id)

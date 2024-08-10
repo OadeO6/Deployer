@@ -12,7 +12,9 @@ class Build(Base):
     name = "build"
     def __init__(self, project_id, _type: str, _repo=None, _id=None,
                  userName=None, userPass=None, Nid=None, rootPass=None, dbName=None,
-                 projectPort=None, relativeProjectId=None, network=None):
+                 projectPort=None, relativeProjectId=None, network=None,
+                 runCommand=None, buildCommand=None, envs=None,
+                 installCommand=None, webServer=None, projectDir=None):
         """
         to add build finis time
         """
@@ -28,7 +30,11 @@ class Build(Base):
         _type = _type.lower()
         kwargs = {}
         if _type in ["flask", "react", "next", "django"]:
-            kwargs = {"repoUrl": _repo}
+            kwargs = {
+                "repoUrl": _repo, "runCommand": runCommand, "envs": envs,
+                "buildCommand": buildCommand, "installCommand": installCommand,
+                "projectDir": projectDir, "webServer": webServer
+            }
         elif _type == "mongodb":
             kwargs = {"userName": userName,"project_id": relativeProjectId,
                      "userPass": userPass}

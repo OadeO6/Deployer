@@ -1,4 +1,4 @@
-def reactSetup(code, Id, Nid, dockerEnv, mainEnv, host_port):
+def reactSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, kwargs):
     projectPort = 3000 # or get costum port
     Build = ["run next project"]
     # run container
@@ -15,20 +15,31 @@ def reactSetup(code, Id, Nid, dockerEnv, mainEnv, host_port):
     )
     #do instalations
     Build.append("echo '+ @show2@ Installing Dependencies...'")
+    installCommand = kwargs.get('installCommand')
+    if not installCommand:
+        installCommand = 'npm install'
+        # do some filtering first
     Build.append(
-        f" sudo docker exec { Id }-name sh -c 'npm install'"
+        f"sudo docker exec {Id}-name sh -c '{installCommand}'"
     )
     Run = ["Run project"]
+    runCommand = kwargs.get('runCommand')
+    if not runCommand:
+        runCommand = "HOST=0.0.0.0 npm run dev"
+        # do some filtering first
     Run.append(
-        f"sudo docker exec -d { Id }-name sh -c 'HOST=0.0.0.0 npm run dev '"
+        f"sudo docker exec -d {Id}-name sh -c '{runCommand}' #show1# run project "
     )
+    # Run.append(
+    #     f"sudo docker exec -d { Id }-name sh -c 'HOST=0.0.0.0 npm run dev '"
+    # )
     checkPort = ["skip"]
     code.append(Build)
     code.append(checkPort)
     code.append(Run)
     return code, projectPort
 
-def flaskSetup(code, Id, Nid, dockerEnv, mainEnv, host_port):
+def flaskSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, kwargs):
     projectPort = 5000
     Build = ["build flask project"]
     # run container
@@ -46,16 +57,29 @@ def flaskSetup(code, Id, Nid, dockerEnv, mainEnv, host_port):
     #do instalations
     Build.append("echo '+ @show1@ Installing Dependencies...'")
     Build.append("echo '+ @show2@ Installing Dependencies...'")
+    installCommand = kwargs.get('installCommand')
+    if not installCommand:
+        installCommand = 'pip install -r requirements.txt'
+        # do some filtering first
     Build.append(
-        f"sudo docker exec {Id}-name sh -c 'pip install -r requirements.txt'"
+        f"sudo docker exec {Id}-name sh -c '{installCommand}'"
     )
     Run = ["Run project"]
     # add -d wil make it run in background
-    Run.append(
-        f'sudo docker exec -d {Id}-name sh -c ' +
-        " 'python -m flask --app {} run --host 0.0.0.0' ".format(
+    # Run.append(
+    #     f'sudo docker exec -d {Id}-name sh -c ' +
+    #     " 'python -m flask --app {} run --host 0.0.0.0' ".format(
+    #         mainEnv.get("FLASK_APP", "app")
+    #     )
+    # )
+    runCommand = kwargs.get('runCommand')
+    if not runCommand:
+        runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
             mainEnv.get("FLASK_APP", "app")
-        ) + "#show1# run project"
+        )
+        # do some filtering first
+    Run.append(
+        f"sudo docker exec -d {Id}-name sh -c '{runCommand}' #show1# run project "
     )
     checkPort = ["skip"]
     code.append(Build)
