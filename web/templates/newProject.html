@@ -30,7 +30,11 @@
           {% set info_msg = "
                 <p>Project Name</p>
           "%}
+          {% if form.stage.data == 'post' %}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg, False) }}
+          {% else %}
           {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
+          {% endif %}
       </label>
     </div>
     <!-- <div class="flex flex-wrap items-center justify-center"> -->
@@ -42,6 +46,7 @@
     <!--   <label for="radio3">tttttttt</label> -->
     <!-- </div> -->
 
+    {% if form.stage.data != 'post' %}
     <div class="flex flex-col gap-3 p-4">
       {% set ids = ["notDeploy", "toDeploy"] %}
       {% set counter = 0 %}
@@ -58,6 +63,7 @@
       {% set counter = counter + 1 %}
       {% endfor %}
     </div>
+    {% endif %}
     <div id="section1">
       <div class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
         <label class="flex relative flex-col min-w-40 flex-1">

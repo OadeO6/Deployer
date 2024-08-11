@@ -21,7 +21,9 @@ class Build(Base):
         # id is curently useless
         self.keys = ["id", "build_num",
                      "created_at", "project_id",
-                    "repo", "building", "status"]
+                    "repo", "building", "status", "runCommand",
+                    "envs", "buildCommand", "installCommand", "projectDir",
+                     "webServer"]
         super().__init__()
         if _id:
             self.id = _id
@@ -35,6 +37,8 @@ class Build(Base):
                 "buildCommand": buildCommand, "installCommand": installCommand,
                 "projectDir": projectDir, "webServer": webServer
             }
+            for i, j in kwargs.items():
+                setattr(self, i, j)
         elif _type == "mongodb":
             kwargs = {"userName": userName,"project_id": relativeProjectId,
                      "userPass": userPass}

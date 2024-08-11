@@ -165,6 +165,11 @@ def newProject(id=None):
     #form = {"submit":2}
     if id:
         form.stage.data = "post"
+        project = Project.find({"id": id}, {"name": 1})
+        if len(list(project)) != 1:
+            abort(404)
+        form.projectName.data = project[0]["name"]
+        form.projectName.render_kw = {"readonly": True}
     return render_template("newProject.html",
                            icons=icons,
                            form=form,
