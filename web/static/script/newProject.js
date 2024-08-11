@@ -101,7 +101,7 @@ async function getRemainingForm(type){
   }
 }
 
-async function updateForm(timeOut){
+async function OldUpdateForm(timeOut){
   setTimeout(() => {
     if (projectUrlAvailable) {
       project3.hidden = false;
@@ -190,8 +190,28 @@ async function projectUrlEventHandler(event){
 // projectUrl.addEventListener('load', projectUrlEventHandler);
 projectUrl.addEventListener('change', projectUrlEventHandler);
 
+
+async function updateForm(){
+	const buildCommand = document.getElementById("buildCommandContainer");
+	const server = document.getElementById("webServerContainer");
+    projectTypeValue = projectType.value;
+    console.log(projectType.value)
+	let needBuild = ["Next", "Node", "React", "Javascript"]
+	if (needBuild.includes(projectTypeValue)){
+		// add build form
+    buildCommand.classList.remove('hidden');
+    server.classList.add('hidden');
+	} else {
+		// add server form
+    server.classList.remove('hidden');
+   buildCommand.classList.add('hidden');
+
+	}
+
+}
+
 projectType.addEventListener('change', () => {
-  updateForm(2000);
+  updateForm();
 });
 
 

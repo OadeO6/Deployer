@@ -184,24 +184,26 @@
       </div>
       <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Run and build commands</h2>
       <div class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex hidden production flex-col relative min-w-40 flex-1">
-          {{ form.buildCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
-          {% set form_field =
-          form.buildCommand(
-          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-          placeholder="npm run build"
-          ) %}
-          {% set error_msg = "
+        <div id="buildCommandContainer" class="hidden">
+          <label class="flex hidden production flex-col relative min-w-40 flex-1">
+            {{ form.buildCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
+            {% set form_field =
+            form.buildCommand(
+            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
+            placeholder="npm run build"
+            ) %}
+            {% set error_msg = "
             Build Command Required
-          "%}
-          {% set success_msg = "
+            "%}
+            {% set success_msg = "
             Build Comman Gotten
-          "%}
-          {% set info_msg = "
-          <p>Build Command For Production Deploument</p>
-          "%}
-          {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
-        </label>
+            "%}
+            {% set info_msg = "
+            <p>Build Command For Production Deploument</p>
+            "%}
+            {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
+          </label>
+        </div>
         <label class="flex flex-col min-w-40 relative flex-1">
           {{ form.deployCommand.label(class="text-white text-base font-medium leading-normal pb-2") }}
           {% set form_field =
@@ -241,14 +243,16 @@
           {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
         </label>
       </div>
-      <h3 class="text-white production python hidden text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Web Server</h3>
-      <div class="hidden production python flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          {{ form.webServer.label(class="text-white text-base font-medium leading-normal pb-2") }}
-          {{ form.webServer(
-          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal"
-          ) }}
-        </label>
+      <div id="webServerContainer">
+        <h3 class="text-white production python hidden text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Web Server</h3>
+        <div class="hidden production python flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
+          <label class="flex flex-col min-w-40 flex-1">
+            {{ form.webServer.label(class="text-white text-base font-medium leading-normal pb-2") }}
+            {{ form.webServer(
+            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#90b0cb] p-4 text-base font-normal leading-normal"
+            ) }}
+          </label>
+        </div>
       </div>
     </div>
 
