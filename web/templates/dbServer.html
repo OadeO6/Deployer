@@ -2,9 +2,9 @@
 {% block workspace %}
 <div>
 	<div class="bg-green-900 ">
-		<p> Project :{{ project}}</p>
-		<p> Project Name:{{ project.name }}</p>
-		<p> Project Url: <a target="_blank" href="http://{{project.url}}">{{ project.url }}</a></p>
+		<p> DataBase Server :{{ databases}}</p>
+		<p> DataBase Server Name:{{ databases.name }}</p>
+		<!-- <p> DataBase Server Url: <a target="_blank" href="http://{{databases.url}}">{{ databases.url }}</a></p> -->
 	</div>
 	<div>
 		<form action="{{url_for("user_views.newProject")}}/{{id}}" method="POST">

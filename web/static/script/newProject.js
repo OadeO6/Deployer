@@ -191,21 +191,53 @@ async function projectUrlEventHandler(event){
 projectUrl.addEventListener('change', projectUrlEventHandler);
 
 
+	const installCommand = document.getElementById('installCommand');
 async function updateForm(){
-	const buildCommand = document.getElementById("buildCommandContainer");
+	const buildCommandContainer = document.getElementById("buildCommandContainer");
 	const server = document.getElementById("webServerContainer");
+	const buildCommand = document.getElementById('buildCommand');
+	const deployCommand = document.getElementById('deployCommand');
+	const installCommand = document.getElementById('installCommand');
     projectTypeValue = projectType.value;
     console.log(projectType.value)
 	let needBuild = ["Next", "Node", "React", "Javascript"]
 	if (needBuild.includes(projectTypeValue)){
 		// add build form
-    buildCommand.classList.remove('hidden');
+    buildCommandContainer.classList.remove('hidden');
     server.classList.add('hidden');
+			deployCommand.placeholder = "npm run dev"
+			deployCommand.parentElement.querySelector('.info').innerText = "npm run dev"
+			installCommand.placeholder = "npm install"
+			installCommand.parentElement.querySelector('.info').innerText = "npm install"
+			buildCommand.placeholder = "npm run build"
+			buildCommand.parentElement.querySelector('.info').innerText = "npm run build"
 	} else {
 		// add server form
     server.classList.remove('hidden');
-   buildCommand.classList.add('hidden');
+   buildCommandContainer.classList.add('hidden');
+			installCommand.placeholder = "pip install requirements.txt"
+			installCommand.parentElement.querySelector('.info').innerText = "pip install requirements.txt"
 
+	}
+	switch (projectTypeValue) {
+		case "Flask":
+
+			deployCommand.placeholder = "python -m flask run"
+			deployCommand.parentElement.querySelector('.info').innerText = "python -m flask run"
+			break;
+		case "Python":
+			deployCommand.placeholder = "python -m flask run"
+			deployCommand.parentElement.querySelector('.info').innerText = "python -m flask run"
+
+
+			break;
+		case "Django":
+			deployCommand.placeholder = "python manage.py runserver"
+
+			deployCommand.parentElement.querySelector('.info').innerText = "python manage.py runserver"
+
+
+			break;
 	}
 
 }

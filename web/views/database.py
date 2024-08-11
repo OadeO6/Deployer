@@ -47,10 +47,9 @@ def newDBServer():
 def dbServer(id):
     dbserver = DBServer.find({"id":id})
     if dbserver:
-        dbserver = dbserver[0]
+        databases = dbserver[0]
     else:
         return abort(404)
-    databases = dbserver.data_bases
     return render_template(
         "dbServer.html",
         curentUrl=url_for("user_views.dbServer", id=id),

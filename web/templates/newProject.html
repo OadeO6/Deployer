@@ -200,6 +200,8 @@
             "%}
             {% set info_msg = "
             <p>Build Command For Production Deploument</p>
+          <p>Default Command:</p>
+          <p class='info'>npm run build</p>
             "%}
             {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
           </label>
@@ -209,7 +211,7 @@
           {% set form_field =
           form.deployCommand(
           class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-          placeholder="npm run build"
+          placeholder="python -m flask run"
           ) %}
           {% set error_msg = "
           Deploy Command Needed
@@ -218,7 +220,9 @@
           Deloy Command Filed Filled
           "%}
           {% set info_msg = "
-          Enter Command For Running Or Deploying Project
+          <p>Enter Command For Running Or Deploying Project</p>
+          <p>Default Command:</p>
+          <p class='info'>python -m flask run</p>
           "%}
           {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
         </label>
@@ -229,7 +233,7 @@
           {% set form_field =
          form.installCommand(
           class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-14 placeholder:text-[#9daab8] p-4 text-base font-normal leading-normal",
-          placeholder="npm install"
+          placeholder="pip install requirements.txt"
           ) %}
           {% set error_msg = "
           Instalation Command Required
@@ -238,7 +242,9 @@
           Field Filled
           "%}
           {% set info_msg = "
-          Enter The Instalation Command
+          <p>Enter The Instalation Command</p>
+          <p>Default Command:</p>
+          <p class='info'>pip install requirements.txt</p>
           "%}
           {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
         </label>

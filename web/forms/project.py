@@ -20,7 +20,7 @@ class projectForm(FlaskForm):
     repoUrl = StringField("Repository URL") #, default="https://github.com/Ade06AA/mytest")
     envKey = StringField("Key")
     envValue = StringField("Value")
-    projectType = SelectField("Select an option", choices=[("Flask", "Flask"), ("Next", "Next"), ("React", "React"), ("Python", "Python"), ("JavaScript", "JavaScript"), ("Node", "Node")])
+    projectType = SelectField("Select an option", choices=[("Flask", "Flask"), ("Django", "Django"), ("Next", "Next"), ("React", "React"), ("Python", "Python"), ("JavaScript", "JavaScript"), ("Node", "Node")])
     projectDirectory = StringField("Project Directory")
     hostIp = StringField("Custom Host Ip")
     buildCommand = StringField("Build Command")

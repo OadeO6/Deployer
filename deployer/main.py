@@ -5,7 +5,7 @@ Module that handels the main deployment
 from os import getenv
 import jenkins
 from deployer.myxml import generate_xml
-from deployer.util import flaskSetup, reactSetup, mysqlSetup, mongodbSetup
+from deployer.util import pythonSetup, nodeSetup, mysqlSetup, mongodbSetup
 
 
 class Deployer:
@@ -150,34 +150,39 @@ class Deployer:
 
             elif pType.casefold() == "flask":
                 code.append(Setup)
-                code, projectPort = flaskSetup(code, self.id, self.Nid,
+                code, projectPort = pythonSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port, kwargs)
+                                               self.envDict, host_port, "flask", kwargs)
 
+            elif pType.casefold() == "django":
+                code.append(Setup)
+                code, projectPort = pythonSetup(code, self.id, self.Nid,
+                                               self.getDEnv(self.envDict),
+                                               self.envDict, host_port, "django", kwargs)
             elif pType.casefold() == "python":
                 code.append(Setup)
-                code, projectPort = flaskSetup(code, self.id, self.Nid,
+                code, projectPort = pythonSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port, kwargs)
+                                               self.envDict, host_port, "python", kwargs)
 
 
             elif pType.casefold() == "react":
                 code.append(Setup)
-                code, projectPort = reactSetup(code, self.id, self.Nid,
+                code, projectPort = nodeSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port, kwargs)
+                                               self.envDict, host_port, "react", kwargs)
 
             elif pType.casefold() == "javascript":
                 code.append(Setup)
-                code, projectPort = reactSetup(code, self.id, self.Nid,
+                code, projectPort = nodeSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port, kwargs)
+                                               self.envDict, host_port, "javascript", kwargs)
 
             elif pType.casefold() == "node":
                 code.append(Setup)
-                code, projectPort = reactSetup(code, self.id, self.Nid,
+                code, projectPort = nodeSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_port, kwargs)
+                                               self.envDict, host_port, "node", kwargs)
 
 
             elif pType.casefold() == "next":
@@ -204,9 +209,9 @@ class Deployer:
                 #     f"sudo docker exec  -d {self.id}-name sh -c 'HOST=0.0.0.0 npm run dev'"
                 # )
                 code.append(Setup)
-                code, projectPort = reactSetup(code, self.id, self.Nid,
+                code, projectPort = nodeSetup(code, self.id, self.Nid,
                                                self.getDEnv(self.envDict),
-                                               self.envDict, host_porti, kwargs)
+                                               self.envDict, host_port, "next",kwargs)
         # checkPort = ["skip"]
         # code.append(Setup)
         # code.append(Build)

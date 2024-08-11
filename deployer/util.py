@@ -1,4 +1,4 @@
-def reactSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, kwargs):
+def nodeSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type, kwargs):
     projectPort = 3000 # or get costum port
     Build = ["run next project"]
     # run container
@@ -39,7 +39,7 @@ def reactSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, kwargs):
     code.append(Run)
     return code, projectPort
 
-def flaskSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, kwargs):
+def pythonSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type,  kwargs):
     projectPort = 5000
     Build = ["build flask project"]
     # run container
@@ -74,9 +74,21 @@ def flaskSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, kwargs):
     # )
     runCommand = kwargs.get('runCommand')
     if not runCommand:
-        runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
-            mainEnv.get("FLASK_APP", "app")
-        )
+        match Type:
+            case "django":
+                runCommand = " python manage.py runserver"
+            case "python":
+                runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
+                    mainEnv.get("FLASK_APP", "app")
+                )
+            case "flask":
+                runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
+                    mainEnv.get("FLASK_APP", "app")
+                )
+            case _:
+                runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
+                    mainEnv.get("FLASK_APP", "app")
+                )
         # do some filtering first
     Run.append(
         f"sudo docker exec -d {Id}-name sh -c '{runCommand}' #show1# run project "
