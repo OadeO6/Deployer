@@ -1,5 +1,5 @@
-{% macro cardfaq(question, answer) -%}
-              <details class="flex flex-col rounded-xl border border-[#3c4753] bg-[#111418] px-[15px] py-[7px] group" open="">
+{% macro cardfaq(question, answer, open=False) -%}
+<details class="flex flex-col rounded-xl border border-[#3c4753] bg-[#111418] px-[15px] py-[7px] group" {% if open %} open="" {% endif%}>
                 <summary class="flex cursor-pointer items-center justify-between gap-6 py-2">
     <p class="text-white text-sm font-medium leading-normal">{{ question}} </p>
                   <div class="text-white group-open:rotate-180" data-icon="CaretDown" data-size="20px" data-weight="regular">
@@ -10,20 +10,6 @@
                 </summary>
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal pb-2">
     {{ answer }}
-                </p>
-              </details>
-              <details class="flex flex-col rounded-xl border border-[#3c4753] bg-[#111418] px-[15px] py-[7px] group">
-                <summary class="flex cursor-pointer items-center justify-between gap-6 py-2">
-                  <p class="text-white text-sm font-medium leading-normal">How do I change my order?</p>
-                  <div class="text-white group-open:rotate-180" data-icon="CaretDown" data-size="20px" data-weight="regular">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
-                    </svg>
-                  </div>
-                </summary>
-                <p class="text-[#9dabb8] text-sm font-normal leading-normal pb-2">
-                  We accept returns within 30 days of the delivery date. Items must be unworn, unwashed, and in original condition. Returns are refunded to the original payment
-                  method. Once your return has been processed, please allow up to 10 business days for the refund to appear on your bank statement.
                 </p>
               </details>
 {%- endmacro %}
