@@ -50,10 +50,12 @@ def dbServer(id):
         databases = dbserver[0]
     else:
         return abort(404)
+    builds = DBServer.getbuilds(id=id)
     return render_template(
         "dbServer.html",
+        apiUrl= 'http://localhost:5000/user/database/api1',
         curentUrl=url_for("user_views.dbServer", id=id),
-        menubar=get_menus(), id=id, databases=databases
+        menubar=get_menus(), id=id, build=builds[0], databases=databases
     )
 
 @user_views.route('/dbservers', methods=['GET'])
@@ -78,3 +80,30 @@ def dbServers():
         projects=dbservers,
         PlusSvg = PlusSvg
     )
+
+
+@user_views.route('/database/api1', methods=['POST'])
+def query():
+    import os
+
+    data = request.get_json()
+    print(data)
+    query = data["query"]
+    type = data["type"]
+    url = data["url"]
+    paswd = data["pass"]
+    user = data["user"]
+    database = data["dbname"]
+    remote_host, port_number = url.split(":")
+    if type.lower() == "mongodb":
+        command = f"""sudo docker run --rm --network host mongo:3.6.13-xenial mongo --host '{remote_host}' --port '{port_number}' {database} --password '{paswd}' --username '{user}' --eval '{ query }' --quiet
+        """
+    elif type.lower() == "mysqli":
+        command = f"""sudo docker
+        mysql -h {remote_host} -P {port_number} -u {user} -p{paswd} -D {database} -e " { query} ;"
+        """
+    else:
+        command = "echo Error"
+    print(command)
+    result = os.popen(command).read()
+    return jsonify({ "result": result })

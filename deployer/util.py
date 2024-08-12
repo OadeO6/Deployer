@@ -155,6 +155,7 @@ def mongodbSetup(code, Id, Nid,  dockerEnv, mainEnv, host_port, dbDetails):
     userPass = dbDetails.get("userPass")
     parentId = dbDetails.get("parent_id")
     dbPort = dbDetails.get("projectPort")
+    print(dbDetails, "yes")
     if not dbPort:
         dbPort = 27017
     if parentId:
@@ -171,7 +172,8 @@ def mongodbSetup(code, Id, Nid,  dockerEnv, mainEnv, host_port, dbDetails):
             f" -e MONGO_INITDB_ROOT_USERNAME={userName} " +
             f" -e MONGO_PORT={dbPort} " +
             f" -e MONGO_INITDB_ROOT_PASSWORD={userPass} " +
-            " -d mongo:7.0-jammy "
+            " -d mongo:3.6.13-xenial "
+            # " -d mongo:7.0-jammy "
     )
     code.append(CreateServer)
     return code, dbPort

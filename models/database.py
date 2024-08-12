@@ -12,7 +12,8 @@ class DBServer(Base):
     name = "db_server" # collection name
     def __init__(self, user_id, project_id, form=None,  network_id=None):
         self.keys = ["id", "name", "created_at", "user_id", "data_bases",
-                     "scope", "db_type", "build_id", "url", "project_id"]
+                     "scope", "db_type", "build_id", "url", "project_id",
+                     "user_pass", "user_name"]
         # build id is the combination of build id ans build num
         super().__init__()
         if form:
@@ -63,6 +64,13 @@ class DBServer(Base):
         build.save()
         return True
 
+    @classmethod
+    def getbuilds(cls, id):
+        """
+        get the latest build of a project
+        """
+        results = Build.find({"project_id": id})
+        return results
     # def rebuild(self):
     # def addMoreDb(self):
     #     """
