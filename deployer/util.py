@@ -84,7 +84,7 @@ def pythonSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type,  kwargs):
             runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
                 mainEnv.get("FLASK_APP", "app")
             )
-        else _:
+        else:
             runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
                 mainEnv.get("FLASK_APP", "app")
             )
