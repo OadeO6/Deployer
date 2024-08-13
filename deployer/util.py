@@ -48,7 +48,7 @@ def pythonSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type,  kwargs):
         f" --name {Id}-name " +
         dockerEnv +
         " -v \$(pwd)/theRepo-${currentBuild.number}:/app " +
-        " -w /app " +
+        f" -w /app/{kwargs.get('projectDir')} " +
         f" -p {host_port}:{projectPort} " +
         f" --network {Nid}-network" +
         " python:3.9-alpine " +
