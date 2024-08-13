@@ -74,22 +74,21 @@ def pythonSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type,  kwargs):
     # )
     runCommand = kwargs.get('runCommand')
     if not runCommand:
-        match Type:
-            case "django":
-                runCommand = " python manage.py runserver"
-            case "python":
-                runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
-                    mainEnv.get("FLASK_APP", "app")
-                )
-            case "flask":
-                runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
-                    mainEnv.get("FLASK_APP", "app")
-                )
-            case _:
-                runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
-                    mainEnv.get("FLASK_APP", "app")
-                )
-        # do some filtering first
+        if Type ==  "django":
+            runCommand = " python manage.py runserver"
+        elif Type ==  "python":
+            runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
+                mainEnv.get("FLASK_APP", "app")
+            )
+        elif Type == "flask":
+            runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
+                mainEnv.get("FLASK_APP", "app")
+            )
+        else _:
+            runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
+                mainEnv.get("FLASK_APP", "app")
+            )
+    # do some filtering first
     Run.append(
         f"sudo docker exec -d {Id}-name sh -c '{runCommand}' #show1# run project "
     )
