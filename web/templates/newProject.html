@@ -196,14 +196,14 @@
             Build Command Required
             "%}
             {% set success_msg = "
-            Build Comman Gotten
+            Build Command Gotten
             "%}
             {% set info_msg = "
             <p>Build Command For Production Deploument</p>
           <p>Default Command:</p>
           <p class='info'>npm run build</p>
             "%}
-            {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
+            {{ form_icons(form_field, error_msg, success_msg, info_msg, False) }}
           </label>
         </div>
         <label class="flex flex-col min-w-40 relative flex-1">
@@ -224,7 +224,7 @@
           <p>Default Command:</p>
           <p class='info'>python -m flask run</p>
           "%}
-          {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg, False) }}
         </label>
       </div>
       <div class="flex max-w-[550px] flex-wrap items-end gap-4 px-4 py-3">
@@ -246,7 +246,7 @@
           <p>Default Command:</p>
           <p class='info'>pip install requirements.txt</p>
           "%}
-          {{ form_icons(form_field, error_msg, success_msg, info_msg) }}
+          {{ form_icons(form_field, error_msg, success_msg, info_msg, False) }}
         </label>
       </div>
       <div id="webServerContainer">

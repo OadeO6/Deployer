@@ -33,13 +33,14 @@ async function updateData(){
 
   await new Promise((resolve, regect) => {
   fetch(`${endpoint}`)
-    .then(res => res.json())
+    .then(res => res ? res.json(): {"output": "Preparing For Deployment...", "building": true})
     .then(data => {
       if (data.output === content){
         count += 1;
       }else{
         count = 0;
       }
+      console.log(count)
       if (count > 30){
         mybrake = true;
       }
