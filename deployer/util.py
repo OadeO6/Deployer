@@ -78,24 +78,28 @@ def pythonSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type,  kwargs):
     #     )
     # )
     runCommand = kwargs.get('runCommand')
-    if Type ==  "django":
-        runCommand = f" python manage.py runserver {projectPort}"
-    elif Type ==  "python":
-        runCommand = " python -m flask --app {} run --host 0.0.0.0 --port {} ".format(
-            mainEnv.get("FLASK_APP", "app"), projectPort
-        )
-    elif Type == "flask":
-        runCommand = " python -m flask --app {} run --host 0.0.0.0 --port {} ".format(
-            mainEnv.get("FLASK_APP", "app"), projectPort
+    if not runCommand:
+        if Type ==  "django":
+            runCommand = f" python manage.py runserver 0.0.0.0:{projectPort}"
+        elif Type ==  "python":
+            runCommand = " python -m flask --app {} run --host 0.0.0.0 --port {} ".format(
+                mainEnv.get("FLASK_APP", "app"), projectPort
+            )
+        elif Type == "flask":
+            runCommand = " python -m flask --app {} run --host 0.0.0.0 --port {} ".format(
+                mainEnv.get("FLASK_APP", "app"), projectPort
+            )
+        else:
+            runCommand = " python -m flask --app {} run --host 0.0.0.0 --port {} ".format(
+                mainEnv.get("FLASK_APP", "app"), projectPort
+            )
+        # do some filtering first
+        Run.append(
+            f"sudo docker exec -d {Id}-name sh -c '{runCommand}' #show1# run project "
         )
     else:
-        runCommand = " python -m flask --app {} run --host 0.0.0.0 --port {} ".format(
-            mainEnv.get("FLASK_APP", "app"), projectPort
-        )
-    # do some filtering first
-    Run.append(
-        f"sudo docker exec -d {Id}-name sh -c '{runCommand}' #show1# run project "
-    )
+        if Type == "django":
+            runCommand = f"{runCommand} 0.0.0.0:{projectPort}"
     checkPort = ["skip"]
     code.append(Build)
     code.append(checkPort)
