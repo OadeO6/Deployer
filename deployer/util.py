@@ -40,7 +40,12 @@ def nodeSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type, kwargs):
     return code, projectPort
 
 def pythonSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type,  kwargs):
-    projectPort = 5000
+    if Type == "django":
+        projectPort = 8000
+    elif Type == "flask":
+        projectPort = 5000
+    else:
+        projectPort = 5000
     Build = ["build flask project"]
     # run container
     Build.append(
@@ -73,21 +78,20 @@ def pythonSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type,  kwargs):
     #     )
     # )
     runCommand = kwargs.get('runCommand')
-    if not runCommand:
-        if Type ==  "django":
-            runCommand = " python manage.py runserver"
-        elif Type ==  "python":
-            runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
-                mainEnv.get("FLASK_APP", "app")
-            )
-        elif Type == "flask":
-            runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
-                mainEnv.get("FLASK_APP", "app")
-            )
-        else:
-            runCommand = " python -m flask --app {} run --host 0.0.0.0 ".format(
-                mainEnv.get("FLASK_APP", "app")
-            )
+    if Type ==  "django":
+        runCommand = f" python manage.py runserver {projectPort}"
+    elif Type ==  "python":
+        runCommand = " python -m flask --app {} run --host 0.0.0.0 --port {} ".format(
+            mainEnv.get("FLASK_APP", "app"), projectPort
+        )
+    elif Type == "flask":
+        runCommand = " python -m flask --app {} run --host 0.0.0.0 --port {} ".format(
+            mainEnv.get("FLASK_APP", "app"), projectPort
+        )
+    else:
+        runCommand = " python -m flask --app {} run --host 0.0.0.0 --port {} ".format(
+            mainEnv.get("FLASK_APP", "app"), projectPort
+        )
     # do some filtering first
     Run.append(
         f"sudo docker exec -d {Id}-name sh -c '{runCommand}' #show1# run project "
