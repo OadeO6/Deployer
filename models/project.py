@@ -13,7 +13,7 @@ class Project(Base):
     name = "project" # collection name
     def __init__(self, user_id, form=None,  _id=None):
         self.keys = ["id", "name", "created_at", "user_id", "project_type",
-                     "tag", "build_id", "current_build_num", "repo", "url"]
+                     "tag", "host_port","build_id", "current_build_num", "repo", "url"]
         # build id is the combination of build id ans build num
         super().__init__()
         if _id:
@@ -78,6 +78,7 @@ class Project(Base):
                       self.form.projectType.data,
                       self.form.repoUrl.data, Id, **kwargs)
         host_port = Ports.get_a_port()
+        self.host_port = host_port
         print("@@@ ", host_port)
         if not host_port:
             print("No port was gotten, pls log this")
@@ -104,18 +105,25 @@ class Project(Base):
         # re url should be on the project collection istad to a void a new request
         # build repo usrol should be unchangable but that of project should be changable in setiogd
         project = project[0]
-        repo_url = Build.find({"id": project["build_id"]}) # to be removed
-        if len(repo_url) < 1:
+        host_port = project["host_port"]
+        buildD = Build.find({"id": project["build_id"]}) # to be removed
+        if len(buildD) < 1:
             return False
-        repo_url = repo_url[0]["repo"]
+        buildD = buildD[0]
+        repo_url = buildD["repo"]
+        kwargs = {
+            "runCommand":buildD["runCommand"], "buildCommand": buildD["buildCommand"],
+            "installCommand": buildD["installCommand"], "envs": buildD["envs"],
+            "projectDir": buildD["projectDir"], "network": None
+        }
         build = Build(
             self.id,
             project["project_type"],
             repo_url,
-            project["build_id"])
+            project["build_id"], **kwargs)
         print("kkkkkkkkkkkkkkkk")
         print(project["project_type"])
-        host_port = Ports.get_a_port()
+        # host_port = Ports.get_a_port()
         if host_port == None:
             print("No port was gotten, pls log this")
             return False

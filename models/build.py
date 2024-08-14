@@ -59,7 +59,8 @@ class Build(Base):
         certificate = "/home/kali/ssh_p_key1"
         res = Connection(host=host, user=user,
                          connect_kwargs={"key_filename": certificate})
-        res.run(command)
+        dd= res.run(command)
+        print(999999, dd)
         return
 
     @classmethod
