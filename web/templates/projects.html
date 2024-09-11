@@ -1,133 +1,118 @@
 {% extends 'userbase.html' %}
-{% block workspace %}
-    <div class="relative flex size-full min-h-full rounded-lg flex-col bg-[#101a23] dark group/design-root overflow-x-hidden" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
-      <div class="layout-container flex h-full grow flex-col">
-        <div class="px-40 flex flex-1 justify-center py-5">
-          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
-            <div class="flex flex-wrap justify-between gap-3 p-4">
-              <div class="flex min-w-72 flex-col gap-3">
-                <p class="text-white tracking-light text-[32px] font-bold leading-tight">Projects</p>
-                <p class="text-[#90b0cb] text-sm font-normal leading-normal">Manage your projects</p>
-              </div>
+  {% block workspace %}
+  <div class="relative flex size-full min-h-full rounded-lg flex-col bg-[#101a23] dark group/design-root overflow-x-hidden" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+    <input type="hidden" id="apiurlnew2" value="{{ url_for('user_views.deleteProject') }}">
+    <script src="{{ url_for('static', filename='script/projects.js')}}" defer></script>
+    <div class="layout-container flex h-full grow flex-col">
+      <div class="px-40 flex flex-1 justify-center py-5">
+        <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+          <div class="flex flex-wrap justify-between gap-3 p-4">
+            <div class="flex min-w-72 flex-col gap-3">
+              <p class="text-white tracking-light text-[32px] font-bold leading-tight">Projects</p>
+              <p class="text-[#90b0cb] text-sm font-normal leading-normal">Manage your projects</p>
             </div>
-            <!-- <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Production</h3> -->
-            <div class="px-4 py-3 @container">
-              <div class="flex overflow-hidden rounded-xl border border-[#314f68] bg-[#101a23]">
-                <table class="flex-1">
-                  <thead>
-                    <tr class="bg-[#182834]">
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Name</th>
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-240 px-4 py-3 text-left text-white w-60 text-sm font-medium leading-normal">Type</th>
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Deploying</th>
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Status</th>
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480 px-4 py-3 text-left text-white w-60 text-sm font-medium leading-normal">Address</th>
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-720 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
-                        Created
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-  {% for i in projects %}
-                    <tr class="border-t border-t-[#314f68]">
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-240 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
-    {%  set view = 'user_views.project' %}
-				<a href="{{ url_for(view, id=i.id) }}">
+          </div>
+          <!-- <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Production</h3> -->
+          <div class="px-4 py-3 @container">
+            <div class="flex overflow-hidden rounded-xl border border-[#314f68] bg-[#101a23]">
+              <table class="flex-1">
+                <thead>
+                  <tr class="bg-[#182834]">
+                    <th id="tBoxHead" class="hidden check"></th>
+                    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Name</th>
+                    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-240 px-4 py-3 text-left text-white w-60 text-sm font-medium leading-normal">Type</th>
+                    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Deploying</th>
+                    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Status</th>
+                    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480 px-4 py-3 text-left text-white w-60 text-sm font-medium leading-normal">Address</th>
+                    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-720 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
+                      Created
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                  {% for i in projects %}
+                  <tr id="{{ i.id }}" class="border-t border-t-[#314f68]">
+                    <td class="cheack-box hidden">
+                      <input type="checkbox" class="m-auto p-5 select-item">
+                    </td>
+                    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-240 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                      {%  set view = 'user_views.project' %}
+                      <a href="{{ url_for(view, id=i.id) }}">
                         <button
                           class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
                         >
                           <span class="truncate">{{ i.name }}</span>
                         </button>
                         <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Go to Project Page</div>
-</a>
-                      </td>
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
-                        {{ i.project_type  }}
-                      </td>
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
-                        {{ i.building }}
-                      </td>
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
-                        {{ i.status }}
-                      </td>
-                      <td class=" table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
-                        <button
-                          class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
-                        >
-                          <a target="_blank" href="http://{{ i.url }}" class="truncate">{{ i.url }}</a>
-                        </button>
-                        <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Visit Deployed Project</div>
-                      </td>
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
-                        {{ i.created_at | format_datetime }}
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-              <style>
-                          @container(max-width:120px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120{display: none;}}
-                @container(max-width:240px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-240{display: none;}}
-                @container(max-width:360px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360{display: none;}}
-                @container(max-width:480px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480{display: none;}}
-                @container(max-width:600px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600{display: none;}}
-                @container(max-width:720px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-720{display: none;}}
-              </style>
+                      </a>
+                    </td>
+                    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
+                      {{ i.project_type  }}
+                    </td>
+                    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
+                      {{ i.building }}
+                    </td>
+                    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
+                      {{ i.status }}
+                    </td>
+                    <td class=" table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                      <button
+                        class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
+                      >
+                        <a target="_blank" href="http://{{ i.url }}" class="truncate">{{ i.url }}</a>
+                      </button>
+                      <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Visit Deployed Project</div>
+                    </td>
+                    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
+                      {{ i.created_at | format_datetime }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
+            <style>
+            @container(max-width:120px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120{display: none;}}
+            @container(max-width:240px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-240{display: none;}}
+            @container(max-width:360px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360{display: none;}}
+            @container(max-width:480px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480{display: none;}}
+            @container(max-width:600px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600{display: none;}}
+            @container(max-width:720px){.table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-720{display: none;}}
+            </style>
           </div>
-          <div class="layout-content-container flex flex-col">
-            <div class="flex h-full min-h-[700px] flex-col justify-between bg-[#101a23] p-4">
-              <div class="flex flex-col gap-4">
-                <div class="flex flex-col gap-2">
-                  <div class="flex items-center gap-3 px-3 py-2"><p class="text-white text-sm font-medium leading-normal">Settings</p></div>
-                </div>
-                <a href={{ url_for("user_views.newProject") }}>
+        </div>
+        <div class="layout-content-container flex flex-col">
+          <div class="flex h-full min-h-[700px] flex-col justify-between bg-[#101a23] p-4">
+            <div class="flex flex-col gap-4">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-3 px-3 py-2"><p class="text-white text-sm font-medium leading-normal">Settings</p></div>
+              </div>
+              <a href={{ url_for("user_views.newProject") }}>
                 <button
                   class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#2094f3] text-white text-sm font-bold leading-normal tracking-[0.015em]"
                 >
                   <span class="truncate">New</span>
                 </button>
-                </a>
-                  <div class="flex items-center gap-3 px-3 py-2">
-                    <div class="text-white" data-icon="Trash" data-size="24px" data-weight="regular">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                        <path
-                          d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"
-                        ></path>
-                      </svg>
-                    </div>
-                    <p class="text-white text-sm font-medium leading-normal">Multiple Delete</p>
+              </a>
+              <div>
+                <button id="box-toggle" class="flex items-center gap-3 px-3 py-2 hover:border border-red-900 rounded-xl " onclick="toggleSelectBox()">
+                  <div class="text-white" data-icon="Trash" data-size="24px" data-weight="regular">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                      <path
+                        d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"
+                      ></path>
+                    </svg>
                   </div>
+                  <p class="text-white text-sm font-medium leading-normal">Multiple Delete</p>
+                </button>
+                <button id="box-delete" class="flex hidden items-center gap-3 px-3 py-2 hover:bg-red-900 rounded-xl " onclick="deleteSelectedItems()">
+                  <p class="text-white text-sm font-medium leading-normal">Delete Selected Projects</p>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-{% endblock %}
-    {#}
-<div cl}}ass="p-6 w-full h-full flex -----justify-center flex-wrap">
-	{% if projects %}
-		{% for i in projects %}
-			<div class="
-				border-2 block border-green-900 p-0 m-[20px] h-[350px] rounded-md w-[250px]
-				">
-
-				<a href="{{ url_for('user_views.project',id=i.id) }}">
-					<div class=" h-[150px] m-0 {{i.project_type | lower}}BackGround bg-image bg-cover bg-center">
-					</div>
-				</a>
-				<ul class="p-5 bg-red-900 w-full rounded-b-md h-[200px]">
-					<li>: {{ i.building }}</li>
-					<li>: {{ i.status }}</li>
-					<li>Name: {{ i.name }}</li>
-					<li>Type: {{ i.project_type | lower}}</li>
-					<li>Url: <a target="_blank" href="http://{{ i.url }}">{{ i.url }}</a></li>
-					<li>Tag: {{ i.tag }}</li>
-				</ul>
-			</div>
-		{% endfor %}
-	{% endif %}
-</div>
-{% endblock workspace %}
-    #}
+  </div>
+  {% endblock %}

@@ -104,6 +104,7 @@ class MongoStorage:
         """
         #session = self.get_session()
         collection = getattr(self.db, cls.name)
+        print("del000000", obj)
         result = collection.delete_many(obj)
         return result.deleted_count
 

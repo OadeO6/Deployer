@@ -1,6 +1,7 @@
 """
 projects
 """
+from os import getenv
 from flask import (
     Blueprint, flash, g, request, redirect, render_template, request, session, url_for, abort, jsonify
 )
@@ -12,12 +13,12 @@ from models.project import Project
 from models.build import Build
 from web.views.images import ErrorSvg, InfoSvg, SuccessSvg, CancelSvg
 from . import user_views, need_login, get_menus
+API_ADDR = getenv("API_ADDR", "localhost")
 
 @user_views.route('/projects', methods=['GET'])
 @need_login
 def projects():
     projects = Project.find({"user_id": session.get("user_id")})
-    print(projects)
     for project in projects:
         print(project)
         Data = Build.find({"project_id": project["id"]})
@@ -31,6 +32,7 @@ def projects():
     return render_template(
         "projects.html",
         curentUrl=url_for("user_views.projects"),
+        apiUrl= f'http://{API_ADDR}:5000/user/project',
         menubar=get_menus(),
         projects=projects
     )
@@ -118,6 +120,37 @@ def projects():
 #     )
 
 
+@user_views.route('/project/del/<string:id>', methods=['POST', 'GET'])
+@user_views.route('/project/del/mul', methods=['POST'])
+@need_login
+def deleteProject(id="mul"):
+    if id == "mul":
+        if request.method == 'GET':
+            return redirect(url_for("user_views.projects"))
+        data = request.get_json()
+
+        if not data or 'itemIds' not in data:
+            flash("Something Whent Wrong", "error")
+            return redirect(url_for("user_views.projects"))
+
+        item_ids = data['itemIds']
+
+        if not isinstance(item_ids, list) or not item_ids:
+            flash("Something Whent Wrong", "error")
+            return redirect(url_for("user_views.projects"))
+        res =  redirect(url_for("user_views.projects"))
+    else:
+        item_ids = [id]
+        res = redirect(url_for("user_views.projects"))
+
+
+    success = Project.Delete(item_ids)
+    print("dell00000000", item_ids)
+    if success:
+        flash("Deleted Project Successfully", "success")
+    else:
+        flash("Something Whent Wrong", "error")
+    return res
 
 @user_views.route('/project/new', methods=['GET', 'POST'])
 @user_views.route('/project/new/<string:id>', methods=['GET', 'POST'])
@@ -173,13 +206,14 @@ def newProject(id=None):
     return render_template("newProject.html",
                            icons=icons,
                            form=form,
-                           apiUrl= 'http://localhost:5000/user/project',
+                           # apiUrl= f'http://{API_ADDR}:5000/user/project',
+                           apiUrl= url_for("user_views.project", id=""),
                            curentUrl=url_for("user_views.newProject"),
                            menubar=get_menus())
 
 @user_views.route('/project/<string:id>', methods=['GET'])
 @need_login
-def project(id):
+def project(id=None):
     project = Project.find({"id":id})
     if project:
         project = project[0]

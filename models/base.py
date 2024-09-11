@@ -21,12 +21,12 @@ class Base():
         # to check if it is rebuilding
         self.built = False
 
-    #should be a classmethod
-    def delete(self, obj):
+    @classmethod
+    def delete(cls, obj):
         """
-        delete document
+        delete document from db
         """
-        pass
+        models.storage.delete(cls, obj)
 
     def to_dict(self):
         new_dict = {}
@@ -48,6 +48,7 @@ class Base():
             result = models.storage.find(cls, {"id": id}, {"id": 1})
         except Exception as e:
             models.handleError(e)
+            result = []
         if len(list(result)) == 1:
             return id
         else:

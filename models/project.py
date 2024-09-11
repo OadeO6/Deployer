@@ -1,6 +1,7 @@
 """
 user object model
 """
+from sys import exception
 import uuid
 from models.base import Base
 # tendency of circular import if storage is inported directly
@@ -136,6 +137,20 @@ class Project(Base):
         # self.curent build num
         self.current_build_num = build.build_num
         build.save()
+        return True
+
+    @classmethod
+    def Delete(cls, ids):
+        try:
+            for i in ids:
+                id = cls.confirm(i)
+                if id:
+                    Build.Delete(i)
+                    cls.delete({'id': i})
+                else:
+                    continue
+        except Exception:
+            return False
         return True
 
     @classmethod

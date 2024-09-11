@@ -18,14 +18,19 @@
     </div>
     <p class="p-2 border-b border-b-gray-700"> Deploying: {{ build.building }}</p>
   </div>
-  <div id="links" class="flex gap-5 my-3 {% if build.building == True %} hidden {% endif %}">
+  <div id="links" class="flex gap-5 my-3">
+    <div id="links" class="flex gap-5 my-3 {% if build.building == True %} hidden {% endif %}">
 
-    <form action="{{url_for("user_views.newProject")}}/{{id}}" method="POST">
-      <button type="submit" class="p-2 rounded-md bg-gray-950 border">ReDeploy</button>
+      <form action="{{url_for("user_views.newProject")}}/{{id}}" method="POST">
+        <button type="submit" class="p-2 rounded-md bg-gray-950 border">ReDeploy</button>
+      </form>
+      <a target="_blank" class="mydisable" href="http://{{project.url}}">
+        <button class="p-2 rounded-md bg-gray-950 border">Visit Site</button>
+      </a>
+    </div>
+    <form action="{{url_for('user_views.deleteProject', id=project.id)}}" method="POST">
+      <button type="submit" class="p-2 rounded-md bg-gray-950 border">Delete Project</button>
     </form>
-    <a target="_blank" class="mydisable" href="http://{{project.url}}">
-      <button class="p-2 rounded-md bg-gray-950 border">Visit Site</button>
-    </a>
   </div>
   {% if not build  %}
   <div class="flex gap-5 my-3 ">

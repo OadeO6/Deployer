@@ -3,6 +3,7 @@ user object model
 """
 from os import getenv
 from fabric import Connection
+from requests import delete
 
 from models.base import Base
 import models
@@ -49,18 +50,38 @@ class Build(Base):
                             projectType=_type, projectPort=projectPort, network=network, **kwargs)
         self.build_num = self.job.buildNum
 
+    @classmethod
+    def Delete(cls, id):
+        """
+        delete all builds on project with <id:project_id>
+        """
+        # delete deploy
+        # delete project from database
+        # delete from jenkins
+        build_id = Build.find({"project_id": id}, {"id": 1})
+        if len(build_id) > 0:
 
-    def deletedeploy(self):
+            build_id = build_id[0]["id"]
+            Build.delete({'id': build_id})
+            cls.deletedeploy(build_id, True)
+
+        return
+
+    @classmethod
+    def deletedeploy(cls, id, network=False):
         # delete container and also build data in jenkins
         # but if it is suspend only delete the the container
-        command = f"sudo docker rm -f {self.id}-name"
+        command1 = f"sudo docker rm -f {id}-name"
+        command2 = f"sudo docker rm -f {id}-network"
         host = getenv("HOST_IP")
         user = "ubuntu"
-        certificate = "/home/kali/ssh_p_key1"
+        certificate = getenv("SSH_CERT")
         res = Connection(host=host, user=user,
                          connect_kwargs={"key_filename": certificate})
-        dd= res.run(command)
-        print(999999, dd)
+        dd= res.run(command1)
+        if network:
+            dd= res.run(command2)
+
         return
 
     @classmethod
@@ -69,7 +90,7 @@ class Build(Base):
         command = f"sudo docker network create {Id}-network"
         host = getenv("HOST_IP")
         user = "ubuntu"
-        certificate = "/home/kali/ssh_p_key1"
+        certificate = getenv("SSH_CERT")
         res = Connection(host=host, user=user,
                          connect_kwargs={"key_filename": certificate})
         res.run(command)
@@ -96,7 +117,7 @@ class Build(Base):
         rebuild
         """
         try:
-            self.deletedeploy()
+            self.__class__.deletedeploy(self.id)
             self.job.build(port, self.id)
         except Exception as e:
             models.handleError(e)
