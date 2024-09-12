@@ -95,7 +95,7 @@
                 </button>
               </a>
               <div>
-                <button id="box-toggle" class="flex items-center gap-3 px-3 py-2 hover:border border-red-900 rounded-xl " onclick="toggleSelectBox()">
+                <button id="box-toggle" class="flex items-center gap-1 px-3 py-2 hover:border border-red-900 rounded-xl " onclick="toggleSelectBox()">
                   <div class="text-white" data-icon="Trash" data-size="24px" data-weight="regular">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                       <path
@@ -104,6 +104,9 @@
                     </svg>
                   </div>
                   <p class="text-white text-sm font-medium leading-normal">Multiple Delete</p>
+                  <div class="hidden w-6 h-6">
+                    {{ LoadingSvg | safe }}
+                  </div>
                 </button>
                 <button id="box-delete" class="flex hidden items-center gap-3 px-3 py-2 hover:bg-red-900 rounded-xl " onclick="deleteSelectedItems()">
                   <p class="text-white text-sm font-medium leading-normal">Delete Selected Projects</p>

@@ -11,7 +11,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from web.forms import projectForm
 from models.project import Project
 from models.build import Build
-from web.views.images import ErrorSvg, InfoSvg, SuccessSvg, CancelSvg
+from web.views.images import ErrorSvg, InfoSvg, SuccessSvg, LoadingSvg,CancelSvg
 from . import user_views, need_login, get_menus
 API_ADDR = getenv("API_ADDR", "localhost")
 
@@ -34,6 +34,7 @@ def projects():
         curentUrl=url_for("user_views.projects"),
         apiUrl= f'http://{API_ADDR}:5000/user/project',
         menubar=get_menus(),
+        LoadingSvg = LoadingSvg,
         projects=projects
     )
 

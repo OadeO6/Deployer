@@ -65,6 +65,20 @@ class DBServer(Base):
         return True
 
     @classmethod
+    def Delete(cls, ids):
+        try:
+            for i in ids:
+                id = cls.confirm(i)
+                if id:
+                    Build.Delete(i)
+                    cls.delete({'id': i})
+                else:
+                    continue
+        except Exception:
+            return False
+        return True
+
+    @classmethod
     def getbuilds(cls, id):
         """
         get the latest build of a project

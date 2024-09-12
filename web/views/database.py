@@ -10,8 +10,40 @@ from web.forms.database import dbServerForm
 from models.database import DBServer
 from models.project import Project
 from . import user_views, need_login, get_menus
-from web.views.images import PlusSvg
+from web.views.images import PlusSvg, LoadingSvg
 
+
+@user_views.route('/db/del/<string:id>', methods=['POST', 'GET'])
+@user_views.route('/db/del/mul', methods=['POST'])
+@need_login
+def deleteDb(id="mul"):
+    if id == "mul":
+        if request.method == 'GET':
+            return redirect(url_for("user_views.dbServers"))
+        data = request.get_json()
+
+        if not data or 'itemIds' not in data:
+            flash("Something Whent Wrong", "error")
+            return redirect(url_for("user_views.dbServers"))
+
+        item_ids = data['itemIds']
+
+        if not isinstance(item_ids, list) or not item_ids:
+            flash("Something Whent Wrong", "error")
+            return redirect(url_for("user_views.dbServers"))
+        res =  redirect(url_for("user_views.dbServers"))
+    else:
+        item_ids = [id]
+        res = redirect(url_for("user_views.dbServers"))
+
+
+    success = DBServer.Delete(item_ids)
+    print("dell00000000", item_ids)
+    if success:
+        flash("Deleted Project Successfully", "success")
+    else:
+        flash("Something Whent Wrong", "error")
+    return res
 
 @user_views.route('/dbserver/new', methods=['GET', 'POST'])
 @need_login
@@ -55,7 +87,9 @@ def dbServer(id):
         "dbServer.html",
         apiUrl= 'http://localhost:5000/user/database/api1',
         curentUrl=url_for("user_views.dbServer", id=id),
-        menubar=get_menus(), id=id, build=builds[0], databases=databases
+        menubar=get_menus(), id=id,
+        build=builds[0] if len(builds) > 0 else {},
+        databases=databases
     )
 
 @user_views.route('/dbservers', methods=['GET'])
@@ -77,6 +111,7 @@ def dbServers():
         "dbServers.html",
         curentUrl=url_for("user_views.dbServers"),
         menubar=get_menus(),
+        LoadingSvg = LoadingSvg,
         projects=dbservers,
         PlusSvg = PlusSvg
     )

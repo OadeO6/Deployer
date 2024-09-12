@@ -1,9 +1,9 @@
 const apiUrl = document.getElementById('apiurlnew2');
+const box_toggle = document.getElementById('box-toggle');
+const box_deleteP = box_toggle.querySelector('p');
 
 function toggleSelectBox() {
     const box_delete = document.getElementById('box-delete');
-    const box_toggle = document.getElementById('box-toggle');
-    const box_deleteP = box_toggle.querySelector('p');
     const box_label = document.getElementById('tBoxHead');
     const check_box = document.getElementsByClassName('cheack-box');
 
@@ -37,6 +37,8 @@ function deleteSelectedItems() {
 
     toggleSelectBox(); // Hide the delete selection UI
 
+    box_deleteP.textContent = "Deleting Project";
+    box_deleteP.nextElementSibling.classList.remove('hidden');
     // Send the delete request and handle redirect
     delRequest(apiUrl.value, delList);
 }
@@ -44,6 +46,7 @@ function deleteSelectedItems() {
 function delRequest(url, itemIds) {
     if (!Array.isArray(itemIds) || itemIds.length === 0) {
         console.error("Item IDs should be a non-empty array.");
+	window.location.href = window.location;
         return;
     }
 
