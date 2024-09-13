@@ -2,6 +2,25 @@ const apiUrl = document.getElementById('apiurlnew2');
 const box_toggle = document.getElementById('box-toggle');
 const box_deleteP = box_toggle.querySelector('p');
 
+let ee=0
+function copyToClipboard(This) {
+    // Get t
+	ee=This
+	This = This.parentElement.parentElement;
+    const content = This.getElementsByClassName('copy_adr')[0].href;
+    const c_msg = This.getElementsByClassName('copy_msg')[0];
+
+    // Copy the content to the clipboard
+    navigator.clipboard.writeText(content).then(() => {
+	    c_msg.classList.remove('hidden')
+	   setTimeout(() => {
+	    c_msg.classList.add('hidden')
+	   }, 700); 
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  }
+
 function toggleSelectBox() {
     const box_delete = document.getElementById('box-delete');
     const box_label = document.getElementById('tBoxHead');

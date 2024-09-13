@@ -44,6 +44,13 @@
                           class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
                         >
                           <span class="truncate">{{ i.name }}</span>
+                          <div class="my-auto ml-2 w-4 h-4 group">
+                            {% if i.building == False %}
+                            {{ MarkSvg | safe}}
+                            {% else %}
+                            {{ LoadingSvg | safe}}
+                            {% endif %}
+                          </div>
                         </button>
                         <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Go To Database Server Page</div>
                       </a>
@@ -56,11 +63,19 @@
                     </td>
                     <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
                       <button
+                        onclick="copyToClipboard(this)"
                         class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
                       >
                         <span class="truncate">{{ i.url }}</span>
+                        <div class="inline-block h-5 w-5 ml-3 text-gray-400 hover:text-white">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 16h8M8 12h8m-6 8h6m2-12h-6m-2 4h-2M8 4h2m4 0h2a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h2V4a2 2 0 012-2h4z" />
+                          </svg>
+                        </div>
+                        <a href="{{i.url}}" class="hidden copy_adr">{{ i.url }}</a>
                       </button>
                       <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Copy Database Server Address</div>
+                      <div class="copy_msg hidden absolute bg-gray-300  rounded-lg p-3">Url Copied</div>
                     </td>
                     <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
                       {{ i.scope }}

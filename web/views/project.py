@@ -11,7 +11,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from web.forms import projectForm
 from models.project import Project
 from models.build import Build
-from web.views.images import ErrorSvg, InfoSvg, SuccessSvg, LoadingSvg,CancelSvg
+from web.views.images import ErrorSvg, InfoSvg, SuccessSvg, MarkSvg, LoadingSvg,CancelSvg
 from . import user_views, need_login, get_menus
 API_ADDR = getenv("API_ADDR", "localhost")
 
@@ -20,7 +20,6 @@ API_ADDR = getenv("API_ADDR", "localhost")
 def projects():
     projects = Project.find({"user_id": session.get("user_id")})
     for project in projects:
-        print(project)
         Data = Build.find({"project_id": project["id"]})
         print(Data)
         if len(Data) == 1:
@@ -35,6 +34,7 @@ def projects():
         apiUrl= f'http://{API_ADDR}:5000/user/project',
         menubar=get_menus(),
         LoadingSvg = LoadingSvg,
+        MarkSvg = MarkSvg,
         projects=projects
     )
 
@@ -226,6 +226,8 @@ def project(id=None):
         "project.html",
         curentUrl=url_for("user_views.project", id=id),
         menubar=get_menus(), project=project,
+        MarkSvg = MarkSvg,
+        LoadingSvg = LoadingSvg,
         builds=builds, build=curentBuild, id=id
     )
 

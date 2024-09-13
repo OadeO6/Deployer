@@ -28,6 +28,19 @@ def create_app():
         timeObj = datetime.fromisoformat(value)
         return f'[{timeObj.strftime("%H:%M:%S")}]'
 
+    @app.template_filter()
+    def repo_name(value):
+        temp = value.split('/')
+        if len(temp) < 3:
+            return "Nill:Nill"
+        user = temp[-2]
+        temp = temp[-1].split('.')
+        if len(temp) < 1:
+            name = None
+        else:
+            name = temp[0]
+            return f"{user}<b>:</b>{name}"
+
     from web.views import auth_views, app_views, user_views
 
     app.register_blueprint(auth_views)

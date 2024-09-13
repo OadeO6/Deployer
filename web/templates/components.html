@@ -260,3 +260,44 @@
    </div>
 </div>
 
+
+
+
+
+{% macro loading() -%}
+<div class="flex space-x-1 mt-5">
+  <div class="dot1 bg-white rounded-full w-4 h-4 animate-dot-blink"></div>
+  <div class="dot2 bg-white rounded-full w-4 h-4 animate-dot-blink"></div>
+  <div class="dot3 bg-white rounded-full w-4 h-4 animate-dot-blink"></div>
+
+  <!-- Tailwind CSS in a <style> block for custom animations -->
+  <style>
+    @keyframes dot-blink {
+      0%, 80%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+      }
+      40% {
+        opacity: 1;
+        transform: translateX(5px);
+      }
+    }
+
+    .animate-dot-blink {
+      animation: dot-blink 1s infinite;
+    }
+
+    .dot1 {
+      animation-delay: 0s;
+    }
+
+    .dot2 {
+      animation-delay: 0.2s;
+    }
+
+    .dot3 {
+      animation-delay: 0.4s;
+    }
+  </style>
+</div>
+{% endmacro %}

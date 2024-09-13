@@ -2,69 +2,78 @@
 {% extends 'userbase.html' %}
 {% block workspace %}
 <div>
-	<div class="bg-green-900 ">
-		<p> DataBase Server Name:{{ databases.name }}</p>
-		<!-- <p> DataBase Server Url: <a target="_blank" href="http://{{databases.url}}">{{ databases.url }}</a></p> -->
-	</div>
-	<div>
-		<form action="{{url_for("user_views.newProject")}}/{{id}}" method="POST">
-			<button type="submit" class="">ReDeploy</button>
-		</form>
-	</div>
-	<div>
-		<h1>Log:</h1l>
-		<div class="log">
-		</div>
-		<p>{{builds }} === builds</p>
-		<p>{{ build}} ==== build</p>
-		<p> output </p>
-		<div id="projectOutPut">
-		</div>
-		<p>loading..........</p>
-	</div>
-	<script src="{{url_for('static', filename='script/projectOutPut.js')}}" defer></script>
+<div class="bg-green-900 ">
+<p> DataBase Server Name:{{ databases.name }}</p>
+<!-- <p> DataBase Server Url: <a target="_blank" href="http://{{databases.url}}">{{ databases.url }}</a></p> -->
+</div>
+<div>
+<form action="{{url_for("user_views.newProject")}}/{{id}}" method="POST">
+<button type="submit" class="">ReDeploy</button>
+</form>
+</div>
+<div>
+<h1>Log:</h1l>
+<div class="log">
+</div>
+<p>{{builds }} === builds</p>
+<p>{{ build}} ==== build</p>
+<p> output </p>
+<div id="projectOutPut">
+</div>
+<p>loading..........</p>
+</div>
+<script src="{{url_for('static', filename='script/projectOutPut.js')}}" defer></script>
 </div>
 {% endblock workspace %}
 #}
 {% extends 'userbase.html' %}
   {% block workspace %}
 <div class="bg-gray-900 min-h-full rounded-lg w-full px-20 py-5 text-white">
-  <div class=" text-sm flex flex-col">
-		<!-- <p> DataBase Server :{{ databases}}</p> -->
-		<!-- <p> DataBase Server :{{ build}}</p> -->
+<div class=" text-sm flex flex-col">
+  <!-- <p> DataBase Server :{{ databases}}</p> -->
+  <!-- <p> DataBase Server :{{ build}}</p> -->
   <div id="url" class="hidden">{{databases.url}}</div>
   <div id="pass" class="hidden">{{databases.user_pass}}</div>
   <div id="user" class="hidden">{{databases.user_name}}</div>
   <div id="type" class="hidden">{{databases.db_type}}</div>
   <div id="dbname" class="hidden">{{databases.name}}</div>
-    <p class="p-2 border-b border-b-gray-700 text-2xl"> Database Name: {{ databases.name }}</p>
-    <p class="p-2 border-b border-b-gray-700"> Database Type: {{ databases.db_type }}</p>
-    <p class="p-2 border-b border-b-gray-700"> Database Status: {{ build.status }}</p>
-    <p class="p-2 border-b border-b-gray-700"> Database Scope: {{ databases.scope }}</p>
-    <p class="p-2 border-b border-b-gray-700"> Database address: {{ databases.url }}</p>
-    <p class="p-2 border-b border-b-gray-700"> First Deploy Date: {{ databases.created_at | format_datetime }}</p>
-    <p class="p-2 border-b border-b-gray-700"> Building: {{ build.building }}</p>
-    <p class="p-2 border-b border-b-gray-700"> Status: {{ build.status }}</p>
+  <p class="p-2 border-b border-b-gray-700 text-2xl"> Database Name: {{ databases.name }}</p>
+  <p class="p-2 border-b border-b-gray-700"> Database Type: {{ databases.db_type }}</p>
+  <p class="p-2 border-b border-b-gray-700"> Database Status: {{ build.status }}</p>
+  <p class="p-2 border-b border-b-gray-700"> Database Scope: {{ databases.scope }}</p>
+  <p class="p-2 border-b border-b-gray-700"> Database address: {{ databases.url }}</p>
+  <p class="p-2 border-b border-b-gray-700"> First Deploy Date: {{ databases.created_at | format_datetime }}</p>
+  <div class="flex">
+    <p class="p-2 pr-0 border-b border-b-gray-700"> Building: {{ build.building }}</p>
+    <div class="my-auto ml-2 w-4 h-4 group">
+      {% if build.building == False %}
+      {{ MarkSvg | safe}}
+      {% else %}
+      {{ LoadingSvg | safe}}
+      {% endif %}
+    </div>
   </div>
-  <div class="border rounded-lg">
-    <details class="border p-1 rounded-lg group" {% if build.building == True %}  open="" {% endif %}>
-      <summary class="log flex px-4 py-2 justify-between ">
-        <p class="text-lg font-medium leading-normal">Query Section</p>
-        <div class="group-open:rotate-180">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-            <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
-          </svg>
-        </div>
-      </summary>
-      <div id="terminal" class="bg-gray-700 rounded-lg p-2">
+  <p class="p-2 border-b border-b-gray-700"> Status: {{ build.status }}</p>
+</div>
+<div class="border rounded-lg">
+<details class="border p-1 rounded-lg group" {% if build.building == True %}  open="" {% endif %}>
+<summary class="log flex px-4 py-2 justify-between ">
+  <p class="text-lg font-medium leading-normal">Query Section</p>
+  <div class="group-open:rotate-180">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+    </svg>
+  </div>
+</summary>
+<div id="terminal" class="bg-gray-700 rounded-lg p-2">
 <div id="before-input" class="flex">
   <b class"inline-block ">{{'> '}}</b>
     <input id="inputField" class="bg-transparent border-none p-0  w-full appearance-none outline-none" type="text"/>
-      </div>
-      </div>
+    </div>
+    </div>
     </details>
-  </div>
-  <input type="hidden" id="apiurlnew" value="{{apiUrl}}">
-  <script src="{{url_for('static', filename='script/database.js')}}" defer></script>
+    </div>
+    <input type="hidden" id="apiurlnew" value="{{apiUrl}}">
+    <script src="{{url_for('static', filename='script/database.js')}}" defer></script>
 </div>
 {% endblock workspace %}

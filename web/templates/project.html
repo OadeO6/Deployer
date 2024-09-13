@@ -16,7 +16,16 @@
         <p>The project is still in deployment process</p>
       </div>
     </div>
-    <p class="p-2 border-b border-b-gray-700"> Deploying: {{ build.building }}</p>
+    <div class="flex">
+      <p class="p-2 border-b border-b-gray-700"> Deploying: {{ build.building }}</p>
+      <div class="my-auto ml-2 w-4 h-4 group">
+        {% if build.building == False %}
+        {{ MarkSvg | safe}}
+        {% else %}
+        {{ LoadingSvg | safe}}
+        {% endif %}
+      </div>
+    </div>
   </div>
   <div id="links" class="flex gap-5 my-3">
     <div id="links" class="flex gap-5 my-3 {% if build.building == True %} hidden {% endif %}">
@@ -42,52 +51,52 @@
   <div class="border rounded-lg">
     <div class="">
       {#
-        <p class="text-lg font-medium leading-normal">Deployment Log</p>
-              <div class="flex overflow-hidden rounded-xl border border-[#314f68] bg-[#101a23]">
-                <table class="flex-1">
-                  <thead>
-                    <tr class="bg-[#182834]">
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Build Num</th>
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Deploying</th>
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Status</th>
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-720 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
-                        Created
-                      </th>
-                      <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480 px-4 py-3 text-left text-white w-60 text-sm font-medium leading-normal">Output Log</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-  {% for i in builds %}
-                    <tr class="border-t border-t-[#314f68]">
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-240 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
-                        <button
-                          class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
-                        >
-                          <span class="truncate">{{ i.build_num }}</span>
-                        </button>
-                        <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Go to Project Page</div>
-                      </td>
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
-                        {{ i.building }}
-                      </td>
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
-                        {{ i.status }}
-                      </td>
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
-                        {{ i.created_at | format_datetime }}
-                      </td>
-                      <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
-                        <p>Output</p>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-      #}
+      <p class="text-lg font-medium leading-normal">Deployment Log</p>
+    <div class="flex overflow-hidden rounded-xl border border-[#314f68] bg-[#101a23]">
+    <table class="flex-1">
+    <thead>
+    <tr class="bg-[#182834]">
+    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Build Num</th>
+    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Deploying</th>
+    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">Status</th>
+    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-720 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
+    Created
+    </th>
+    <th class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-480 px-4 py-3 text-left text-white w-60 text-sm font-medium leading-normal">Output Log</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in builds %}
+    <tr class="border-t border-t-[#314f68]">
+    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-240 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+    <button
+    class="peer flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#223749] text-white text-sm font-medium leading-normal w-full"
+    >
+    <span class="truncate">{{ i.build_num }}</span>
+    </button>
+    <div class="hidden peer-hover:block absolute bg-gray-300 opacity-40 rounded-lg p-3">Go to Project Page</div>
+    </td>
+    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-360 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
+    {{ i.building }}
+    </td>
+    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
+    {{ i.status }}
+    </td>
+    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-600 h-[72px] px-4 py-2 w-[400px] text-[#90b0cb] text-sm font-normal leading-normal">
+    {{ i.created_at | format_datetime }}
+    </td>
+    <td class="table-18b4fc18-afe6-42c4-8e03-9d76c1a92c16-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
+    <p>Output</p>
+    </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    </div>
+    #}
 
-      {% for i in builds %}
-      <div></div>
+    {% for i in builds %}
+    <div></div>
       {% endfor %}
     </div>
     <details class="border p-1 rounded-lg group" {% if build.building == True %}  open="" {% endif %}>
@@ -104,7 +113,9 @@
     </details>
   </div>
   <div id="loading" class="{% if build.building == False %} hidden {% endif  %}">
-    <p>loading..........</p>
+
+    {% from "components.html" import loading %}
+    {{  loading() }}
   </div>
   <script src="{{url_for('static', filename='script/projectOutPut.js')}}" defer></script>
 </div>

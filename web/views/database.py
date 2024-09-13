@@ -6,11 +6,12 @@ from flask import (
 )
 # from jenkins import requests
 # from six.moves import urllib
+from models.build import Build
 from web.forms.database import dbServerForm
 from models.database import DBServer
 from models.project import Project
 from . import user_views, need_login, get_menus
-from web.views.images import PlusSvg, LoadingSvg
+from web.views.images import PlusSvg, MarkSvg, LoadingSvg
 
 
 @user_views.route('/db/del/<string:id>', methods=['POST', 'GET'])
@@ -70,6 +71,7 @@ def newDBServer():
         dataBase = DBServer(session.get("user_id"), project_id, form, build_id)
         dataBase.build()
         dataBase.save()
+        return redirect(url_for("user_views.dbServer", id=dataBase.id))
     return render_template("newDBServer.html", form=form,
                            curentUrl=url_for("user_views.newDBServer"),
                            menubar=get_menus())
@@ -89,6 +91,8 @@ def dbServer(id):
         curentUrl=url_for("user_views.dbServer", id=id),
         menubar=get_menus(), id=id,
         build=builds[0] if len(builds) > 0 else {},
+        MarkSvg = MarkSvg,
+        LoadingSvg = LoadingSvg,
         databases=databases
     )
 
@@ -96,23 +100,22 @@ def dbServer(id):
 @need_login
 def dbServers():
     dbservers = DBServer.find({"user_id": session.get("user_id")})
-    # print(projects)
-    # for project in projects:
-    #     print(project)
-    #     Data = Build.find({"project_id": project["id"]})
-    #     print(Data)
-    #     if len(Data) == 1:
-    #         Data = Data[0]
-    #     else:
-    #         Data = {}
-    #     project["building"] = Data.get("building", False)
-    #     project["status"] = Data.get("status", None)
+    for dB in dbservers:
+        print(dB)
+        Data = Build.find({"project_id": dB["id"]})
+        if len(Data) == 1:
+            Data = Data[0]
+        else:
+            Data = {}
+        dB["building"] = Data.get("building", False)
+        dB["status"] = Data.get("status", None)
     return render_template(
         "dbServers.html",
         curentUrl=url_for("user_views.dbServers"),
         menubar=get_menus(),
         LoadingSvg = LoadingSvg,
         projects=dbservers,
+        MarkSvg = MarkSvg,
         PlusSvg = PlusSvg
     )
 
