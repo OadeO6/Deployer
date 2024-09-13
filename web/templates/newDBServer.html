@@ -13,7 +13,23 @@
 
         </label>
       </div>
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+      <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Scope</h3>
+      <div class="flex flex-col gap-3 p-4">
+      {% set ids = ["global_scope", "local_scope"] %}
+      {% set counter = 0 %}
+        {% for radio in form.dataBaseScope  %}
+        <label id="{{ ids[loop.index - 1] }}" class="flex items-center gap-4 rounded-xl border border-solid border-[#314f68] p-[15px]">
+          {{ radio(
+          class="h-5 w-5 border-2 border-[#314f68] bg-transparent text-transparent checked:border-[#2094f3] checked:bg-[image:--radio-dot-svg] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-[#2094f3]"
+          ) }}
+          <div class="flex grow flex-col">
+            {{ radio.label(class="", class="text-white text-sm font-medium leading-normal") }}
+          </div>
+        </label>
+        {% endfor %}
+
+      </div>
+      <div id="rProjectName" class="hidden flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
         <label class="flex flex-col min-w-40 flex-1">
           {{ form.dbProjectName.label(class="text-white text-base font-medium leading-normal pb-2") }}
           {{form.dbProjectName(
@@ -49,20 +65,6 @@
           )  }}
         </label>
       </div>
-      <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Scope</h3>
-      <div class="flex flex-col gap-3 p-4">
-        {% for radio in form.dataBaseScope  %}
-        <label class="flex items-center gap-4 rounded-xl border border-solid border-[#314f68] p-[15px]">
-          {{ radio(
-          class="h-5 w-5 border-2 border-[#314f68] bg-transparent text-transparent checked:border-[#2094f3] checked:bg-[image:--radio-dot-svg] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-[#2094f3]"
-          ) }}
-          <div class="flex grow flex-col">
-            {{ radio.label(class="", class="text-white text-sm font-medium leading-normal") }}
-          </div>
-        </label>
-        {% endfor %}
-
-      </div>
       <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Type</h3>
       <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
         <label class="flex flex-col min-w-40 flex-1">
@@ -74,7 +76,7 @@
         {{ form.submit(class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#2094f3] text-white text-sm font-bold leading-normal tracking-[0.015em]") }}
       </div>
 	</form>
-    <script src="{{url_for('static', filename='script/newProject.js')}}"></script>
+    <script src="{{url_for('static', filename='script/newDbs.js')}}"></script>
   </div>
 
   {% endblock workspace %}

@@ -23,6 +23,11 @@ let projectTypeValue = projectType.value;
 // let projectNameAvailable = false
 let projectUrlAvailable = false
 
+window.onload = ()=>{
+document.getElementsByName('deployOrNot')[1].checked = true;
+document.getElementsByName('mode')[1].checked = true;
+}
+
 async function verifyName(name){
   try {
     const response = await fetch(`${apiUrl.value}/${name}/api4`);
