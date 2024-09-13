@@ -1,7 +1,6 @@
 """
 user object model
 """
-from sys import exception
 import uuid
 from models.base import Base
 # tendency of circular import if storage is inported directly
