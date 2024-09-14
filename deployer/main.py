@@ -237,6 +237,9 @@ class Deployer:
         pass
 
     def build(self, port, Id=None):
+        print('start')
+        print(self.generate_xml_config(port))
+        print('start')
         if not Id:
             if self.network == "create1":
                 # create network using fabric

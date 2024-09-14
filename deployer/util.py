@@ -28,7 +28,7 @@ def nodeSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type, kwargs):
         runCommand = "HOST=0.0.0.0 npm run dev"
         # do some filtering first
     Run.append(
-        f"sudo docker exec -d {Id}-name sh -c '{runCommand}' #show1# run project "
+        f"sudo docker exec -d {Id}-name sh -c '{runCommand} >run_outPut 2>run_error ' #show1# run project "
     )
     # Run.append(
     #     f"sudo docker exec -d { Id }-name sh -c 'HOST=0.0.0.0 npm run dev '"
@@ -94,12 +94,17 @@ def pythonSetup(code, Id, Nid, dockerEnv, mainEnv, host_port, Type,  kwargs):
                 mainEnv.get("FLASK_APP", "app"), projectPort
             )
         # do some filtering first
+        runCommand = f"{runCommand} >run_outPut 2>run_error ; echo @show1@ {runCommand}"
         Run.append(
-            f"sudo docker exec -d {Id}-name sh -c '{runCommand}' #show1# run project "
+            f"sudo docker exec -d {Id}-name sh -c '{runCommand}'"
         )
     else:
         if Type == "django":
             runCommand = f"{runCommand} 0.0.0.0:{projectPort}"
+            runCommand = f"{runCommand} >run_outPut 2>run_error ; echo @show1@ {runCommand}"
+            Run.append(
+                f"sudo docker exec -d {Id}-name sh -c '{runCommand}'"
+            )
     checkPort = ["skip"]
     code.append(Build)
     code.append(checkPort)

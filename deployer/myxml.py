@@ -34,11 +34,13 @@ def generate_pipe(Id, code, port, host_port, apiEndpoint, check, abort, fail):
                     "\t\tsteps {\n" +
                         '\t\t\techo "+ @show1@ cheacking if project is ready..."\n' +
                         f"\t\t\tsh \"netstat -tnlp | grep { host_port }\"\n" +
-                        f"\t\t\techo '+ @show1@ Project listenig on { port } '\n" +
+                    f" sh \"echo @show2@ run success;sudo docker exec  {Id}-name sh -c 'cat run_outPut'\" "
+
+                        f"\n\t\t\techo '+ @show1@ Project listenig on { port } '\n" +
                     "\t\t}\n" +
                 "\t}\n" if check else "")
-    abort = [a+'\n' for a in abort]
-    fail = [a+'\n' for a in fail]
+    abort = ['\n', *[a+'\n' for a in abort]]
+    fail = ['\n', *[a+'\n' for a in fail]]
     pipeline_code = f"""pipeline {{
         agent {{ label 'alx'}}
         options {{ timestamps () }}
@@ -55,11 +57,15 @@ def generate_pipe(Id, code, port, host_port, apiEndpoint, check, abort, fail):
         post {{
             aborted {{
                 {
+f' sh "sudo docker exec  {Id}-name ' +
+"sh -c 'if [ -s run_outPut ]; then;echo @error2@ run;cat run_outPut;echo @error1@ project listening on localhost instead of global host;else;echo @error2@run project;cat run_error;fi '" + '"'  +
                 "".join(abort)
                 }
             }}
             failure {{
                 {
+f' sh "sudo docker exec  {Id}-name ' +
+"sh -c 'if [ -s run_outPut ]; then;echo @error2@ run;cat run_outPut;echo @error1@ project listening on localhost instead of global host;else;echo @error2@run project;cat run_error;fi '" + '"'  +
                     "".join(fail)
                 }
             }}

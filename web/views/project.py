@@ -271,6 +271,15 @@ def projectApi(id):
                 l1.append(l2)
                 skip = 2 # skip next two lines
                 print(l2)
+            elif "@error1@" in _line[0]:
+                l2 = [[_line[0].split("@error1@")[-1], _line[1]], None]
+                l1.append(l2)
+                print(l2)
+            elif "error2@" in _line[0]:
+                l2 = [[_line[0].split("@error2@")[-1], _line[1]], ""]
+                l1.append(l2)
+                skip = 2 # skip next two lines
+                print(l2)
         elif l2[1] != None:
             l2[1] = f"{l2[1]}\n{_line[0]}"
 
