@@ -22,7 +22,7 @@ def generate_pipe(Id, code, port, host_port, apiEndpoint, check, abort, fail):
             stage += step
         stage += "\n\t\t\t\t}\n\t\t\t}\n"
         stages += stage
-        # agent {{ label 'alx' }}
+        # agent {{ label 'node-1' }}
     # had to do it this way because in python f string regects any backlash
     # something like a = f" { 'ade\n' }" wount work
     # commenting is also not allowed
@@ -33,7 +33,7 @@ def generate_pipe(Id, code, port, host_port, apiEndpoint, check, abort, fail):
                    "\t\t}\n" +
                     "\t\tsteps {\n" +
                         '\t\t\techo "+ @show1@ cheacking if project is ready..."\n' +
-                        f"\t\t\tsh \"netstat -tnlp | grep { host_port }\"\n" +
+                        f"\t\t\tsh \"python3 ~/check_port.py { host_port } --assert-port\"\n" +
                     f" sh \"echo @show2@ run success;sudo docker exec  {Id}-name sh -c 'cat run_outPut'\" "
 
                         f"\n\t\t\techo '+ @show1@ Project listenig on { port } '\n" +
@@ -42,7 +42,7 @@ def generate_pipe(Id, code, port, host_port, apiEndpoint, check, abort, fail):
     abort = ['\n', *[a+'\n' for a in abort]]
     fail = ['\n', *[a+'\n' for a in fail]]
     pipeline_code = f"""pipeline {{
-        agent {{ label 'alx'}}
+        agent {{ label 'node-1'}}
         options {{ timestamps () }}
 
         triggers {{

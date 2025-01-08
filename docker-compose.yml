@@ -1,0 +1,73 @@
+version: '3.9'
+
+services:
+
+  # tailwind:
+  #   image: node:18
+  #   command: npx tailwindcss -i static/styles/main.css -o static/styles/tailwind.css --watch
+  #   working_dir: /app/web
+  #   volumes:
+  #     - ./web:/app/web
+  #   networks:
+  #     - app-network
+  #   restart: unless-stopped
+
+  mongodb-container:
+    image: mongo:4.4
+    container_name: mongodb-container
+    env_file:
+      - .env
+    network_mode: "host"
+    volumes:
+      - mongodb_data:/data/db
+    # ports:
+    #   - "27017:27017"
+    # networks:
+    #   - app-network
+
+  jenkins:
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - ./jenkins/node_java_and_docker_setup.sh:/var/jenkins_home/node_setup
+      - ./util/check_port.py:/var/jenkins_home/check_port.py
+    env_file:
+      - .env
+      - .privatekey
+    restart: unless-stopped
+
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # command: python3 -m flask --app web run --host 0.0.0.0
+    command: >
+      sh -c "./tailwindcss -i web/static/styles/main.css -o web/static/styles/tailwind.css --watch &
+             python3 -m flask --app web run --host 0.0.0.0 --debug"
+    # ports:
+    #   - "5000:5000"
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+      - .privatekey
+    depends_on:
+      - mongodb-container
+      # - tailwind
+      - jenkins
+    network_mode: "host"
+    # networks:
+    #   - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+
+volumes:
+  jenkins_home:
+  mongodb_data:

@@ -74,8 +74,8 @@ class Build(Base):
         command1 = f"sudo docker rm -f {id}-name"
         command2 = f"sudo docker rm -f {id}-network"
         host = getenv("HOST_IP")
-        user = "ubuntu"
-        certificate = getenv("SSH_CERT")
+        user = getenv("HOST_USER")
+        certificate = getenv("SSH_CERT_LOCATION")
         res = Connection(host=host, user=user,
                          connect_kwargs={"key_filename": certificate})
         dd= res.run(command1)
@@ -89,8 +89,8 @@ class Build(Base):
         # use fabric to create network
         command = f"sudo docker network create {Id}-network"
         host = getenv("HOST_IP")
-        user = "ubuntu"
-        certificate = getenv("SSH_CERT")
+        user = getenv("HOST_USER")
+        certificate = getenv("SSH_CERT_LOCATION")
         res = Connection(host=host, user=user,
                          connect_kwargs={"key_filename": certificate})
         res.run(command)

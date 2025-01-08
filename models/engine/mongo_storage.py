@@ -16,7 +16,7 @@ class MongoStorage:
         """
         init
         """
-        DB_NAME = getenv("DB_NAME", "alx")
+        DB_NAME = getenv("DB_NAME", "deployer")
         DB_PORT = getenv("DB_PORT", "27017")
         try:
             DB_PORT = int(DB_PORT)

@@ -246,7 +246,7 @@ def projectApi(id):
     output = BuildData["output"]
     l1 = []
     l2 = [None, None]
-    output = [a for a in output.split('\n') if "[Pipeline]" not in a]
+    output = []  if not output else [a for a in output.split('\n') if "[Pipeline]" not in a]
     skip = 0
     length = len(output)
     from re import search

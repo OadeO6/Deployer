@@ -17,7 +17,8 @@ class Deployer:
         self.server = jenkins.Jenkins(
             url=  getenv("JENKINS_URL","http://localhost:8080"),
             username= getenv("JENKINS_USER", "OadeO6"), # use an env file
-            password= getenv("JENKINS_PASSWD", "2a8f52fb4bde48069e2f61049f9b314e")
+            password= getenv("JENKINS_PASSWD", "2a8f52fb4bde48069e2f61049f9b314e"),
+            timeout=10
         )
         self.kwargs = kwargs
         # FLASK_RUN_PORT FLASK_APP

@@ -7,3 +7,5 @@ pymongo==3.11.2
 python-dotenv==1.0.1
 python-jenkins==1.0.2
 flask-cors==4.0.1
+fabric==3.2.2
+setuptools>=58.0.0
